@@ -1,0 +1,7 @@
+interface:
+  display_name: "Generate Reporter Response Emails"
+  short_description: "Draft TrueProfit reporter replies"
+  default_prompt: "Use $generate-reponse-emails-to-reporters to draft a concise reporter response email from the opportunity details, source notes, and requested tone."
+
+policy:
+  allow_implicit_invocation: true
