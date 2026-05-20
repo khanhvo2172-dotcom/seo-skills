@@ -1,9 +1,9 @@
 # SEO Skills for Claude Code
 
-> A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, and YouTube community seeding — built for TrueProfit's ecommerce marketing workflow.
+> A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, and YouTube community seeding — built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-3-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-4-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -38,6 +38,20 @@ Screens emails from **HARO**, **MentionMatch**, and **Qwoted** to surface PR opp
 - Returns a ranked summary — no raw email noise
 
 **Strong-fit topics:** ecommerce profitability, Shopify merchant analytics, profit/margin tracking, ROAS vs. POAS, shipping cost impact, AI + merchant data via MCP.
+
+---
+
+### `generate-reponse-emails-to-reporters`
+Drafts concise, reporter-ready response emails for PR opportunities using TrueProfit positioning, source notes, requested angles, and customer-style examples.
+
+**Triggers when you say:** *"generate a response email"*, *"draft reporter reply"*, *"write the MentionMatch/Qwoted/HARO response"*
+
+**What it does:**
+- Turns reporter questions into a ready-to-send email
+- Positions Harry Chu as Founder/CEO of TrueProfit when relevant
+- Keeps a concise, friendly, Ahrefs-style partner tone
+- Adds practical ecommerce profitability advice and concrete anonymized customer examples
+- Checks that every reporter question is answered before finalizing
 
 ---
 
@@ -107,6 +121,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 |---|---|
 | `/trueprofit-blog-localization` | Translate blog articles to ES/DE/FR |
 | `/browse-emails-to-find-opportunities` | Screen PR opportunity emails |
+| `/generate-reponse-emails-to-reporters` | Draft reporter response emails |
 | `/youtube-seeding-comments-generate` | Generate YouTube seeding comments |
 
 Skills are available globally across all Claude Code sessions after installation.
@@ -119,6 +134,7 @@ Skills are available globally across all Claude Code sessions after installation
 |---|---|
 | `trueprofit-blog-localization` | Claude Code |
 | `browse-emails-to-find-opportunities` | Claude Code + Gmail MCP |
+| `generate-reponse-emails-to-reporters` | Claude Code |
 | `youtube-seeding-comments-generate` | Claude Code |
 
 ---
