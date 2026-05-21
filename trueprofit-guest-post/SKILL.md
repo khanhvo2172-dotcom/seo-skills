@@ -60,19 +60,14 @@ TrueProfit is the #1 Net Profit Analytics Platform built for Shopify & ecommerce
 
 ### Step 1 - Ask content type
 
-Ask the user which type of content they need, and ask them to fill in this summary table:
+Ask all questions at once in a single numbered list. The user answers all in one reply.
 
-> "Please fill in this quick summary before I start:"
->
-> | Field | Your answer |
-> |---|---|
-> | Content type | Full app listing section / Short blurb / Single sentence / Pricing table / Other |
-> | Numbered heading? | Yes - number X / No |
-> | Include pricing? | Yes / No |
-> | Include rating? | Yes / No |
-> | Angle to emphasise | e.g. dropshipping, marketing attribution, MCP, general |
-> | Specific URL to link | e.g. homepage / Shopify App / marketing attribution page |
-> | Partner page URL | (optional, for context) |
+1. What type of content? (full app listing section / short blurb / single sentence / other)
+2. Numbered heading? If yes, what number? (or no)
+3. Any angle to emphasise? (e.g. dropshipping, marketing attribution, MCP, or general)
+4. Which URL to link? (homepage / Shopify App / other, default is homepage)
+
+Once answered, move to Step 2.
 
 ### Step 2 - Ask for partner content sample
 
@@ -91,7 +86,8 @@ From the pasted sample, extract and match:
 - **Feature list style**: bold label + colon, plain bullets, numbered list, or no list
 - **Link style**: hyperlinked product name, or inline hyperlink on descriptive text
 - **Length**: approximate word count
-- **Pricing**: table vs prose vs omitted
+- **Pricing**: table vs prose vs omitted, include pricing in output only if the sample includes it
+- **Rating**: included or omitted, include rating in output only if the sample includes it
 - **Closing**: CTA, summary sentence, or just the feature list
 
 ### Step 4 - Generate content
@@ -99,12 +95,10 @@ From the pasted sample, extract and match:
 Write the TrueProfit section matching the partner's style exactly. Follow these rules:
 
 - Never invent features, stats, or claims not in the Brand Reference above
-- Always hyperlink "TrueProfit" to https://trueprofit.io/ on first mention (or the specific URL the user requested)
+- Always hyperlink "TrueProfit" to https://trueprofit.io on first mention (or the specific URL the user requested)
 - Match the partner's heading numbering style if they use numbered lists
 - Use the same bullet format as the partner
 - Match approximate section length from the sample
-- Only include pricing if the user said yes in Step 1
-- Only include rating if the user said yes in Step 1
 - Match the opening structure from the sample
 - Do not use em dashes; use commas, colons, or semicolons instead
 
