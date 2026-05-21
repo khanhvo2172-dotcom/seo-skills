@@ -43,9 +43,12 @@ Example: [Concrete customer-style example.]
 ...
 
 Best,
-[Sender Name]
-TrueProfit
-https://trueprofit.io
+
+Harry Chu's contact information:
+- Linkedin: https://www.linkedin.com/in/harry-chu-trueprofit/
+- Youtube: https://www.youtube.com/@HarryChu-TrueProfit/shorts
+- Website: https://trueprofit.io/author/harry-chu
+
 ```
 
 ## Answer Style
