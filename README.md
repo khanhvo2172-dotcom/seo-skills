@@ -1,9 +1,9 @@
 # SEO Skills for Claude Code
 
-> A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
+> A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, guest post content, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-5-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-6-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -69,6 +69,20 @@ Searches Gmail for email threads related to a link exchange partner and produces
 
 ---
 
+### `trueprofit-guest-post`
+Generates TrueProfit guest post sections, blurbs, app listing entries, and link exchange content that matches a partner page's style and structure.
+
+**Triggers when you say:** *"write a section for X"*, *"generate guest post for Y"*, *"create content for our partner"*, *"write a TrueProfit blurb"*
+
+**What it does:**
+- Collects content type, heading, pricing, rating, angle, and target URL requirements
+- Requires a partner content sample so the output matches the existing page style
+- Uses a fixed TrueProfit brand reference for features, pricing, rating, and URLs
+- Matches tone, heading format, bullet style, link style, length, and closing pattern
+- Outputs ready-to-paste markdown without inventing unsupported claims
+
+---
+
 ### `youtube-seeding-comments-generate`
 Generates **realistic YouTube seeding comments** for Shopify/ecommerce topics in both unbranded and TrueProfit-branded batches.
 
@@ -120,6 +134,7 @@ cp -R trueprofit-blog-localization ~/.claude/skills/
 cp -R browse-emails-to-find-opportunites ~/.claude/skills/
 cp -R generate-reponse-emails-to-reporters ~/.claude/skills/
 cp -R summarize-email-thread ~/.claude/skills/
+cp -R trueprofit-guest-post ~/.claude/skills/
 cp -R youtube-seeding-comments-generate ~/.claude/skills/
 ```
 
@@ -130,6 +145,7 @@ Copy-Item -Recurse -Force trueprofit-blog-localization "$env:USERPROFILE\.claude
 Copy-Item -Recurse -Force browse-emails-to-find-opportunites "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force generate-reponse-emails-to-reporters "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force summarize-email-thread "$env:USERPROFILE\.claude\skills\"
+Copy-Item -Recurse -Force trueprofit-guest-post "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force youtube-seeding-comments-generate "$env:USERPROFILE\.claude\skills\"
 ```
 
@@ -149,6 +165,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | `/browse-emails-to-find-opportunites` | Screen PR opportunity emails |
 | `/generate-reponse-emails-to-reporters` | Draft reporter response emails |
 | `/summarize-email-thread` | Brief link exchange partner email history |
+| `/trueprofit-guest-post` | Generate partner-style TrueProfit guest post content |
 | `/youtube-seeding-comments-generate` | Generate YouTube seeding comments |
 
 Skills are available globally across all Claude Code sessions after installation.
@@ -163,6 +180,7 @@ Skills are available globally across all Claude Code sessions after installation
 | `browse-emails-to-find-opportunites` | Claude Code + Gmail MCP |
 | `generate-reponse-emails-to-reporters` | Claude Code |
 | `summarize-email-thread` | Claude Code + Gmail MCP |
+| `trueprofit-guest-post` | Claude Code |
 | `youtube-seeding-comments-generate` | Claude Code |
 
 ---
