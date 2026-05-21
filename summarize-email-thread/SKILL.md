@@ -95,10 +95,10 @@ Present the briefing in this format:
 
 **Link placements**
 
-| Side | URL | Anchor text | Status | Link type | Placement & added content |
-|---|---|---|---|---|---|
-| Ours (on their site) | [URL] | [anchor] | Published / Not yet published | dofollow / nofollow / unknown | [exact placement instruction] |
-| Theirs (on our site) | [URL] | [anchor] | Published / Not yet published | dofollow / nofollow / unknown | [exact placement instruction] |
+| Side | URL | Anchor text | Target Page | Status | Link type | Placement & added content |
+|---|---|---|---|---|---|---|
+| Ours (on their site) | [URL] | [anchor] | Target URL (my website's URL that receives the backlink) | Published / Not yet published | dofollow / nofollow / unknown | [exact placement instruction] |
+| Theirs (on our site) | [URL] | [anchor] | Target URL (their website's URL that receives the backlink) | Published / Not yet published | dofollow / nofollow / unknown | [exact placement instruction] |
 
 If more than 2 total placements were agreed, add a row for each one.
 
