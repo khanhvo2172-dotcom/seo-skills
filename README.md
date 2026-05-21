@@ -1,9 +1,9 @@
 # SEO Skills for Claude Code
 
-> A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
+> A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-4-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-5-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -52,6 +52,20 @@ Drafts concise, reporter-ready response emails for PR opportunities using TruePr
 - Keeps a concise, friendly, Ahrefs-style partner tone
 - Adds practical ecommerce profitability advice and concrete anonymized customer examples
 - Checks that every reporter question is answered before finalizing
+
+---
+
+### `summarize-email-thread`
+Searches Gmail for email threads related to a link exchange partner and produces a structured briefing with the partner, agreement, link placement status, last contact date, and recommended next action.
+
+**Triggers when you say:** *"what did we agree with X"*, *"catch me up on X"*, *"what is the status with X"*, *"I got a reply from X"*
+
+**What it does:**
+- Searches Gmail by domain, email address, subject keyword, or partner name
+- Reads full thread bodies instead of relying on snippets
+- Extracts agreed URLs, anchor text, placement context, link type, and status
+- Classifies status as completed, active, pending, stalled, or exchange agreed
+- Returns a concise briefing before you reply to a partner
 
 ---
 
@@ -105,6 +119,7 @@ mkdir -p ~/.claude/skills
 cp -R trueprofit-blog-localization ~/.claude/skills/
 cp -R browse-emails-to-find-opportunites ~/.claude/skills/
 cp -R generate-reponse-emails-to-reporters ~/.claude/skills/
+cp -R summarize-email-thread ~/.claude/skills/
 cp -R youtube-seeding-comments-generate ~/.claude/skills/
 ```
 
@@ -114,6 +129,7 @@ New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\skills" | Out-Null
 Copy-Item -Recurse -Force trueprofit-blog-localization "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force browse-emails-to-find-opportunites "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force generate-reponse-emails-to-reporters "$env:USERPROFILE\.claude\skills\"
+Copy-Item -Recurse -Force summarize-email-thread "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force youtube-seeding-comments-generate "$env:USERPROFILE\.claude\skills\"
 ```
 
@@ -132,6 +148,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | `/trueprofit-blog-localization` | Translate blog articles to ES/DE/FR |
 | `/browse-emails-to-find-opportunites` | Screen PR opportunity emails |
 | `/generate-reponse-emails-to-reporters` | Draft reporter response emails |
+| `/summarize-email-thread` | Brief link exchange partner email history |
 | `/youtube-seeding-comments-generate` | Generate YouTube seeding comments |
 
 Skills are available globally across all Claude Code sessions after installation.
@@ -145,6 +162,7 @@ Skills are available globally across all Claude Code sessions after installation
 | `trueprofit-blog-localization` | Claude Code |
 | `browse-emails-to-find-opportunites` | Claude Code + Gmail MCP |
 | `generate-reponse-emails-to-reporters` | Claude Code |
+| `summarize-email-thread` | Claude Code + Gmail MCP |
 | `youtube-seeding-comments-generate` | Claude Code |
 
 ---
