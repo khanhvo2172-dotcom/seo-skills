@@ -107,6 +107,8 @@ The user uses Gmail MCP to search/read emails from:
 
 When asked to scan emails:
 - Ask users the exact date ranges.
+- Read only unread messages unless the user explicitly asks for all messages.
+- Use Gmail search with `is:unread` and exclude trash/spam.
 - Read relevant messages.
 - Ignore previously reviewed opportunities if user asks.
 - Avoid raw operational detail; provide ranked summaries.
