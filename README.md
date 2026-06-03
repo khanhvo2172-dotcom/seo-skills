@@ -3,12 +3,26 @@
 > A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, guest post content, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-6-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-7-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
 ## Skills
+
+### `compare-content-between-ggdocs-live-url`
+Compares a TrueProfit Google Docs article tab against its live `trueprofit.io` blog URL to detect content, link, data benchmark, FAQ, formatting, and section ordering differences.
+
+**Triggers when you say:** *"compare doc vs live"*, *"check if the live page matches the doc"*, *"any differences between doc and URL"*, *"is the content synced"*
+
+**What it does:**
+- Reads the specific Google Docs tab or matching year-versioned content
+- Compares only the live article body, excluding site chrome and author bio
+- Checks H1, intros, headings, body text, links, benchmarks, Further Reading, FAQs, CTAs, and formatting
+- Handles TrueProfit callout block extraction limits and raw HTML verification
+- Returns `No` when synced, or a structured differences table when mismatches exist
+
+---
 
 ### `trueprofit-blog-localization`
 Translates TrueProfit blog markdown files into **Spanish (Spain)**, **German (Germany)**, and **French (France)** with locale-aware formatting rules, currency conversion, and Google Docs-friendly output.

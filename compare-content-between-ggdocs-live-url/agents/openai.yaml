@@ -1,0 +1,7 @@
+interface:
+  display_name: "Compare Doc vs Live URL"
+  short_description: "Compare TrueProfit doc and live article"
+  default_prompt: "Use $compare-content-between-ggdocs-live-url to compare this Google Docs article tab against the matching trueprofit.io live blog URL and report any content, link, data, FAQ, formatting, or ordering differences."
+
+policy:
+  allow_implicit_invocation: true
