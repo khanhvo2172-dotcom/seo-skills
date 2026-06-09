@@ -62,6 +62,8 @@ Check these elements in order:
 11. CTA sections, TrueProfit product mentions, and Shopify app links.
 12. Formatting differences such as bold, italic, punctuation, em dashes, commas, and semicolons.
 
+Do not report automated in-article image/banner CTAs as differences. Skip empty-anchor or image-wrapped Shopify App Store links added by the live site, especially URLs using `utm_campaign=in-blog-banner-*`, unless the user explicitly asks to audit CTAs or tracking links.
+
 ### 5. Handle structural rewrites
 
 If the live URL is fundamentally different from the Google Doc, do not force a line-by-line diff.
