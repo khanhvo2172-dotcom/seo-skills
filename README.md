@@ -3,7 +3,7 @@
 > A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, guest post content, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-8-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-9-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -36,6 +36,23 @@ Translates TrueProfit blog markdown files into **Spanish (Spain)**, **German (Ge
 - Preserves all Markdown structure: headings, tables, links, CTAs, image placeholders
 - Keeps brand names in English (TrueProfit, Shopify, AliExpress, etc.)
 - Runs a QA checklist after each delivery
+
+---
+
+### `trueprofit-blog-triggers`
+Adds the CMS "highlight triggers" that the n8n publishing workflow needs before a blog post can be built, operating on the **English (first) tab** of a TrueProfit blog Google Doc.
+
+**Triggers when you say:** *"check the doc"*, *"prep for publish"*, *"add triggers to this doc"*, *"recheck the triggers"*, *"is the doc ready for n8n"*
+
+**What it does:**
+- Detects inline formulas (line containing "formula" + next line with `=`) and adds a `Content Highlight` label above them
+- Detects `Pro tip` and `Note:` callouts and adds a `Content Highlight` label above them
+- Adds an `Image (sentence note): <url>, Alt is "<alt>"` line above each embedded image — either auto-numbered from a base slug (Mode A) or from an explicit URL+alt list (Mode B)
+- Reports whether **Quick Recap** and **FAQ** sections are present (never fabricates them)
+- Idempotent — already-present triggers are detected and skipped; re-running never creates duplicates
+- Normalizes all trigger lines to plain body text after inserting
+
+**Requires:** Google Docs API credentials (`token.json`). Run this before `trueprofit-blog-multilingual-tabs-triggers`.
 
 ---
 
@@ -162,6 +179,7 @@ cd seo-skills
 ```bash
 mkdir -p ~/.claude/skills
 cp -R trueprofit-blog-localization ~/.claude/skills/
+cp -R trueprofit-blog-triggers ~/.claude/skills/
 cp -R trueprofit-blog-multilingual-tabs-triggers ~/.claude/skills/
 cp -R browse-emails-to-find-opportunites ~/.claude/skills/
 cp -R generate-reponse-emails-to-reporters ~/.claude/skills/
@@ -174,6 +192,7 @@ cp -R youtube-seeding-comments-generate ~/.claude/skills/
 ```powershell
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\skills" | Out-Null
 Copy-Item -Recurse -Force trueprofit-blog-localization "$env:USERPROFILE\.claude\skills\"
+Copy-Item -Recurse -Force trueprofit-blog-triggers "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force trueprofit-blog-multilingual-tabs-triggers "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force browse-emails-to-find-opportunites "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force generate-reponse-emails-to-reporters "$env:USERPROFILE\.claude\skills\"
@@ -195,6 +214,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | Command | Description |
 |---|---|
 | `/trueprofit-blog-localization` | Translate blog articles to ES/DE/FR |
+| `/trueprofit-blog-triggers` | Add CMS triggers to the English tab of a blog doc |
 | `/trueprofit-blog-multilingual-tabs-triggers` | Repair/sync triggers and links in ES/DE/FR tabs |
 | `/browse-emails-to-find-opportunites` | Screen PR opportunity emails |
 | `/generate-reponse-emails-to-reporters` | Draft reporter response emails |
@@ -211,6 +231,7 @@ Skills are available globally across all Claude Code sessions after installation
 | Skill | Requirements |
 |---|---|
 | `trueprofit-blog-localization` | Claude Code |
+| `trueprofit-blog-triggers` | Claude Code + Google Docs API credentials |
 | `trueprofit-blog-multilingual-tabs-triggers` | Claude Code + Google Docs API credentials |
 | `browse-emails-to-find-opportunites` | Claude Code + Gmail MCP |
 | `generate-reponse-emails-to-reporters` | Claude Code |
