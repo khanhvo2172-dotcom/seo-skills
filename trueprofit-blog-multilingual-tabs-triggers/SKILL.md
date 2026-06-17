@@ -8,20 +8,27 @@ description: >-
   and "Content Highlight:" with a colon. This skill REPAIRS them: reformats each
   image line to the canonical one-line form with the matching English URL and a
   translated alt, normalizes Content Highlight labels, and adds any Content
-  Highlight that is genuinely missing. Use this AFTER the English-only
+  Highlight that is genuinely missing. Also bulk-localizes internal
+  trueprofit.io/blog links and Shopify app utm_campaign tags in the three
+  language tabs via update_links.py. Use this AFTER the English-only
   trueprofit-blog-triggers skill has prepped tab 1, whenever the user asks to add,
   fix, sync, or repair triggers in the other language tabs / ES-DE-FR tabs /
   translated versions / multilingual tabs of a blog doc, or to "do the same for
-  the other languages". Edits the doc in place via the Google Docs API.
+  the other languages", or to "update/localize the internal links". Edits the doc
+  in place via the Google Docs API.
 ---
 
-# TrueProfit multilingual tab trigger repair (ES / DE / FR)
+# TrueProfit multilingual tab trigger repair + link localization (ES / DE / FR)
 
 A blog Google Doc has tabs: **English** (tab 1, often titled "article"), then
 **Spanish**, **German** and **French** versions. The English-only
 [`trueprofit-blog-triggers`](../trueprofit-blog-triggers/SKILL.md) skill preps tab 1.
-This skill fixes the **three translated tabs** so the n8n multilingual publisher
-picks up correct triggers in every locale.
+This skill does two things to the **three translated tabs**:
+
+1. **Repair / place CMS triggers** — so the n8n multilingual publisher picks up
+   correct `Image (sentence note):` and `Content Highlight` lines in every locale.
+2. **Localize internal links** (via `update_links.py`) — rewrites `trueprofit.io/blog/<slug>`
+   links and Shopify app `utm_campaign` tags for each language.
 
 **Run the English skill first.** This skill reads the English tab's image triggers
 to learn the shared image URLs (in order), so tab 1 must already be triggered.
@@ -37,25 +44,32 @@ image-trigger-line count vs. the English image count:
 - **REPAIR (counts match).** The tab carries one image-trigger line per English
   image, in order — repair each in place: rewrite to canonical form, swap in the
   English URL by order, translate the alt, drop the stale second URL line.
-- **PLACE (counts differ → tab is out of sync).** The tab was translated from an
-  older English draft, so its image lines are missing/misplaced. The skill removes
-  whatever stale image lines exist and **places every English image** by anchoring
-  to headings: each English image sits under a heading, and the translated tab has
-  the same headings in the same order, so it maps English heading → translated
-  heading (by order, confirmed with **cognate keywords** that survive translation —
-  `competition`~`competencia`, `organic`~`organica`, `tofu`~`tofu`, `USB`~`USB`) and
-  inserts the trigger at the **end of the matched section** — right before the next
-  heading (of the same or higher level), mirroring how English places each image as
-  the **last paragraph of its section**, not the first one under the heading. The
-  dry-run prints the heading each image lands under, with `keyword` or `ordinal`
-  confidence — review it.
+- **PLACE (counts differ → tab is out of sync).** The tab is missing its trigger
+  lines (or they were reset). The skill removes whatever stale lines exist and
+  **mirrors the English tab**: every English image — and every English Content
+  Highlight — is placed at the **same paragraph position** as English. For each
+  English image it (1) maps the image's English heading → the translated heading (by
+  order, confirmed with **cognate keywords** that survive translation —
+  `competition`~`competencia`, `organic`~`organica`, `tofu`~`tofu`, `USB`~`USB`),
+  then (2) inserts the trigger **after the translated paragraph at the same ordinal**
+  — i.e. after the translated equivalent of the English paragraph it follows, *not*
+  grouped at the section end. Pure paragraph counting drifts when a language merges
+  or splits a paragraph, so within a small window around the expected ordinal it
+  picks the translated paragraph whose **content best matches** the English anchor
+  paragraph (cognate-token overlap), falling back to the ordinal. An image whose
+  English heading only matches a **closing-region** heading (Final Thoughts / FAQ),
+  by ordinal *or* a coincidental keyword, is redirected to the **end of the body**
+  (e.g. a closing CTA lands before Final Thoughts, never inside the FAQ). The dry-run
+  prints, per image, the translated heading and the paragraph it lands after, with
+  `keyword` / `ordinal` / `fallback` confidence, plus **STRUCTURE WARNINGS** for any
+  anchor not confirmed by a shared heading keyword — review them.
 
 ## What it does per language tab
 
 | Element | Behaviour |
 |---|---|
-| **Image trigger** | Produces one canonical line `Image (sentence note): <url>, Alt is <alt>` per English image — **repaired** in place (counts match) or **placed** at the end of the matching translated heading's section (out of sync). `<url>` is the **English tab's Nth image URL** (same CDN file, by order); `<alt>` is the **translated** alt. |
-| **Content Highlight** | **Only where there's real translated content.** A `Content Highlight` is **kept** (and `Content Highlight:` normalized to no colon) only when the next line is genuine translated highlight content — a localized formula (`=` on the next line) or a Pro tip / Note callout (keyword + colon). A `Content Highlight` carried over from translation that sits above ordinary prose (a test stub, or content the translation dropped) is treated as an **orphan and removed**. A missing `Content Highlight` is **added** above any detected formula / callout that lacks one. |
+| **Image trigger** | Produces one canonical line `Image (sentence note): <url>, Alt is <alt>` per English image — **repaired** in place (counts match) or **placed at the same paragraph position as English** (out of sync). `<url>` is the **English tab's Nth image URL** (same CDN file, by order); `<alt>` is the **translated** alt. |
+| **Content Highlight** | **REPAIR (counts match):** a `Content Highlight` is **kept** (and `Content Highlight:` normalized to no colon) only when the next line is genuine translated highlight content — a localized formula (`=` on the next line) or a callout (Pro tip / Note / **Your Takeaway** keyword + colon); one sitting above ordinary prose is an **orphan and removed**, and a missing one is **added** above any detected formula / callout. **PLACE (out of sync):** Content Highlights are **mirrored from English** — wherever English has a `Content Highlight` above a paragraph, one is placed above the translated equivalent of that paragraph (same paragraph-ordinal anchoring, snapping to the translated callout label). This keeps every editorial highlight — Your Takeaway, Pro tip, Note, formula — in parity with English without per-language guesswork. |
 | **Quick Recap / FAQ** | **Flags only**, per tab, using localized terms. Never fabricates. |
 
 Trigger **labels stay in English** in every tab (`Content Highlight`,
@@ -111,12 +125,43 @@ lines it found (vs the English image count), Quick Recap / FAQ presence, and eve
 planned change (`replace` / `insert`) with its reason.
 
 **Always dry-run first.** The header shows each tab's `image mode` (REPAIR or PLACE)
-and, in PLACE mode, the **heading each image lands under** with a `keyword`/`ordinal`
-confidence tag — **review that mapping** before applying, especially any `ordinal`
-rows (matched by position, not a shared word). PLACE mode assumes the translated
-article has the same sections in the same order as English (true of a faithful
-translation); if a product section is genuinely absent in a translated tab, that
-image still gets anchored by order — the dry-run is where you catch it.
+and, in PLACE mode, the translated heading **and the paragraph each image lands
+after**, with a `keyword`/`ordinal`/`fallback` confidence tag — **review that
+mapping** before applying, especially any `ordinal` rows (matched by position, not a
+shared word) and the **STRUCTURE WARNINGS** block (any anchor not confirmed by a
+shared heading keyword — the tell-tale of an English/translated heading mismatch).
+PLACE mode assumes the translated article has the same sections, in the same order,
+with the same paragraph breaks as English (true of a faithful translation); paragraph
+drift from a merge/split is auto-corrected by content match, but the dry-run is where
+you catch a genuinely missing or reordered section.
+
+### Step 4 — localize internal links (optional but recommended)
+
+After the triggers are applied, run `update_links.py` to rewrite internal links in
+the language tabs:
+
+```bash
+python update_links.py --doc "<DOC>" --dry-run   # preview all changes
+python update_links.py --doc "<DOC>"             # apply
+```
+
+**What it rewrites:**
+
+| Link type | Change |
+|---|---|
+| `https://trueprofit.io/blog/<slug>` | Becomes `https://trueprofit.io/es/blog/<slug>` (or `/de/`, `/fr/`) — only if the slug is in the hardcoded `MULTILINGUAL_SLUGS` list (~29 slugs). Slugs not in the list are skipped and logged. |
+| `https://apps.shopify.com/trueprofit?…utm_campaign=<val>…` | Becomes `utm_campaign=es-<val>` (or `de-`, `fr-`). |
+
+Both operations are **idempotent** — already-localized links (`/es/blog/…` or `utm_campaign=es-…`) are silently skipped.
+
+**Tab matching:** `update_links.py` identifies language tabs by exact title match
+(`"Spanish Version"`, `"German Version"`, `"French Version"`). Tabs not carrying
+one of those exact titles are ignored. If the doc uses different tab names, the
+script will report 0 updates — check that the tab titles match exactly.
+
+**Updating the slug list:** `MULTILINGUAL_SLUGS` is a Python `set` inside
+`update_links.py`. To add a new localized blog post, add its slug (the part after
+`/blog/`) to that set and commit the file.
 
 ## Idempotent & plain-text
 
@@ -152,16 +197,28 @@ final mapping and the full tab list — check it before applying.
 
 - `scripts/detect_ml.py` — image repair planner (`plan_repairs`,
   `parse_existing_triggers`), the Content-Highlight planner (`plan_ch`: keep backed,
-  delete orphans) and the localized add-missing-Content-Highlight recognisers
-  (`LANG_TERMS`, used by `detect`).
-- `scripts/place_ml.py` — the **heading-anchored placement** engine
-  (`english_image_anchors`, `align_headings`, `plan_placements`) used in PLACE mode.
-  Heading matching uses cognate keywords: tokens are lowercased, accent-stripped, and
-  two tokens match if they share a 4-char prefix (so translated headings still align),
-  with a monotonic **ordinal fallback** when there's no shared word. Each image is
-  inserted at the **end of its section** (`_section_end`: before the next heading of
-  the same or higher level), mirroring English.
-- `scripts/gdocs_ml_triggers.py` — the orchestrator (tabs, modes, batchUpdate).
+  delete orphans) and the localized recognisers (`LANG_TERMS` / `compile_recognisers`,
+  used by `detect`) — `callout` now also covers **Your Takeaway**-style labels, and a
+  `final_thoughts` recogniser feeds the end-of-body fallback.
+- `scripts/place_ml.py` — the **paragraph-anchored, English-mirroring placement**
+  engine used in PLACE mode. `english_image_anchors` / `english_ch_anchors` record,
+  per image / Content Highlight, the heading it sits under, the **body-paragraph
+  ordinal** it follows/labels, and that paragraph's text. `align_headings` maps
+  English → translated headings by cognate keywords (tokens lowercased, accent-
+  stripped, matched on a shared 4-char prefix; monotonic ordinal fallback).
+  `plan_placements` / `plan_ch_placements` then insert each trigger at the **same
+  paragraph ordinal**, using `choose_anchor` (cognate-token overlap in a ±2 window) to
+  correct translation drift; CH placement snaps to the translated callout label.
+  `body_end_index` is the closing-region landmark for the CTA fallback.
+- `scripts/gdocs_ml_triggers.py` — the orchestrator (tabs, modes, structure-warning
+  guard, batchUpdate).
+- `scripts/update_links.py` — standalone link-localization script. Walks every text
+  run in the ES / DE / FR tabs, rewrites `trueprofit.io/blog/<slug>` links to their
+  localized equivalent for slugs in `MULTILINGUAL_SLUGS`, and prefixes `utm_campaign`
+  values on `apps.shopify.com/trueprofit` links. Matches tabs by exact title
+  (`"Spanish Version"`, `"German Version"`, `"French Version"`). Applies changes in
+  batches of 400 (Docs API limit is 500). Run independently after the trigger step;
+  supports `--dry-run`.
 - `scripts/test_detect_ml.py` — `python test_detect_ml.py` runs the whole suite
   (detection, repair, placement, and request-builder ordering regressions).
 
