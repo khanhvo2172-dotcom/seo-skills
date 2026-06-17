@@ -86,6 +86,18 @@ For each batch of HARO/Qwoted/MentionMatch emails, summarize:
 
 Do not over-recommend borderline opportunities. Be strict.
 
+## Drafting Follow-up Emails
+
+When the user asks to draft, write, refine, or prepare a response email for any opportunity found by this skill, also use the `generate-reponse-emails-to-reporters` skill.
+
+Carry forward the opportunity context from the email scan:
+- Reporter name, publication, deadline, title, target source type, and submission email when available.
+- The reporter's exact question or request.
+- The fit classification and recommended TrueProfit angle.
+- Any user-specified angle or wording preference.
+
+For TrueProfit AI/SMB/productivity opportunities, instruct the response skill to use the TrueProfit MCP angle: Shopify merchants connect store and profit data to LLMs like ChatGPT or Codex, then use AI for financial analysis, dashboards, product and campaign decisions, margin investigation, and hidden-cost analysis. Prefer a short paragraph plus bullets for example questions instead of a dense plain-text paragraph.
+
 ## Example Good Pitch Angle: AI Reliability
 
 > TrueProfit is a Shopify profit analytics app that lets merchants connect store/profit data to LLMs like Claude and ChatGPT via MCP. We do not build foundation models, but we see how merchants use AI on top of ecommerce financial data and where reliability issues appear in real workflows. In ecommerce analytics, the biggest reliability issue is not only hallucinated text; it is whether the model has complete, current, structured business data such as orders, refunds, ad spend, shipping costs, COGS, transaction fees, discounts, and taxes. Without those inputs, an AI assistant can give confident but misleading recommendations.

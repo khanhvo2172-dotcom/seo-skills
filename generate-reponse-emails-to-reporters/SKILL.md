@@ -84,12 +84,34 @@ Use these recurring recommendations when they fit the reporter's question:
 Use this angle for AI, SMB productivity, AI decision-making, store analytics, or workflow questions:
 
 - AI helps SMBs most when it becomes a decision layer on top of trusted business data, not just a generic writing or automation tool.
+- Prefer a short paragraph followed by bullets when explaining TrueProfit MCP. Avoid writing one dense plain-text paragraph when the pitch includes multiple example questions or use cases.
+- Use this default phrasing for AI scaling, SMB decision-making, productivity, or "scale smarter" requests:
+
+```text
+Harry can speak to how AI is helping SMBs make better business decisions, not just move faster. With TrueProfit MCP, Shopify merchants can connect their store and profit data to LLMs like ChatGPT or Codex, then ask plain-English questions such as:
+
+- Which products are actually profitable?
+- Why did my margin drop this week?
+- Which campaigns should I scale or pause?
+- What hidden costs are eating into profit?
+- Which products look strong by revenue but weak by net margin?
+```
+
+- After the bullet list, explain that MCP gives AI complete business context across Shopify, ad platforms, shipping apps, payment processors, and spreadsheets.
+- Mention practical outputs when relevant: financial analysis, dashboards, product margin comparisons, campaign performance reviews, net profit explanations, and decisions around pricing, inventory, discounts, and ad spend.
 - With TrueProfit MCP, Shopify merchants can connect store and profit data to LLMs like ChatGPT or Codex and ask plain-English questions such as:
   - Which products are actually profitable?
   - Why did my margin drop this week?
   - Which campaigns should I scale or pause?
   - What hidden costs are eating into profit?
 - The core point: many SMBs already have the data, but it is scattered across Shopify, ad platforms, shipping apps, payment processors, and spreadsheets. MCP gives AI the right context so merchants can use its reasoning ability to analyze store performance and make better decisions faster.
+- For AI/SMB pitches, include one short illustrative ecommerce example unless the user asks for a shorter email.
+
+Example:
+
+```text
+Example: A Shopify fashion merchant might see that one product has the highest revenue, but once AI reviews COGS, return rate, shipping cost, discounts, and ad spend, it may show that a lower-revenue product has better average order profit. Instead of scaling the biggest seller, the merchant can shift budget toward the product with stronger unit economics.
+```
 
 ## Harry Chu Links
 
