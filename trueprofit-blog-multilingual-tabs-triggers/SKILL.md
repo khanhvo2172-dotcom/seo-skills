@@ -66,11 +66,13 @@ image-trigger-line count vs. the English image count:
 
 ## What it does per language tab
 
-| Element | Behaviour |
-|---|---|
-| **Image trigger** | Produces one canonical line `Image (sentence note): <url>, Alt is <alt>` per English image — **repaired** in place (counts match) or **placed at the same paragraph position as English** (out of sync). `<url>` is the **English tab's Nth image URL** (same CDN file, by order); `<alt>` is the **translated** alt. |
-| **Content Highlight** | **REPAIR (counts match):** a `Content Highlight` is **kept** (and `Content Highlight:` normalized to no colon) only when the next line is genuine translated highlight content — a localized formula (`=` on the next line) or a callout (Pro tip / Note / **Your Takeaway** keyword + colon); one sitting above ordinary prose is an **orphan and removed**, and a missing one is **added** above any detected formula / callout. **PLACE (out of sync):** Content Highlights are **mirrored from English** — wherever English has a `Content Highlight` above a paragraph, one is placed above the translated equivalent of that paragraph (same paragraph-ordinal anchoring, snapping to the translated callout label). This keeps every editorial highlight — Your Takeaway, Pro tip, Note, formula — in parity with English without per-language guesswork. |
-| **Quick Recap / FAQ** | **Flags only**, per tab, using localized terms. Never fabricates. |
+| Element | Script | Behaviour |
+|---|---|---|
+| **Image trigger** | `gdocs_ml_triggers.py` | Produces one canonical line `Image (sentence note): <url>, Alt is <alt>` per English image — **repaired** in place (counts match) or **placed at the same paragraph position as English** (out of sync). `<url>` is the **English tab's Nth image URL** (same CDN file, by order); `<alt>` is the **translated** alt. |
+| **Content Highlight** | `gdocs_ml_triggers.py` | **REPAIR (counts match):** a `Content Highlight` is **kept** (and `Content Highlight:` normalized to no colon) only when the next line is genuine translated highlight content — a localized formula (`=` on the next line) or a callout (Pro tip / Note / **Your Takeaway** keyword + colon); one sitting above ordinary prose is an **orphan and removed**, and a missing one is **added** above any detected formula / callout. **PLACE (out of sync):** Content Highlights are **mirrored from English** — wherever English has a `Content Highlight` above a paragraph, one is placed above the translated equivalent of that paragraph (same paragraph-ordinal anchoring, snapping to the translated callout label). This keeps every editorial highlight — Your Takeaway, Pro tip, Note, formula — in parity with English without per-language guesswork. |
+| **Quick Recap / FAQ** | `gdocs_ml_triggers.py` | **Flags only**, per tab, using localized terms. Never fabricates. |
+| **Blog links** | `update_links.py` | Rewrites `https://trueprofit.io/blog/<slug>` → `https://trueprofit.io/<lang>/blog/<slug>` for every slug in the `MULTILINGUAL_SLUGS` list. Links to slugs not in the list are left untouched and logged. Already-localized links are skipped. |
+| **Shopify app links** | `update_links.py` | Prefixes `utm_campaign` on `apps.shopify.com/trueprofit` links: `utm_campaign=foo` → `utm_campaign=es-foo` / `de-foo` / `fr-foo`. Skips links where the prefix is already present. |
 
 Trigger **labels stay in English** in every tab (`Content Highlight`,
 `Image (sentence note):`, `Alt is`) because the n8n parser keys on them — only the
