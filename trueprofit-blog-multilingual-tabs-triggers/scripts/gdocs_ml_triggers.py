@@ -56,7 +56,8 @@ from detect_ml import (
     RE_CONTENT_HIGHLIGHT,
     RE_EXISTING_IMAGE_TRIGGER,
 )
-from place_ml import english_image_anchors, plan_placements
+from place_ml import (english_image_anchors, plan_placements,
+                      english_ch_anchors, plan_ch_placements)
 
 SCOPES = ["https://www.googleapis.com/auth/documents"]
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -481,7 +482,8 @@ def main():
     alts = load_alts(args.alts)
     en_urls = [u for u, _a in en_images]
     en_alts = [a for _u, a in en_images]
-    en_anchors = english_image_anchors(en_blocks)  # for placement mode
+    en_anchors = english_image_anchors(en_blocks)     # image positions (PLACE mode)
+    en_ch_anchors = english_ch_anchors(en_blocks)     # Content Highlight positions (PLACE mode)
     if en_images and not alts and not args.dry_run:
         print("NOTE: no --alts given; image alts will copy the English alt. "
               "Pass --alts alts.json for translated alt text.\n")
@@ -496,31 +498,40 @@ def main():
         blocks = flatten(content)
         translated_alts = alts.get(lang, [])
 
-        # Content Highlight handling (Option B): keep/normalize a carried-over CH
-        # only when it is backed by real translated content; delete orphan CHs; and
-        # add a CH above any genuinely-detected formula/callout that lacks one.
         rep = plan_repairs(blocks, en_urls, translated_alts, en_alts)
-        chrep = plan_ch(blocks, lang)               # normalize backed + delete orphans
-        add = detect(blocks, lang, image_map=None)  # add missing CH + QR/FAQ report
-        ch_ops = list(chrep["ops"])
-        ch_ops += [
-            {"start": ins["index"], "text": ins["text"], "reason": "add missing " + ins["reason"]}
-            for ins in add["insertions"]
-        ]
+        add = detect(blocks, lang, image_map=None)  # Quick Recap / FAQ report (+ add-CH in REPAIR)
 
         E, T = len(en_urls), rep["image_units"]
-        placement = None
+        placement = chplace = None
+        warnings = []
         if E > 0 and T != E:
-            # OUT OF SYNC: carried-over image lines don't match English (stale tab).
-            # Remove them and PLACE every English image by heading anchor instead.
-            placement = plan_placements(blocks, en_anchors, translated_alts, en_alts)
-            stale = [u for u in parse_existing_triggers(blocks) if u["kind"] == "image"]
-            image_ops = [{"start": u["start"], "end": u["end"]} for u in stale] + placement["ops"]
-            image_mode = "PLACE by heading (tab is out of sync: %d existing vs %d English)" % (T, E)
+            # OUT OF SYNC: mirror the English tab. Drop the carried-over trigger
+            # lines and re-place every English image AND Content Highlight at its
+            # English paragraph position (cognate-corrected for translation drift).
+            placement = plan_placements(blocks, en_anchors, translated_alts, en_alts, lang)
+            chplace = plan_ch_placements(blocks, en_ch_anchors, lang)
+            stale = parse_existing_triggers(blocks)
+            stale_imgs = [u for u in stale if u["kind"] == "image"]
+            stale_chs = [u for u in stale if u["kind"] == "ch"]
+            image_ops = [{"start": u["start"], "end": u["end"]} for u in stale_imgs] + placement["ops"]
+            ch_ops = [{"start": u["start"], "end": u["end"]} for u in stale_chs] + chplace["ops"]
+            warnings = placement["warnings"] + chplace["warnings"]
+            image_mode = "PLACE by paragraph (out of sync: %d existing vs %d English image lines)" % (T, E)
+            ch_summary = "mirror English: place %d, drop %d carried-over" % (chplace["placed"], len(stale_chs))
+            notes = placement["notes"]
         else:
-            # IN SYNC: repair the carried-over image lines by order.
+            # IN SYNC: repair the carried-over image lines by order; keep/normalize
+            # backed Content Highlights, drop orphans, add any missing ones.
+            chrep = plan_ch(blocks, lang)
+            ch_ops = list(chrep["ops"]) + [
+                {"start": ins["index"], "text": ins["text"], "reason": "add missing " + ins["reason"]}
+                for ins in add["insertions"]
+            ]
             image_ops = [o for o in rep["ops"] if o["text"].lstrip().startswith("Image")]
             image_mode = "REPAIR by order"
+            ch_summary = "keep %d backed, remove %d orphan(s), add %d detected" % (
+                chrep["kept"], chrep["deleted"], len(add["insertions"]))
+            notes = rep["notes"]
 
         ops = image_ops + ch_ops
 
@@ -528,38 +539,52 @@ def main():
         print("   paragraphs: %d | image trigger lines: %d (vs %d English) | Content Highlight lines: %d"
               % (len(blocks), T, E, rep["ch_units"]))
         print("   image mode : %s" % image_mode)
-        print("   Content Highlight: keep %d backed, remove %d orphan(s), add %d detected"
-              % (chrep["kept"], chrep["deleted"], len(add["insertions"])))
+        print("   Content Highlight: %s" % ch_summary)
         print("   Quick Recap: %s | FAQ: %s" % (
             "present" if add["quick_recap_present"] else "MISSING (add manually)",
             "present" if add["faq_present"] else "MISSING (add manually)",
         ))
         if E > 0 and not translated_alts:
             print("   NOTE: no translated alts for %s; image alts copy the English alt." % lang)
-        for note in rep["notes"] if placement is None else placement["notes"]:
+        for note in notes:
             print("   - %s" % note)
 
+        # ---- Structural parity guard: surface any anchor that did not match a
+        # translated heading by keyword (the tell-tale of out-of-sync headings) ----
+        if warnings:
+            print("   !! STRUCTURE WARNINGS (%d) - review before applying; the English and "
+                  "translated tabs may not share the same headings:" % len(warnings))
+            for w in warnings:
+                print("      - %s" % w)
+
         if placement is not None:
-            print("   Image placement (review the heading each image lands under):")
+            print("   Image placement (image -> translated heading | paragraph it follows):")
             for r in placement["review"]:
-                print("      #%-2d %-44s -> %s [%s]"
-                      % (r["n"], r["url"].rsplit("/", 1)[-1], r["tr_heading"][:46], r["how"]))
+                print("      #%-2d %-40s -> %s [%s]" % (
+                    r["n"], r["url"].rsplit("/", 1)[-1][:40], r["tr_heading"][:34], r["how"]))
+                print("           after: %s" % (r.get("para") or "(under heading)"))
+            if chplace["review"]:
+                print("   Content Highlight placement (above paragraph):")
+                for r in chplace["review"]:
+                    print("      CH%-2d %s [%s]  above: %s" % (
+                        r["n"], r["tr_heading"][:30], r["how"], r.get("para", "")))
 
         if not ops:
             print("   Nothing to repair, place or add (already canonical).\n")
             continue
 
         if args.dry_run:
-            n_img = len(placement["ops"]) if placement is not None else len([o for o in image_ops if o.get("text")])
+            n_img = placement["placed"] if placement is not None else len([o for o in image_ops if o.get("text")])
+            n_ch = chplace["placed"] if chplace is not None else len([o for o in ch_ops if o.get("text")])
             print("   Planned: %d image change(s) + %d Content Highlight change(s). --dry-run: nothing written.\n"
-                  % (n_img, len(ch_ops)))
+                  % (n_img, n_ch))
             continue
 
         requests = build_repair_requests(ops, tab_id)
         service.documents().batchUpdate(documentId=did, body={"requests": requests}).execute()
         n = normalize_styles(service, did, tab_id)
         grand["img"] += placement["placed"] if placement is not None else rep["image_repaired"]
-        grand["ch"] += len(ch_ops)
+        grand["ch"] += chplace["placed"] if chplace is not None else len([o for o in ch_ops if o.get("text")])
         print("   Applied %d change(s); normalized %d trigger line(s).\n" % (len(requests), n))
 
     if not args.dry_run:

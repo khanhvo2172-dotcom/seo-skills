@@ -41,9 +41,11 @@ LANG_TERMS = {
     "en": {
         "name": "English",
         "formula": [r"formula"],
-        "callout": [r"pro\s*tip", r"note", r"tip"],
+        "callout": [r"pro\s*tip", r"note", r"tip",
+                    r"your\s+takeaway", r"key\s+takeaway", r"takeaway"],
         "quick_recap": [r"quick\s+recap"],
         "faq": [r"faqs?", r"frequently\s+asked\s+questions"],
+        "final_thoughts": [r"final\s+thoughts", r"conclusion", r"wrapping\s+up"],
     },
     "es": {
         "name": "Spanish",
@@ -51,9 +53,12 @@ LANG_TERMS = {
         "callout": [
             r"consejo\s+profesional", r"consejo\s+pro", r"truco\s+profesional",
             r"consejo", r"truco", r"nota", r"aviso", r"importante", r"pro\s*tip",
+            r"tu\s+conclusi[oó]n", r"conclusi[oó]n", r"para\s+llevar",
         ],
         "quick_recap": [r"resumen\s+r[aá]pido", r"recapitulaci[oó]n\s+r[aá]pida", r"resumen"],
         "faq": [r"faqs?", r"preguntas\s+frecuentes"],
+        "final_thoughts": [r"reflexiones\s+finales", r"pensamientos\s+finales",
+                           r"conclusi[oó]n", r"conclusiones"],
     },
     "de": {
         "name": "German",
@@ -61,9 +66,11 @@ LANG_TERMS = {
         "callout": [
             r"profi-?\s*tipp", r"profitipp", r"tipp", r"hinweis", r"notiz",
             r"anmerkung", r"achtung", r"wichtig", r"pro\s*tip",
+            r"dein\s+fazit", r"fazit", r"zum\s+mitnehmen",
         ],
         "quick_recap": [r"kurze\s+zusammenfassung", r"schnelle\s+zusammenfassung", r"zusammenfassung"],
         "faq": [r"faqs?", r"h[aä]ufig\s+gestellte\s+fragen", r"h[aä]ufige\s+fragen"],
+        "final_thoughts": [r"abschlie[sß]+ende\s+gedanken", r"schlussgedanken", r"fazit"],
     },
     "fr": {
         "name": "French",
@@ -72,10 +79,12 @@ LANG_TERMS = {
             r"astuce\s+de\s+pro", r"astuce\s+pro", r"conseil\s+de\s+pro", r"conseil\s+pro",
             r"astuce", r"conseil", r"remarque", r"note", r"[aà]\s+noter", r"attention",
             r"important", r"pro\s*tip",
+            r"votre\s+le[cç]on", r"le[cç]on", r"[aà]\s+retenir", r"ce\s+qu['\s]il\s+faut\s+retenir",
         ],
         "quick_recap": [r"r[eé]capitulatif\s+rapide", r"r[eé]sum[eé]\s+rapide", r"en\s+bref"],
         "faq": [r"faqs?", r"questions\s+fr[eé]quentes",
                 r"questions\s+fr[eé]quemment\s+pos[eé]es", r"foire\s+aux\s+questions"],
+        "final_thoughts": [r"r[eé]flexions\s+finales", r"pens[eé]es\s+finales", r"conclusion"],
     },
 }
 
@@ -94,6 +103,7 @@ def compile_recognisers(lang):
     callout_alt = "|".join(t["callout"])
     qr_alt = "|".join(t["quick_recap"])
     faq_alt = "|".join(t["faq"])
+    ft_alt = "|".join(t.get("final_thoughts", [])) or r"(?!x)x"  # never-match if absent
     return {
         # A line that CONTAINS a formula word, e.g. a "Fórmula" heading or an
         # inline lead-in "...la fórmula del margen:". Unlike English (where the
@@ -107,6 +117,9 @@ def compile_recognisers(lang):
         "quick_recap": re.compile(r"^\s*(?:%s)\b" % qr_alt, re.I),
         # A line ENDING in a FAQ phrase (mirrors the n8n /FAQs?\s*$/i and friends).
         "faq": re.compile(r"(?:(?:%s)\s*:?\s*$)" % faq_alt, re.I),
+        # A heading that CONTAINS a 'Final Thoughts' phrase (used only for the
+        # end-of-body fallback landmark in place_ml, matched against headings).
+        "final_thoughts": re.compile(r"\b(?:%s)\b" % ft_alt, re.I),
     }
 
 

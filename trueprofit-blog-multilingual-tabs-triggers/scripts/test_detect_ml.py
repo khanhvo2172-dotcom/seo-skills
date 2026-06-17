@@ -4,7 +4,9 @@
 Run:  python test_detect_ml.py
 """
 from detect_ml import detect, parse_existing_triggers, plan_repairs, plan_ch
-from place_ml import english_image_anchors, plan_placements, heading_score, align_headings, headings
+from place_ml import (english_image_anchors, english_ch_anchors, plan_placements,
+                      plan_ch_placements, heading_score, align_headings, headings,
+                      choose_anchor, body_end_index, section_bodies)
 
 
 def seq(*items):
@@ -204,80 +206,107 @@ def main():
     rep = plan_repairs(b, ["https://x/real-1.webp", "https://x/real-2.webp"], [], ["a", "b"])
     ok &= run("repair: count mismatch warns", any("WARNING" in n for n in rep["notes"]))
 
-    # ---- Heading-anchored placement (out-of-sync translated tab) -----------
+    # ---- Cognate matching (heading + paragraph) ----------------------------
     ok &= run("cognate: competition~competencia", heading_score("Low Competition", "baja competencia") >= 1)
     ok &= run("cognate: organic~organica", heading_score("Organic Fruit", "fruta organica") >= 1)
     ok &= run("cognate: lamps~lamparas", heading_score("Mushroom Lamps", "Lamparas de setas") >= 1)
     ok &= run("cognate: no false match socks/calcetines", heading_score("Fuzzy Socks", "Calcetines esponjosos") == 0)
 
+    # choose_anchor self-corrects a +1 drift using content overlap.
+    bodies = seq((0, "Texto extra que no estaba."),
+                 (0, "Las lamparas de hongo son tendencia mundial."),
+                 (0, "Se venden muy bien."))
+    idx, score, moved = choose_anchor("Mushroom lamps are trending worldwide.", bodies, 0)
+    ok &= run("choose_anchor: corrects +1 drift to the lamparas paragraph", idx == 1 and moved is True)
+    idx, score, moved = choose_anchor("Totally unrelated text.", bodies, 0)
+    ok &= run("choose_anchor: no signal -> stays at expected ordinal", idx == 0 and moved is False)
+
+    # ---- Paragraph-anchored placement (out-of-sync translated tab) ----------
     en = seq(
-        (2, "What Is a Profitable Niche with Low Competition?"),
-        (0, "Image (sentence note): https://x/intro-1.webp, Alt is Large preview"),
-        (2, "10 Profitable Niches with Low Competition"),
-        (3, "Sustainable Mushroom Lamps"),
+        (2, "Intro Heading"),
+        (0, "Intro paragraph one."),
+        (0, "Intro paragraph two with the secret."),
+        (0, "Image (sentence note): https://x/intro-1.webp, Alt is Intro"),
+        (3, "Mushroom Lamps Section"),
+        (0, "Mushroom lamps are trending worldwide."),
         (0, "Image (sentence note): https://x/mushroom-2.webp, Alt is Mushroom lamp"),
-        (3, "Organic Dried Fruit Slices"),
-        (0, "Image (sentence note): https://x/organic-3.webp, Alt is Organic snacks"),
-        (3, "Natural-fiber Fuzzy Socks"),
-        (0, "Image (sentence note): https://x/socks-4.webp, Alt is Fuzzy socks"),
-        (3, "Frozen Smoothie Cups"),
-        (0, "Image (sentence note): https://x/smoothie-5.webp, Alt is Smoothie cups"),
-        (0, "Image (sentence note): https://x/dashboard-6.webp, Alt is Dashboard"),
+        (0, "They sell very well online."),
+        (0, "Content Highlight"),
+        (0, "Your Takeaway: focus on one hero product."),
+        (3, "Closing CTA Section"),
+        (0, "Track your store performance closely."),
+        (0, "Image (sentence note): https://x/cta-3.webp, Alt is CTA"),
     )
     anchors = english_image_anchors(en)
-    ok &= run("anchors: 6 images found", len(anchors) == 6)
-    ok &= run("anchors: dashboard offset=1 under smoothie heading",
-              anchors[5]["offset"] == 1 and anchors[4]["h_order"] == anchors[5]["h_order"])
+    ok &= run("anchors: 3 images found", len(anchors) == 3)
+    ok &= run("anchors: img1 follows 2 body paragraphs",
+              anchors[0]["body_ordinal"] == 2 and "secret" in anchors[0]["anchor_text"])
+    ok &= run("anchors: img2 follows 1 body paragraph", anchors[1]["body_ordinal"] == 1)
+    chs = english_ch_anchors(en)
+    ok &= run("ch anchors: 1 found, labels the takeaway paragraph",
+              len(chs) == 1 and chs[0]["before_ordinal"] == 3 and "Takeaway" in chs[0]["anchor_text"])
 
-    # Prose between headings + a trailing FAQ heading, so "end of section"
-    # (before the next heading) is distinct from "right after the heading".
+    # Translated tab: faithful but with an EXTRA paragraph in the mushroom section
+    # (drift) and a closing region (Final Thoughts + FAQ) but NO CTA heading.
     tr = seq(
-        (1, "10 nichos rentables con baja competencia"),
-        (2, "Resumen rapido"),
-        (0, "Texto de resumen."),
-        (2, "Que es un nicho rentable con baja competencia?"),
-        (0, "Un nicho es un segmento de mercado."),
-        (2, "10 nichos rentables con baja competencia en 2026"),
-        (3, "Lamparas de setas sostenibles"),
-        (0, "Las lamparas de setas son tendencia."),
-        (3, "Rodajas de fruta organica deshidratada"),
-        (0, "La fruta deshidratada vende bien."),
-        (3, "Calcetines esponjosos de fibra natural"),
-        (0, "Los calcetines son comodos."),
-        (3, "Vasos de smoothie congelado"),
-        (0, "Los smoothies congelados gustan."),
+        (2, "Encabezado de introduccion"),
+        (0, "Parrafo uno de introduccion."),
+        (0, "Parrafo dos con el secreto."),
+        (3, "Seccion de lamparas de hongo"),
+        (0, "Texto extra que no estaba en el original."),
+        (0, "Las lamparas de hongo son tendencia mundial."),
+        (0, "Se venden muy bien en linea."),
+        (0, "Tu conclusion: enfocate en un producto estrella."),
+        (2, "Reflexiones finales"),
+        (0, "En resumen, construye una marca."),
         (2, "Preguntas frecuentes"),
+        (0, "Una pregunta."),
     )
-    tr_alts = ["Vista previa", "Lampara de setas", "Fruta organica", "Calcetines", "Vasos smoothie", "Panel"]
-    place = plan_placements(tr, anchors, tr_alts, [a["alt"] for a in anchors])
-    ok &= run("place: 6 images placed", place["placed"] == 6)
-
-    th = {h["text"]: h for h in headings(tr)}
-    rev = {r["n"]: r for r in place["review"]}
-    ok &= run("place: intro -> '¿Que es...' heading", rev[1]["tr_heading"].startswith("Que es"))
-    ok &= run("place: mushroom -> 'Lamparas...' (keyword)", rev[2]["tr_heading"].startswith("Lamparas") and rev[2]["how"] == "keyword")
-    ok &= run("place: socks -> 'Calcetines...' (ordinal fallback ok)", rev[4]["tr_heading"].startswith("Calcetines"))
-    ok &= run("place: smoothie -> 'Vasos de smoothie'", rev[5]["tr_heading"].startswith("Vasos"))
+    T = {b["text"]: b for b in tr}
+    tr_alts = ["Intro es", "Lampara es", "CTA es"]
+    place = plan_placements(tr, anchors, tr_alts, [a["alt"] for a in anchors], "es")
+    ok &= run("place: 3 images placed", place["placed"] == 3)
 
     def op_for(slug):
         return [o for o in place["ops"] if slug in o["text"]][0]
 
-    # Each image lands at the END of its section = the start of the NEXT heading
-    # (not th["end"], which would be right under its own heading).
-    ok &= run("place: mushroom at section end (before 'Rodajas' heading)",
-              op_for("mushroom-2")["start"] == th["Rodajas de fruta organica deshidratada"]["start"])
-    ok &= run("place: organic at section end (before 'Calcetines' heading)",
-              op_for("organic-3")["start"] == th["Calcetines esponjosos de fibra natural"]["start"])
-    # smoothie (#5) and dashboard (#6) both land at the end of the smoothie section,
-    # i.e. right before the trailing FAQ heading, sharing one insert index.
-    smoothie_op = op_for("smoothie-5")
-    dash_op = op_for("dashboard-6")
-    ok &= run("place: smoothie & dashboard share the section-end index (before FAQ)",
-              smoothie_op["start"] == dash_op["start"] == th["Preguntas frecuentes"]["start"])
-    ok &= run("place: image is NOT inserted right under its own heading",
-              op_for("mushroom-2")["start"] != th["Lamparas de setas sostenibles"]["end"])
+    # img1: after the 2nd intro paragraph (the one mentioning the secret)
+    ok &= run("place: img1 after 'Parrafo dos con el secreto.'",
+              op_for("intro-1")["start"] == T["Parrafo dos con el secreto."]["end"])
+    # img2: drift-corrected past the EXTRA paragraph onto the lamparas paragraph
+    ok &= run("place: img2 drift-corrected onto the lamparas paragraph",
+              op_for("mushroom-2")["start"] == T["Las lamparas de hongo son tendencia mundial."]["end"])
+    ok &= run("place: img2 NOT placed after the extra paragraph",
+              op_for("mushroom-2")["start"] != T["Texto extra que no estaba en el original."]["end"])
+    # img3 (CTA): its English heading has no keyword match; the ordinal step lands
+    # in the closing region, so it is redirected to the end of the body.
+    ok &= run("place: CTA redirected to end of body (before 'Reflexiones finales')",
+              op_for("cta-3")["start"] == T["Reflexiones finales"]["start"])
+    ok &= run("place: CTA flagged as fallback in review",
+              [r for r in place["review"] if r["n"] == 3][0]["how"] == "fallback")
+    ok &= run("place: a structure warning was raised for the CTA", len(place["warnings"]) >= 1)
     ok &= run("place: op text canonical with translated alt",
-              smoothie_op["text"] == "Image (sentence note): https://x/smoothie-5.webp, Alt is Vasos smoothie\n")
+              op_for("intro-1")["text"] == "Image (sentence note): https://x/intro-1.webp, Alt is Intro es\n")
+
+    # Content Highlight mirrored above the translated takeaway (drift-corrected).
+    chplace = plan_ch_placements(tr, chs, "es")
+    ok &= run("ch place: 1 Content Highlight placed", chplace["placed"] == 1)
+    ok &= run("ch place: above 'Tu conclusion...' paragraph",
+              chplace["ops"][0]["start"] == T["Tu conclusion: enfocate en un producto estrella."]["start"]
+              and chplace["ops"][0]["text"] == "Content Highlight\n")
+
+    # body_end_index lands on the Final Thoughts heading.
+    ok &= run("body_end_index: finds 'Reflexiones finales'",
+              body_end_index(tr, "es") == T["Reflexiones finales"]["start"])
+
+    # ---- REPAIR-mode CH now recognises 'takeaway' callouts -------------------
+    bt = text_blocks("Texto.", "Tu conclusión: lidera con un producto héroe.")
+    r = detect(bt, "es")
+    ok &= run("es: 'Tu conclusión:' takeaway triggers CH", len(r["insertions"]) == 1)
+    bt = text_blocks("Content Highlight", "Dein Fazit: setze auf ein Hero-Produkt.")
+    chrep = plan_ch(bt, "de")
+    ok &= run("de: 'Dein Fazit:' backs a Content Highlight (kept, not orphaned)",
+              chrep["kept"] == 1 and chrep["deleted"] == 0)
 
     # ---- Request builder ordering (regression: replace must delete-then-insert) -
     from gdocs_ml_triggers import build_repair_requests
