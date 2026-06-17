@@ -1,0 +1,21 @@
+# Google OAuth secrets / runtime credentials — never commit
+token.json
+credentials.json
+client_secret*.json
+*.pem
+*.key
+.env
+.env.*
+
+# Per-document runtime data (not part of any skill)
+alts.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS noise
+.DS_Store
+Thumbs.db
