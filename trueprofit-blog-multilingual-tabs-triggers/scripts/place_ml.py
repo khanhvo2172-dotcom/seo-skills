@@ -445,11 +445,23 @@ def plan_ch_placements(tr_blocks, ch_anchors, lang=None):
         # on the next line; cognate scoring would prefer the text, so snap to the
         # callout LABEL line when one is in the window. Otherwise fall back to cognate.
         idx = None
+        lo, hi = max(0, exp - 2), min(len(bodies) - 1, exp + 2)
         if rec is not None:
-            lo, hi = max(0, exp - 2), min(len(bodies) - 1, exp + 2)
             cands = [j for j in range(lo, hi + 1) if rec["callout"].match(_clean(bodies[j]["text"]))]
             if cands:
                 idx = min(cands, key=lambda j: (abs(j - exp), j))
+        if idx is None and "=" in (a["anchor_text"] or ""):
+            # The English CH labels a FORMULA ("X = ..."). Formula terms rarely
+            # cognate across languages (German compounds share no prefix with the
+            # English), so token scoring can drift onto a nearby further-reading
+            # line whose URL slug coincidentally carries English words. The "="
+            # is the universal discriminator (same rule detect_ml uses), so snap
+            # to the in-window translated line that carries an "=" and is not a URL.
+            fcands = [j for j in range(lo, hi + 1)
+                      if "=" in _clean(bodies[j]["text"])
+                      and not RE_URLISH.search(_clean(bodies[j]["text"]))]
+            if fcands:
+                idx = min(fcands, key=lambda j: (abs(j - exp), j))
         if idx is None:
             idx, _score, _moved = choose_anchor(a["anchor_text"], bodies, exp)
         target = bodies[idx]

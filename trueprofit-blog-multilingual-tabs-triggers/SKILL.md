@@ -69,7 +69,7 @@ image-trigger-line count vs. the English image count:
 | Element | Script | Behaviour |
 |---|---|---|
 | **Image trigger** | `gdocs_ml_triggers.py` | Produces one canonical line `Image (sentence note): <url>, Alt is <alt>` per English image — **repaired** in place (counts match) or **placed at the same paragraph position as English** (out of sync). `<url>` is the **English tab's Nth image URL** (same CDN file, by order); `<alt>` is the **translated** alt. |
-| **Content Highlight** | `gdocs_ml_triggers.py` | **REPAIR (counts match):** a `Content Highlight` is **kept** (and `Content Highlight:` normalized to no colon) only when the next line is genuine translated highlight content — a localized formula (`=` on the next line) or a callout (Pro tip / Note / **Your Takeaway** keyword + colon); one sitting above ordinary prose is an **orphan and removed**, and a missing one is **added** above any detected formula / callout. **PLACE (out of sync):** Content Highlights are **mirrored from English** — wherever English has a `Content Highlight` above a paragraph, one is placed above the translated equivalent of that paragraph (same paragraph-ordinal anchoring, snapping to the translated callout label). This keeps every editorial highlight — Your Takeaway, Pro tip, Note, formula — in parity with English without per-language guesswork. |
+| **Content Highlight** | `gdocs_ml_triggers.py` | **REPAIR (counts match):** a `Content Highlight` is **kept** (and `Content Highlight:` normalized to no colon) only when the next line is genuine translated highlight content — a localized formula (`=` on the next line) or a callout (Pro tip / Note / **Your Takeaway** keyword + colon); one sitting above ordinary prose is an **orphan and removed**, and a missing one is **added** above any detected formula / callout. **PLACE (out of sync):** Content Highlights are **mirrored from English** — wherever English has a `Content Highlight` above a paragraph, one is placed above the translated equivalent of that paragraph (same paragraph-ordinal anchoring, snapping to the translated callout label, or to the localized formula line via the `=` discriminator when the English highlight labels a formula). This keeps every editorial highlight — Your Takeaway, Pro tip, Note, formula — in parity with English without per-language guesswork. |
 | **Quick Recap / FAQ** | `gdocs_ml_triggers.py` | **Flags only**, per tab, using localized terms. Never fabricates. |
 | **Blog links** | `update_links.py` | Rewrites `https://trueprofit.io/blog/<slug>` → `https://trueprofit.io/<lang>/blog/<slug>` for every slug in the `MULTILINGUAL_SLUGS` list. Links to slugs not in the list are left untouched and logged. Already-localized links are skipped. |
 | **Shopify app links** | `update_links.py` | Prefixes `utm_campaign` on `apps.shopify.com/trueprofit` links: `utm_campaign=foo` → `utm_campaign=es-foo` / `de-foo` / `fr-foo`. Skips links where the prefix is already present. |
@@ -210,7 +210,13 @@ final mapping and the full tab list — check it before applying.
   stripped, matched on a shared 4-char prefix; monotonic ordinal fallback).
   `plan_placements` / `plan_ch_placements` then insert each trigger at the **same
   paragraph ordinal**, using `choose_anchor` (cognate-token overlap in a ±2 window) to
-  correct translation drift; CH placement snaps to the translated callout label.
+  correct translation drift; CH placement snaps to the translated callout label,
+  and — when the English Content Highlight labels a **formula** (`=` present) — to the
+  in-window translated line that also carries `=` and is not a URL. This `=` snap
+  keeps a formula highlight anchored correctly in languages whose formula terms don't
+  cognate-match English (e.g. German compounds like `Nettogewinn`), where token
+  scoring would otherwise drift onto a nearby further-reading line whose English URL
+  slug (`…/gross-profit-vs-net-profit`) coincidentally repeats the formula's words.
   `body_end_index` is the closing-region landmark for the CTA fallback.
 - `scripts/gdocs_ml_triggers.py` — the orchestrator (tabs, modes, structure-warning
   guard, batchUpdate).

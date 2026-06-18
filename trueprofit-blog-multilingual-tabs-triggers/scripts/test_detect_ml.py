@@ -299,6 +299,33 @@ def main():
     ok &= run("body_end_index: finds 'Reflexiones finales'",
               body_end_index(tr, "es") == T["Reflexiones finales"]["start"])
 
+    # ---- CH formula snap: German formula terms don't cognate, and a nearby -----
+    # further-reading line carries the English URL slug ('...net-profit'); token
+    # scoring would steal the anchor onto the URL line. The '=' discriminator must
+    # keep the CH above the localized formula.
+    en_f = seq(
+        (3, "6. Net Profit"),
+        (0, "This is the total money left over after all expenses."),
+        (0, "Content Highlight"),
+        (0, "Net Profit = Operating Profit - (Debt Interest + Taxes)"),
+    )
+    chs_f = english_ch_anchors(en_f)
+    de_f = seq(
+        (3, "6. Nettogewinn"),
+        (0, "Dies ist der Gesamtbetrag der nach Abzug aller Ausgaben bleibt."),
+        (0, "Nettogewinn = Betriebsgewinn - (Schuldzinsen + Steuern)"),
+        (0, "Weiterfuehrende Lektuere: https://trueprofit.io/blog/gross-profit-vs-net-profit"),
+    )
+    Tf = {b["text"]: b for b in de_f}
+    chplace_f = plan_ch_placements(de_f, chs_f, "de")
+    ok &= run("ch formula snap: 1 Content Highlight placed", chplace_f["placed"] == 1)
+    ok &= run("ch formula snap: above the 'Nettogewinn =' formula line",
+              chplace_f["ops"][0]["start"]
+              == Tf["Nettogewinn = Betriebsgewinn - (Schuldzinsen + Steuern)"]["start"])
+    ok &= run("ch formula snap: NOT above the further-reading URL line",
+              chplace_f["ops"][0]["start"]
+              != Tf["Weiterfuehrende Lektuere: https://trueprofit.io/blog/gross-profit-vs-net-profit"]["start"])
+
     # ---- REPAIR-mode CH now recognises 'takeaway' callouts -------------------
     bt = text_blocks("Texto.", "Tu conclusión: lidera con un producto héroe.")
     r = detect(bt, "es")
