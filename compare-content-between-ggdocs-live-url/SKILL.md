@@ -53,7 +53,7 @@ Check these elements in order:
 2. H1 title.
 3. Intro paragraphs, including links.
 4. Quick Recap or summary box.
-5. H2/H3 section headings, hierarchy, and order.
+5. Heading structure for H1-H6, hierarchy, and order. Flag mismatches where one source uses a heading level and the other uses plain text, such as a live H4 product heading that appears as normal paragraph text in the Google Doc.
 6. Body text within each section.
 7. Internal links, including anchor text and target URL.
 8. Data benchmarks. Always include these in the result table, even when identical. Cover margin percentages, AOV, per-product metrics, cost ranges, pricing data, and numerical claims or statistics.
