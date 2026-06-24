@@ -23,6 +23,7 @@ When pitching AI/SMB/productivity topics, focus on TrueProfit MCP: Shopify merch
 6. Keep examples believable and varied. Do not start every example with the same phrase.
 7. When pitching Harry, add his social links near the end unless the user asks for a shorter reply.
 8. End with a simple signoff. Do not over-explain the brand unless the pitch needs it.
+9. When the user approves the copy and asks to make or create the draft, create it directly in Gmail when Gmail is connected. Preserve the approved recipient, subject, and body. Create a draft only; never send it unless the user explicitly asks to send it.
 
 ## Default Email Structure
 
@@ -59,6 +60,7 @@ Harry Chu's contact information:
 ## Answer Style
 
 - Answer the question directly in the first sentence.
+- Open with a hook that directly addresses the reporter's central topic. Do not lead with a narrower TrueProfit qualification; use that as the following sentence.
 - Prefer practical actions over generic advice.
 - Use `profit`, `margin`, `unit economics`, `net profit`, `average order profit`, `COGS`, `shipping`, `refunds`, `returns`, `CAC`, `LTV`, and `net profit on ad spend` when relevant.
 - Keep paragraphs short. Most answers should be 60-120 words including the example.
@@ -84,6 +86,8 @@ Use these recurring recommendations when they fit the reporter's question:
 Use this angle for AI, SMB productivity, AI decision-making, store analytics, or workflow questions:
 
 - AI helps SMBs most when it becomes a decision layer on top of trusted business data, not just a generic writing or automation tool.
+- Emphasize that AI recommendations are only as useful as the business-performance data behind them. For acquisition or growth topics, mention accurate profit, cost, customer, product, and campaign data before describing what AI can recommend.
+- For stories about winning customers, a preferred hook pattern is: `AI is helping businesses win more customers, but its recommendations are only as good as the business data behind them.` Follow it by explaining that complete performance data helps AI identify who to target, what to promote, and where to invest marketing budget.
 - Prefer a short paragraph followed by bullets when explaining TrueProfit MCP. Avoid writing one dense plain-text paragraph when the pitch includes multiple example questions or use cases.
 - Use this default phrasing for AI scaling, SMB decision-making, productivity, or "scale smarter" requests:
 
@@ -146,9 +150,11 @@ Example: Another merchant, a travel accessories store, had one backpack generati
 Before finalizing:
 
 - Confirm every reporter question is answered.
+- Confirm the opening hook directly answers the reporter's topic before introducing the TrueProfit-specific profitability angle.
 - Confirm every requested example exists and uses varied wording.
 - Confirm the intro uses the user's preferred phrasing, especially names and titles.
 - Confirm TrueProfit proof points are included when useful: #1 profit tracking app for Shopify stores, 5.0 rating, 770+ reviews, and 70,000+ merchants.
 - Confirm Harry Chu's links are included when Harry is introduced as the source.
 - Confirm examples do not overclaim or invent precise metrics.
 - Confirm the email can be sent as-is, with only sender name/signature needing replacement if unknown.
+- If the user requested a Gmail draft, confirm it was created but not sent.
