@@ -87,6 +87,7 @@ Use this angle for AI, SMB productivity, AI decision-making, store analytics, or
 
 - AI helps SMBs most when it becomes a decision layer on top of trusted business data, not just a generic writing or automation tool.
 - Emphasize that AI recommendations are only as useful as the business-performance data behind them. For acquisition or growth topics, mention accurate profit, cost, customer, product, and campaign data before describing what AI can recommend.
+- For AI decision-making topics, use stronger data-quality language: AI can only make reliable business decisions when it works from accurate, clean, and valuable performance data. Without full context around profit, costs, products, customers, and campaigns, it can hallucinate confident recommendations that look smart but lead merchants in the wrong direction.
 - For stories about winning customers, a preferred hook pattern is: `AI is helping businesses win more customers, but its recommendations are only as good as the business data behind them.` Follow it by explaining that complete performance data helps AI identify who to target, what to promote, and where to invest marketing budget.
 - Prefer a short paragraph followed by bullets when explaining TrueProfit MCP. Avoid writing one dense plain-text paragraph when the pitch includes multiple example questions or use cases.
 - Use this default phrasing for AI scaling, SMB decision-making, productivity, or "scale smarter" requests:
@@ -119,13 +120,19 @@ Example: A Shopify fashion merchant might see that one product has the highest r
 
 ## Harry Chu Links
 
-When introducing Harry Chu as the source, include these links near the end:
+When introducing Harry Chu as the source, include these links near the end with a friendly lead-in such as `Explore more about Harry here:`
 
 ```text
-Harry's social links:
+Explore more about Harry here:
 Website: https://trueprofit.io/author/harry-chu
 LinkedIn: https://www.linkedin.com/in/harry-chu-trueprofit/
 YouTube: https://www.youtube.com/@HarryChu-TrueProfit/shorts
+```
+
+When closing an AI or ecommerce decision-making pitch, prefer a natural American-style invitation instead of a stiff availability line:
+
+```text
+Want to explore this further? Harry would be happy to share how AI is helping ecommerce businesses make faster, smarter, and more data-driven decisions when it is grounded in accurate profit and performance data.
 ```
 
 ## Example Phrasing
