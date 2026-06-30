@@ -124,3 +124,4 @@ When asked to scan emails:
 - Read relevant messages.
 - Ignore previously reviewed opportunities if user asks.
 - Avoid raw operational detail; provide ranked summaries.
+- After crawling, always mark the scanned messages as read (remove the `UNREAD` label from every thread that was opened/evaluated), so the same opportunities are not re-surfaced on the next run.
