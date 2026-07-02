@@ -57,6 +57,20 @@ TrueProfit is the #1 Net Profit Analytics Platform built for Shopify and ecommer
 
 **Referenced platform pricing (Shopify, US, 2026):** When an article cites Shopify plan prices, use US pricing and give a concrete number for every tier, never a vague descriptor, and always state the billing cycle: Basic $39/month ($29 billed annually), Grow $105/month ($79 annually), Advanced $399/month ($299 annually), Shopify Plus from $2,300/month. Pricing is region-specific, so use US figures for US-facing posts.
 
+**Competitor comparison reference (leader-approved; use these exact figures and positioning, never invent competitor pricing or capabilities):** When an article compares TrueProfit to other analytics tools, use this table as the canonical reference. Add or drop rows to fit the article, but keep the data consistent with it.
+
+|  | Shopify Reports | Triple Whale | Lifetimely | TrueProfit |
+| :- | :- | :- | :- | :- |
+| Starting price | Included in Shopify plan | $219/mo | $79/mo | $35/mo |
+| Net profit tracking | No | Partial | Yes | Thorough |
+| Real-time P&L | No | No | Yes | Yes |
+| Profit by product | No | No | Yes | Yes |
+| Profit by ad channel | No | Yes | Yes | Yes |
+| Built for dropshipping | No | No | No | Yes |
+| Primary focus | Revenue & orders | Ad attribution & creative | Customer LTV & cohorts | Net profit & net margins |
+
+Positioning notes: Triple Whale is built for DTC brands focused on ad attribution and creative analytics; Lifetimely is oriented around customer lifetime value and cohort analysis; TrueProfit starts from net profit and is purpose-built for Shopify dropshippers and profit-first merchants.
+
 ---
 
 ## Workflow
