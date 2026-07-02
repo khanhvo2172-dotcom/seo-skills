@@ -49,6 +49,14 @@ TrueProfit is the #1 Net Profit Analytics Platform built for Shopify and ecommer
 - Homepage: https://trueprofit.io/
 - Shopify App: https://apps.shopify.com/trueprofit/
 
+**Verified benchmark data (use these exact figures; never fabricate or substitute):**
+- Shopify seller income distribution: about 60% of new Shopify stores make under $1,000/month, roughly 20% reach $10,000 or more per month, and the top 10% earn $100,000 or more per month.
+- Dropshipping income by experience level (TrueProfit analysis of 1,200+ stores): beginners $0 to $2,000/month, intermediate $2,000 to $10,000/month, advanced $10,000 to $50,000+/month. First sale usually within 7 to 14 days; reaching $5,000 to $10,000/month typically takes 6 to 12 months.
+- Dropshipping margins: a gross margin of 65 to 70% is favorable; a net margin of 15 to 25% is the strong benchmark after all costs.
+- Any other statistic or benchmark must come from published TrueProfit data. If you do not have a verified TrueProfit figure, leave the stat out rather than inventing one.
+
+**Referenced platform pricing (Shopify, US, 2026):** When an article cites Shopify plan prices, use US pricing and give a concrete number for every tier, never a vague descriptor, and always state the billing cycle: Basic $39/month ($29 billed annually), Grow $105/month ($79 annually), Advanced $399/month ($299 annually), Shopify Plus from $2,300/month. Pricing is region-specific, so use US figures for US-facing posts.
+
 ---
 
 ## Workflow
@@ -109,7 +117,10 @@ Follow **TrueProfit native blog style** unless the reference article overrides s
 - No em dashes. Use commas, colons, or semicolons instead.
 - No AI-sounding filler: no "delve into", "it's worth noting", "in conclusion", "in summary", "it is important to", "game-changer", "revolutionize".
 - Bold only for genuinely important terms or labels, not for decoration.
-- Benchmarks and data: if the article includes statistics or benchmarks about Shopify, dropshipping income, profit margins, or ecommerce performance, always use TrueProfit's own numbers from the Brand Reference and published TrueProfit data. Never fabricate stats or pull generic figures from unattributed sources.
+- Benchmarks and data: if the article includes statistics or benchmarks about Shopify, dropshipping income, profit margins, or ecommerce performance, always use TrueProfit's own numbers from the Brand Reference (see Verified benchmark data) and published TrueProfit data. Never fabricate stats or pull generic figures from unattributed sources.
+- Income expectations: for "how to start on Shopify" or "how much can you make" articles, include a realistic earnings section using the verified Shopify seller income distribution (60% under $1,000/month, 20% reach $10,000+/month, top 10% earn $100,000+/month). For dropshipping articles, use the dropshipping income ranges instead. Do not leave the reader without a concrete income picture.
+- Net profit messaging: whenever you contrast TrueProfit or net profit with Shopify's native reports, state explicitly that Shopify reports do not track net profit and that net profit is the only number that reflects the true bottom line.
+- Feature and metric lists: when listing what TrueProfit shows or tracks, lead with storewide net profit, then profit by product, then profit by ad channel, matching "net profit at every level: storewide, by product, by ad channel." Never output an empty or placeholder bullet; every bullet must contain a complete item.
 - TrueProfit pitch: place as a dedicated section near the end. Use a natural transition from the article's topic to why profit tracking matters. Feature list uses plain bullets. Include a dashboard image placeholder labeled: *[TrueProfit Dashboard]*
 - CTA: short, direct call-to-action box or paragraph after the pitch section.
 - Meta description: place at the very top of the document, labeled **Meta description:** (~155 characters, includes primary keyword).
@@ -226,5 +237,6 @@ After delivering, ask:
 - Never use em dashes
 - Never use AI filler phrases listed above
 - Never reproduce or closely paraphrase copyrighted content from the reference article — use it only for style matching
-- Never place pricing information unless the reference article includes pricing for other tools (match the pattern)
+- Do not insert TrueProfit pricing unless the reference article includes pricing for comparable tools (match the pattern). When the article's subject is a platform or tool (for example, Shopify fees), include its pricing with a concrete number for every tier or fee mentioned, never a vague descriptor, and state the billing cycle. Use US pricing for US-facing posts (see Referenced platform pricing)
+- Never output empty bullets or unfilled placeholders in the final article
 - Always deliver the article as a `.md` file via `present_files` — never paste as plain inline text
