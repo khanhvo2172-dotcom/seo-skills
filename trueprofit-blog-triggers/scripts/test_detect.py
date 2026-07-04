@@ -78,6 +78,18 @@ def main():
     r = detect(b, "x")
     ok &= run("note-that prose does NOT trigger", len(r["insertions"]) == 0)
 
+    # 5b. "Your Takeaway:" callout -> Content Highlight before it
+    b = text_blocks("Some intro.", "Your Takeaway:")
+    r = detect(b, "x")
+    ok &= run("your-takeaway triggers CH", len(r["insertions"]) == 1 and r["insertions"][0]["index"] == b[1]["start"])
+    b = text_blocks("Your Takeaway: Lead with one hero product")
+    r = detect(b, "x")
+    ok &= run("your-takeaway with text triggers CH", len(r["insertions"]) == 1)
+    # Already has CH -> skip
+    b = text_blocks("Content Highlight", "Your Takeaway: do the thing")
+    r = detect(b, "x")
+    ok &= run("your-takeaway with existing CH is skipped", len(r["insertions"]) == 0)
+
     # 6. Images: two images -> two numbered triggers, in order, placed ABOVE
     b = text_blocks("Intro", "<IMG>", "Body text", "<IMG>", "Outro")
     r = detect(b, "marginal-benefit-vs-marginal-cost")

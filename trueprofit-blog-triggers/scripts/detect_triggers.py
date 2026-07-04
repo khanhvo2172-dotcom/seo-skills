@@ -48,6 +48,7 @@ RE_FORMULA_HEADING = re.compile(r"\bformula\b", re.I)
 # ("Note that...") so we require a colon to avoid false positives.
 RE_PRO_TIP = re.compile(r"^\s*pro\s*tip\b", re.I)
 RE_NOTE = re.compile(r"^\s*note\s*:", re.I)
+RE_YOUR_TAKEAWAY = re.compile(r"^\s*your\s+takeaway\s*:", re.I)
 
 # An Image trigger that already exists in the doc (so we don't duplicate it).
 RE_EXISTING_IMAGE_TRIGGER = re.compile(r"^\s*Image\b[^:]*:\s*https?://", re.I)
@@ -191,13 +192,13 @@ def detect(blocks, base_slug=None, image_map=None):
                     )
             continue
 
-        # ---- Content Highlight: Pro tip / Note callouts ----
-        if RE_PRO_TIP.match(text) or RE_NOTE.match(text):
+        # ---- Content Highlight: Pro tip / Note / Your Takeaway callouts ----
+        if RE_PRO_TIP.match(text) or RE_NOTE.match(text) or RE_YOUR_TAKEAWAY.match(text):
             prev = _prev_nonempty(blocks, i)
             if prev is not None and RE_CONTENT_HIGHLIGHT.match(_clean(prev["text"])):
                 notes.append("Callout already has a Content Highlight - skipped.")
             else:
-                label = "Pro tip" if RE_PRO_TIP.match(text) else "Note"
+                label = "Pro tip" if RE_PRO_TIP.match(text) else "Your Takeaway" if RE_YOUR_TAKEAWAY.match(text) else "Note"
                 insertions.append(
                     {
                         "index": b["start"],

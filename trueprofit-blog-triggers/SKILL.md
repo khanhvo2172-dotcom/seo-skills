@@ -143,15 +143,19 @@ In economics, marginal benefit is the maximum amount a consumer is willing...
 
 (The next line has no `=` — so nothing is added.)
 
-### Content Highlight — Pro tip / Note callouts
+### Content Highlight — Pro tip / Note / Your Takeaway callouts
 
-Trigger on a line starting with **`Pro tip`** (colon optional) or **`Note:`**
-(colon required, so ordinary prose like "Note that…" is left alone). Insert a
-`Content Highlight` label above it:
+Trigger on a line starting with **`Pro tip`** (colon optional), **`Note:`**
+(colon required, so ordinary prose like "Note that…" is left alone), or
+**`Your Takeaway:`** (colon required). Insert a `Content Highlight` label above
+it:
 
 ```
 Pro tip: Use our profit margin tool   -->   Content Highlight
                                             Pro tip: Use our profit margin tool
+
+Your Takeaway: Lead with one hero     -->   Content Highlight
+                                            Your Takeaway: Lead with one hero
 ```
 
 ### Image
