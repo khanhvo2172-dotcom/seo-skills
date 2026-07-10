@@ -119,6 +119,13 @@ def flatten(content):
         { kind: 'text'|'image', text, start, end }
     Only top-level paragraphs are considered (tables/TOC are skipped - triggers
     never live inside those).
+
+    A paragraph can hold an image AND meaningful text in the same run (e.g. a
+    caption sentence sitting in the same paragraph as an inline image). That
+    still needs an Image trigger - so it emits an 'image' block (anchored at
+    the paragraph start, where the trigger line lands) followed by a 'text'
+    block for the same range, so Content Highlight detection still sees the
+    text. A pure image paragraph (no text) emits only the 'image' block.
     """
     blocks = []
     for el in content:
@@ -137,9 +144,10 @@ def flatten(content):
             if "inlineObjectElement" in pe:
                 has_image = True
         text = "".join(text_parts)
-        # A paragraph that holds an image and no meaningful text is an image block.
-        if has_image and not text.strip():
+        if has_image:
             blocks.append({"kind": "image", "text": "", "start": start, "end": end})
+            if text.strip():
+                blocks.append({"kind": "text", "text": text, "start": start, "end": end})
         else:
             blocks.append({"kind": "text", "text": text, "start": start, "end": end})
     return blocks

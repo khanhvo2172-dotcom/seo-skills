@@ -58,10 +58,17 @@ in a fresh session that has no files:
 
 The Google account behind the token needs **edit access** to the doc.
 
-You always need two things from the user:
+You always need these from the user:
 
 1. The **Google Doc** (URL or ID).
-2. **How to name the images** — one of two modes (ask which, if unclear):
+2. **Whether the doc has a CTA image, and where.** Many articles end with a
+   fixed call-to-action image (e.g. `https://be.trueprofit.io/uploads/<slug>-N.webp`
+   with alt `TrueProfit CTA`) that should keep its own fixed URL/alt rather than
+   following the same naming rule as the other images. Ask this **before**
+   picking a naming mode — if there's a CTA image, its URL+alt is fixed and the
+   position (usually last) should be excluded from the base-slug/alt-rule
+   pattern applied to the rest.
+3. **How to name the images** — one of two modes (ask which, if unclear):
 
    **Mode A — base slug (auto-number, blank alt).** One slug drives every image
    URL, numbered by order, alt left empty. Good for a fresh article where the
