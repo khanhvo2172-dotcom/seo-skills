@@ -65,6 +65,7 @@ Harry Chu's contact information:
 - Use `profit`, `margin`, `unit economics`, `net profit`, `average order profit`, `COGS`, `shipping`, `refunds`, `returns`, `CAC`, `LTV`, and `net profit on ad spend` when relevant.
 - Keep paragraphs short. Most answers should be 60-120 words including the example.
 - Avoid inflated PR phrasing such as `game-changing`, `revolutionary`, `unlock`, `seamless`, or `robust`.
+- Do not overuse the em dash (—) to connect clauses. Use it sparingly, no more than once per paragraph, and prefer a period, comma, or a plain conjunction (`and`, `but`, `so`) instead.
 - Do not claim exact customer outcomes unless the user provides exact numbers.
 - If examples are illustrative rather than verified case studies, phrase them as anonymized customer examples, not public case studies.
 
