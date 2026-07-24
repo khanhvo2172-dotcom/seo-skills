@@ -72,9 +72,9 @@ You always need these from the user:
    Other recurring branded screenshots follow the same "fixed URL/alt, not
    part of the naming rule" pattern — e.g. the TrueProfit dashboard screenshot:
    `https://be.trueprofit.io/uploads/trueprofit-dashboard-1-1.webp` with alt
-   `TrueProfit's revamp dashboard`. If the user names a known recurring image
-   like this, use its fixed URL/alt directly instead of applying a base-slug
-   or asking them to re-supply it.
+   `TrueProfit Revamp Live Profit Dashboard`. If the user names a known
+   recurring image like this, use its fixed URL/alt directly instead of
+   applying a base-slug or asking them to re-supply it.
 3. **How to name the images** — one of two modes (ask which, if unclear):
 
    **Mode A — base slug (auto-number, blank alt).** One slug drives every image
