@@ -98,6 +98,26 @@ You always need these from the user:
    python gdocs_triggers.py --doc "<DOC>" --image-list "images.txt" --dry-run
    ```
 
+   **Generating alt text yourself (Mode B, when the user gives a rule instead of
+   literal text).** Often the user gives a *rule* rather than the exact alt
+   strings — e.g. "alt is the app name in each heading 3 plus 'homepage'", or
+   "each image demonstrates its heading 3 topic, generate the alt". When you
+   have to generate the wording (not just plug in a name), ask **which style**
+   they want, since this changes the output a lot:
+
+   - **Formula** — a fixed template applied mechanically, e.g. `<name> homepage`
+     for every image. Good when the rule already fully determines the string.
+   - **Contextual/natural** — a distinct, naturally-worded sentence per image
+     that reflects what the heading/section is actually about, e.g. instead of
+     repeating "Demonstration of <heading text> using AI" verbatim for every
+     image, vary the verb/phrasing per topic ("Demonstration of automating
+     supplier sourcing and order fulfillment using AI" vs "Demonstration of
+     handling customer service using AI"). Avoid restating the heading text
+     unchanged — rephrase it naturally.
+
+   If unclear which the user wants, ask before generating the full list — it's
+   much cheaper than generating, applying, then reset + regenerating.
+
    The two modes are mutually exclusive. In Mode B, image #1 takes line 1, image
    #2 line 2, and so on — order matters. If the list length doesn't match the
    number of images in the doc, the dry-run prints a **WARNING** and you should
