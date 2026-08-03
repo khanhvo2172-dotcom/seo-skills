@@ -9,7 +9,7 @@ description: Generate concise, reporter-ready email replies for PR opportunities
 
 Use this skill to turn reporter requests into concise, usable email replies. Default to a friendly, direct partner tone similar to Ahrefs: clear answers, little fluff, practical examples, and no stiff PR language.
 
-When the opportunity is for TrueProfit, write from Khanh unless the user names another sender. Introduce Harry Chu as the founder/source when the pitch needs an expert. Position TrueProfit as the #1 profit tracking app for Shopify stores, with a 5.0 rating from 770+ reviews and 70,000+ merchants, helping merchants track true profit after costs such as COGS, shipping, ad spend, transaction fees, discounts, refunds, taxes, and app fees.
+When the opportunity is for TrueProfit, write from Khanh unless the user names another sender. Introduce Harry Chu as the founder/source when the pitch needs an expert. Position TrueProfit as the #1 profit tracking app for Shopify stores, with a 5.0 rating from 800+ reviews and 70,000+ merchants, helping merchants track true profit after costs such as COGS, shipping, ad spend, transaction fees, discounts, refunds, taxes, and app fees.
 
 When pitching AI/SMB/productivity topics, focus on TrueProfit MCP: Shopify merchants can connect store and profit data to LLMs like ChatGPT or Codex, then use AI's reasoning to analyze store performance and make better decisions. Do not position TrueProfit as a foundation-model or generic AI company. Position it as a Shopify profit analytics app that gives AI the complete, current business context needed for useful analysis.
 
@@ -36,7 +36,7 @@ Hi [Reporter Name],
 
 I am Khanh from TrueProfit, and I would like to introduce Harry Chu, founder of TrueProfit, as a source for your story.
 
-TrueProfit is the #1 profit tracking app for Shopify stores, with a 5.0 rating from 770+ reviews and 70,000+ merchants. It helps ecommerce merchants track real profit after COGS, shipping, ad spend, transaction fees, discounts, refunds, taxes, and other costs.
+TrueProfit is the #1 profit tracking app for Shopify stores, with a 5.0 rating from 800+ reviews and 70,000+ merchants. It helps ecommerce merchants track real profit after COGS, shipping, ad spend, transaction fees, discounts, refunds, taxes, and other costs.
 
 Here are some insights from our CEO, Harry Chu:
 
@@ -163,7 +163,7 @@ Before finalizing:
 - Confirm the opening hook directly answers the reporter's topic before introducing the TrueProfit-specific profitability angle.
 - Confirm every requested example exists and uses varied wording.
 - Confirm the intro uses the user's preferred phrasing, especially names and titles.
-- Confirm TrueProfit proof points are included when useful: #1 profit tracking app for Shopify stores, 5.0 rating, 770+ reviews, and 70,000+ merchants.
+- Confirm TrueProfit proof points are included when useful: #1 profit tracking app for Shopify stores, 5.0 rating, 800+ reviews, and 70,000+ merchants.
 - Confirm Harry Chu's links are included when Harry is introduced as the source.
 - Confirm examples do not overclaim or invent precise metrics.
 - Confirm the email can be sent as-is, with only sender name/signature needing replacement if unknown.
