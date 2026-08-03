@@ -54,6 +54,7 @@ Harry Chu's contact information:
 - Linkedin: https://www.linkedin.com/in/harry-chu-trueprofit/
 - Youtube: https://www.youtube.com/@HarryChu-TrueProfit/shorts
 - Website: https://trueprofit.io/author/harry-chu
+- X: https://x.com/harryprofitguy
 
 ```
 
@@ -128,6 +129,7 @@ Explore more about Harry here:
 Website: https://trueprofit.io/author/harry-chu
 LinkedIn: https://www.linkedin.com/in/harry-chu-trueprofit/
 YouTube: https://www.youtube.com/@HarryChu-TrueProfit/shorts
+X: https://x.com/harryprofitguy
 ```
 
 When closing an AI or ecommerce decision-making pitch, prefer a natural American-style invitation instead of a stiff availability line:
