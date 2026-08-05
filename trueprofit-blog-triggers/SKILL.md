@@ -3,15 +3,17 @@ name: trueprofit-blog-triggers
 description: >-
   Recheck a TrueProfit blog Google Doc and add the CMS "highlight triggers" the
   n8n publishing workflow needs before a post can be built: a Content Highlight
-  label above formulas and Pro tip/Note callouts, and Image trigger lines with
-  auto-numbered be.trueprofit.io CDN URLs - and it reports whether the Quick
-  Recap and FAQ sections exist. Use this whenever the user asks to "check",
-  "prep", "recheck", "add triggers to", or "get ready for publish" a blog Google
-  Doc, mentions Content Highlight / Quick Recap / FAQ / Image triggers / sentence
-  notes, gives a Google Docs link for the TrueProfit blog pipeline, or is about
-  to push a doc through the n8n blog automation. Edits the doc in place via the
-  Google Docs API, first tab only. Prefer this skill over editing the doc by hand
-  or eyeballing the triggers.
+  label above formulas and Pro tip/Note callouts, Image trigger lines with
+  auto-numbered be.trueprofit.io CDN URLs, and a linked CTA image above a [cta]
+  marker - and it reports whether the Quick Recap and FAQ sections exist and
+  whether any Further Reading block is mis-placed. Use this whenever the user
+  asks to "check", "prep", "recheck", "add triggers to", or "get ready for
+  publish" a blog Google Doc, mentions Content Highlight / Quick Recap / FAQ /
+  Image triggers / sentence notes / CTA image / Further Reading placement, gives
+  a Google Docs link for the TrueProfit blog pipeline, or is about to push a doc
+  through the n8n blog automation. Edits the doc in place via the Google Docs
+  API, first tab only. Prefer this skill over editing the doc by hand or
+  eyeballing the triggers.
 ---
 
 # TrueProfit blog trigger prep
@@ -32,12 +34,15 @@ tells you when those are missing so you can write them.
 |---|---|
 | **Content Highlight** | **Adds** a `Content Highlight` label line above qualifying content (see rules below). |
 | **Image** | **Adds** an `Image (sentence note): <url>, Alt is "<alt>"` line **above** each embedded image. URL+alt come from either a base slug (auto-numbered, blank alt) or an explicit per-image list. |
+| **CTA image** | **Adds** an image trigger above a `[cta]` marker — fixed URL and alt, plus a `Link is` to the Shopify app listing tagged with the article's main keyword — **but only when the article has more than 5 Heading 2 sections** (FAQ counted). A shorter article gets a **warning** and nothing is inserted. |
 | **Quick Recap** | **Flags only.** If the first tab has no Quick Recap, it tells you — it does not write one. |
 | **FAQ** | **Flags only.** Same — reports missing, never fabricates Q&A. |
+| **Further Reading** | **Flags only.** Warns when a Further Reading block sits directly above the 2nd–5th Heading 2 (it reads as belonging to the heading below it). Never moved automatically. |
 
-The reason Quick Recap and FAQ are flag-only is that they need real editorial
-judgement (which points to summarise, which questions matter). Formulas, callouts
-and image URLs are mechanical, so those are safe to automate.
+The reason Quick Recap, FAQ and Further Reading are flag-only is that they need
+real editorial judgement (which points to summarise, which questions matter,
+which section a reading list belongs to). Formulas, callouts, image URLs and the
+CTA image are mechanical, so those are safe to automate.
 
 ## How to run it
 
@@ -69,12 +74,20 @@ You always need these from the user:
    position (usually last) should be excluded from the base-slug/alt-rule
    pattern applied to the rest.
 
+   A `[cta]` **marker line** in the doc is handled automatically (see the CTA
+   rule below) — it's an author note, not an embedded image, so it never
+   consumes a slot in the image list.
+
    Other recurring branded screenshots follow the same "fixed URL/alt, not
    part of the naming rule" pattern — e.g. the TrueProfit dashboard screenshot:
    `https://be.trueprofit.io/uploads/trueprofit-dashboard-1-1.webp` with alt
    `TrueProfit Revamp Live Profit Dashboard`. If the user names a known
    recurring image like this, use its fixed URL/alt directly instead of
    applying a base-slug or asking them to re-supply it.
+
+   Only treat an image as one of these recurring branded assets when the user
+   **explicitly says so**. An alt string that merely contains the word
+   "dashboard" is not enough — use the per-image URL from the naming rule.
 3. **How to name the images** — one of two modes (ask which, if unclear):
 
    **Mode A — base slug (auto-number, blank alt).** One slug drives every image
@@ -123,13 +136,23 @@ You always need these from the user:
    number of images in the doc, the dry-run prints a **WARNING** and you should
    re-check the order before applying. Alt text may contain spaces/hyphens but
    should avoid `"`, `(`, `)` (the n8n parser stops alt at those characters).
+4. **The article's main keyword slug** — only needed when the doc has a `[cta]`
+   marker, because it becomes the CTA link's `utm_campaign` value. Pass it with
+   `--cta-campaign`; it defaults to `--base-slug` when that's given, so in
+   Mode A you usually don't have to supply anything extra.
+
+   ```bash
+   python gdocs_triggers.py --doc "<DOC>" --image-list "images.txt" \
+     --cta-campaign "how-to-track-dropship-expenses" --dry-run
+   ```
 
 **Always dry-run first** so the user can see the full plan (and verify the image
 mapping) before the doc changes. If it looks right, re-run without `--dry-run`.
 
-The dry run prints: Quick Recap / FAQ presence, images found, and every planned
-insertion with its reason. If it looks right, run the same command **without**
-`--dry-run` to apply the edits in place.
+The dry run prints: Quick Recap / FAQ presence, the Heading 2 count, images
+found, any warnings (short-article CTA, mis-placed Further Reading, image-list
+mismatch), and every planned insertion with its reason. If it looks right, run
+the same command **without** `--dry-run` to apply the edits in place.
 
 The script is **idempotent** — triggers already present are detected and skipped,
 so re-running a doc won't create duplicates. That makes a dry-run → review →
@@ -214,23 +237,79 @@ with a real caption later. An image that already has an `Image: …` line on
 **either** side of it (above or below) is left untouched, so re-runs never
 duplicate.
 
+### CTA image
+
+Authors mark where the call-to-action banner should go with a **`[cta]`** note
+(anywhere on the line — a bare `[cta]` or `Put the [cta] banner here` both
+count). It's a text marker, not an embedded image, so it never consumes a slot
+in the `--image-list`.
+
+**Length gate first.** Count the **Heading 2** paragraphs in the first tab, with
+the FAQ heading counted as one. If the article has **5 or fewer**, the skill
+**inserts nothing and warns** — a CTA banner in a short article is a judgement
+call for the author. Only with **more than 5** H2s does it add the trigger above
+the marker:
+
+```
+Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA-3.webp, Link is https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&utm_medium=blog&utm_campaign=<main-keyword>, Alt is TrueProfit CTA
+[cta]
+```
+
+Fixed parts: the image URL `https://be.trueprofit.io/uploads/app-listing-CTA-3.webp`
+and the alt `TrueProfit CTA`. Only `utm_campaign` varies — it's the article's
+main keyword slug (e.g. `how-to-track-dropship-expenses`), from
+`--cta-campaign` or, failing that, `--base-slug`. With neither, the skill warns
+instead of writing a link with a missing campaign tag.
+
+**`Link is` comes before `Alt is` on purpose.** Alt parsing runs to the end of
+the line, so with the link last the alt would come out as
+`TrueProfit CTA, Link is https://…`. Keeping alt last leaves it exactly
+`TrueProfit CTA`.
+
+### Further Reading placement (warn only)
+
+A **Further Reading** line plus the run of URLs under it should sit *inside* the
+section it belongs to. When the block is the **last thing before the next H2**,
+it reads as an introduction to that heading instead. The skill warns when a
+Further Reading block sits directly above the **2nd, 3rd, 4th or 5th** H2 —
+those are the positions where it changes how the section is read. Nothing is
+moved; it's a note for the author.
+
+```
+H2 #1: A1                      H2 #1: A1
+  sentence 1                     sentence 1
+  H3                             H3
+    sentence 3                     sentence 3
+    Further Reading  <- fine       Further Reading
+  H3                               https://…
+    sentence 5                 H2 #2: A2        <- WARNING: the block above
+  Further Reading  <- WARNING                      belongs to A1, not A2
+H2 #2: A2
+```
+
+A block that's followed by more prose, another H3, or the 1st / 6th-and-later H2
+is left alone.
+
 ### Plain-text guarantee
 
-Every trigger line this skill writes — both the `Content Highlight` labels and
-the `Image (sentence note): …` lines — is forced to **normal body text**
-(`NORMAL_TEXT`, bold/italic/underline cleared). Inserted text otherwise inherits
-the style at the insertion point, so a label dropped above a heading could come
-out heading-sized or bold. The script re-reads the doc after inserting and
-normalizes every trigger line.
+Every trigger line this skill writes — the `Content Highlight` labels, the
+`Image (sentence note): …` lines and the CTA line — is forced to **normal body
+text** (`NORMAL_TEXT`, bold/italic/underline cleared). Inserted text otherwise
+inherits the style at the insertion point, so a label dropped above a heading
+could come out heading-sized or bold. The script re-reads the doc after
+inserting and normalizes every trigger line.
 
 ## After running
 
 Report back to the user, concisely:
 
-- What was added (count of Content Highlight labels, count of image triggers,
-  with the numbered URLs).
+- What was added (count of Content Highlight labels, count of image triggers
+  with the numbered URLs, and whether the CTA image trigger went in).
 - Whether **Quick Recap** and **FAQ** are present or missing — and if missing,
   remind them to add those manually before publishing.
+- Any **warnings**: a `[cta]` marker in a ≤5-H2 article (nothing inserted), a
+  Further Reading block sitting directly above the 2nd–5th H2, or an image-list
+  count mismatch.
 - Any skipped items (already-triggered images, callouts that already had a
   highlight).
 

@@ -5,13 +5,17 @@ Add TrueProfit CMS "highlight triggers" to a blog Google Doc (first tab only).
 What it does, end to end:
   1. Authenticates to the Google Docs API (OAuth desktop flow, token cached).
   2. Reads the document WITH tab content and isolates the FIRST tab.
-  3. Flattens that tab's paragraphs into ordered blocks (text + image markers).
+  3. Flattens that tab's paragraphs into ordered blocks (text + image markers),
+     carrying each paragraph's heading level.
   4. Runs the pure-logic detector (detect_triggers.detect) to plan insertions:
        - Content Highlight before a Formula line (heading "Formula" + next
          line containing "="), and before "Pro tip"/"Note:" callouts.
        - Image (sentence note) lines with auto-numbered be.trueprofit.io URLs.
+       - A CTA image trigger above a "[cta]" marker, but only in articles with
+         more than 5 Heading 2 sections (FAQ counted).
   5. Reports whether Quick Recap and FAQ sections exist (it does NOT add them -
-     per the workflow, those are flagged for you to handle manually).
+     per the workflow, those are flagged for you to handle manually), plus
+     warnings for short-article CTAs and mis-placed Further Reading blocks.
   6. Applies the insertions via batchUpdate (unless --dry-run).
 
 Usage:
@@ -113,10 +117,21 @@ def first_tab(document):
     return document.get("body", {}).get("content", []), None
 
 
+def heading_level(para):
+    """
+    Heading level of a paragraph: 2 for HEADING_2, 3 for HEADING_3, ... and 0 for
+    body text. The CTA and Further Reading checks count/locate Heading 2s, so the
+    detector needs this on every block.
+    """
+    style = para.get("paragraphStyle", {}).get("namedStyleType", "") or ""
+    m = re.match(r"^HEADING_(\d+)$", style)
+    return int(m.group(1)) if m else 0
+
+
 def flatten(content):
     """
     Turn a body 'content' list into ordered blocks the detector understands:
-        { kind: 'text'|'image', text, start, end }
+        { kind: 'text'|'image', text, start, end, level }
     Only top-level paragraphs are considered (tables/TOC are skipped - triggers
     never live inside those).
 
@@ -136,6 +151,7 @@ def flatten(content):
         end = el.get("endIndex")
         if start is None or end is None:
             continue
+        level = heading_level(para)
         text_parts = []
         has_image = False
         for pe in para.get("elements", []):
@@ -145,11 +161,11 @@ def flatten(content):
                 has_image = True
         text = "".join(text_parts)
         if has_image:
-            blocks.append({"kind": "image", "text": "", "start": start, "end": end})
+            blocks.append({"kind": "image", "text": "", "start": start, "end": end, "level": level})
             if text.strip():
-                blocks.append({"kind": "text", "text": text, "start": start, "end": end})
+                blocks.append({"kind": "text", "text": text, "start": start, "end": end, "level": level})
         else:
-            blocks.append({"kind": "text", "text": text, "start": start, "end": end})
+            blocks.append({"kind": "text", "text": text, "start": start, "end": end, "level": level})
     return blocks
 
 
@@ -184,8 +200,9 @@ def build_requests(insertions, tab_id):
 def trigger_paragraphs(blocks):
     """
     The trigger LABEL lines this skill owns: a standalone "Content Highlight"
-    paragraph, and any "Image (sentence note): http..." line. These are the lines
-    we keep as plain text and the ones --reset removes.
+    paragraph, and any "Image (sentence note): http..." line (the CTA image line
+    included - it shares the same prefix). These are the lines we keep as plain
+    text and the ones --reset removes.
     """
     out = []
     for b in blocks:
@@ -289,6 +306,7 @@ def main():
     ap.add_argument("--doc", required=True, help="Google Doc ID or URL")
     ap.add_argument("--base-slug", help='Auto-number image URLs from this slug, empty alt (mode A). Mutually exclusive with --image-list.')
     ap.add_argument("--image-list", help='Path to a file of "<url><tab><alt>" lines mapped to images in order (mode B). Mutually exclusive with --base-slug.')
+    ap.add_argument("--cta-campaign", help="utm_campaign value (main-keyword slug) for the CTA image link. Defaults to --base-slug when given.")
     ap.add_argument("--dry-run", action="store_true", help="Show the plan without editing the doc")
     ap.add_argument("--reset", action="store_true", help="Remove all skill-added trigger lines (then re-run normally to re-create them)")
     ap.add_argument("--creds", default=DEFAULT_CREDS, help="Path to OAuth client secrets json")
@@ -306,6 +324,11 @@ def main():
         print("Document : %s\nTab      : %s\n" % (title, tab_id or "(single-tab doc)"))
         return reset_triggers(service, did, blocks, tab_id, args.dry_run)
 
+    # ---- CTA campaign: explicit flag wins, else fall back to the base slug ----
+    cta_campaign = (args.cta_campaign or args.base_slug or "").strip().lower() or None
+    if cta_campaign and not re.match(r"^[a-z0-9-]+$", cta_campaign):
+        sys.exit("cta-campaign should be lowercase letters, numbers and hyphens only: %r" % cta_campaign)
+
     # ---- Choose image mode: base-slug auto-number OR explicit url+alt list ----
     if args.base_slug and args.image_list:
         sys.exit("Use either --base-slug OR --image-list, not both.")
@@ -313,12 +336,12 @@ def main():
         image_map = parse_image_list(args.image_list)
         if not image_map:
             sys.exit("Image list is empty: %s" % args.image_list)
-        plan = detect(blocks, image_map=image_map)
+        plan = detect(blocks, image_map=image_map, cta_campaign=cta_campaign)
     elif args.base_slug:
         base_slug = args.base_slug.strip().lower()
         if not re.match(r"^[a-z0-9-]+$", base_slug):
             sys.exit("base-slug should be lowercase letters, numbers and hyphens only: %r" % base_slug)
-        plan = detect(blocks, base_slug=base_slug)
+        plan = detect(blocks, base_slug=base_slug, cta_campaign=cta_campaign)
     else:
         sys.exit("Provide --base-slug or --image-list (or --reset).")
 
@@ -330,7 +353,16 @@ def main():
 
     print("Quick Recap : %s" % ("present" if plan["quick_recap_present"] else "MISSING - add it manually"))
     print("FAQ         : %s" % ("present" if plan["faq_present"] else "MISSING - add it manually"))
+    print("Heading 2s  : %d (FAQ counted)" % plan["h2_count"])
+    if plan["cta_markers"]:
+        print("CTA markers : %d found  |  %d CTA image trigger(s) planned" % (plan["cta_markers"], plan["cta_added"]))
     print()
+
+    if plan["warnings"]:
+        print("Warnings:")
+        for w in plan["warnings"]:
+            print("  ! %s" % w)
+        print()
 
     if plan["notes"]:
         print("Notes:")

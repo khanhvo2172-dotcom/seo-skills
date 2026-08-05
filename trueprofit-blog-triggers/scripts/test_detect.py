@@ -6,20 +6,38 @@ Run:  python test_detect.py
 from detect_triggers import detect
 
 
-def blk(kind, text, start, end):
-    return {"kind": kind, "text": text, "start": start, "end": end}
+def blk(kind, text, start, end, level=0):
+    return {"kind": kind, "text": text, "start": start, "end": end, "level": level}
 
 
 def text_blocks(*texts):
-    """Build sequential text blocks with synthetic but monotonic indices."""
+    """
+    Build sequential text blocks with synthetic but monotonic indices.
+
+    Each item is either a string (body text, or "<IMG>" for an image) or a
+    (level, text) tuple to give the paragraph a heading level - e.g. (2, "FAQ")
+    for a Heading 2. Levels matter to the CTA and Further Reading checks.
+    """
     out = []
     idx = 1
     for t in texts:
+        level = 0
+        if isinstance(t, tuple):
+            level, t = t
         kind = "image" if t == "<IMG>" else "text"
         body = "" if t == "<IMG>" else t
         end = idx + max(len(body), 1) + 1
-        out.append(blk(kind, body, idx, end))
+        out.append(blk(kind, body, idx, end, level))
         idx = end
+    return out
+
+
+def h2s(n, start=1):
+    """n Heading 2 paragraphs named A<start>..., each with a line of prose."""
+    out = []
+    for k in range(start, start + n):
+        out.append((2, "A%d" % k))
+        out.append("prose under A%d" % k)
     return out
 
 
@@ -27,6 +45,14 @@ def run(name, cond):
     status = "PASS" if cond else "FAIL"
     print("[%s] %s" % (status, name))
     return cond
+
+
+CTA_LINE = (
+    "Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA-3.webp, "
+    "Link is https://apps.shopify.com/trueprofit?utm_source=trueprofit.io"
+    "&utm_medium=blog&utm_campaign=how-to-track-dropship-expenses, "
+    "Alt is TrueProfit CTA\n"
+)
 
 
 def main():
@@ -174,6 +200,88 @@ def main():
     b = text_blocks("Content Highlight", "Pro tip: do the thing")
     r = detect(b, "x")
     ok &= run("pro tip with existing CH is skipped", len(r["insertions"]) == 0)
+
+    # ---- 11. H2 counting -----------------------------------------------------
+    b = text_blocks(*(h2s(5) + [(2, "Dropship Expenses FAQs"), "Q?"]))
+    r = detect(b, "x")
+    ok &= run("h2 count includes the FAQ heading", r["h2_count"] == 6)
+
+    # ---- 12. CTA image: long article (>5 H2) -> trigger above the [cta] note --
+    b = text_blocks(*(h2s(6) + ["[cta]"]))
+    r = detect(b, cta_campaign="how-to-track-dropship-expenses")
+    cta_ins = [x for x in r["insertions"] if "app-listing-CTA-3" in x["text"]]
+    ok &= run("CTA added when article has 6 H2s", r["cta_added"] == 1 and len(cta_ins) == 1)
+    ok &= run("CTA line exact (Link before Alt)", cta_ins and cta_ins[0]["text"] == CTA_LINE)
+    ok &= run("CTA inserted above the [cta] marker", cta_ins and cta_ins[0]["index"] == b[-1]["start"])
+    ok &= run("CTA marker counted", r["cta_markers"] == 1)
+    ok &= run("no CTA warning on a long article", not any("CTA" in w for w in r["warnings"]))
+
+    # 12b. Marker embedded in a sentence still counts
+    b = text_blocks(*(h2s(6) + ["Put the [cta] banner here"]))
+    r = detect(b, cta_campaign="slug")
+    ok &= run("inline [cta] marker detected", r["cta_added"] == 1)
+
+    # ---- 13. CTA image: short article (<=5 H2) -> warn, insert nothing --------
+    b = text_blocks(*(h2s(5) + ["[cta]"]))
+    r = detect(b, cta_campaign="how-to-track-dropship-expenses")
+    ok &= run("CTA NOT added when only 5 H2s", r["cta_added"] == 0)
+    ok &= run("short-article CTA warns", any("only 5 Heading 2" in w for w in r["warnings"]))
+    ok &= run("short-article CTA inserts nothing", len(r["insertions"]) == 0)
+
+    # 13b. No campaign slug -> warn rather than write a broken link
+    b = text_blocks(*(h2s(6) + ["[cta]"]))
+    r = detect(b)
+    ok &= run("missing campaign warns", r["cta_added"] == 0 and any("utm_campaign" in w for w in r["warnings"]))
+
+    # 13c. CTA already triggered -> skipped, no duplicate
+    b = text_blocks(*(h2s(6) + [
+        "Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA-3.webp, Link is https://apps.shopify.com/trueprofit?utm_campaign=x, Alt is TrueProfit CTA",
+        "[cta]",
+    ]))
+    r = detect(b, cta_campaign="slug")
+    ok &= run("already-triggered CTA skipped", r["cta_added"] == 0)
+
+    # ---- 14. Further Reading placement --------------------------------------
+    # Directly above the 2nd H2 -> warn
+    b = text_blocks(
+        (2, "A1"), "sentence 1", (3, "H3a"), "sentence 3",
+        "Further Reading", "https://www.trueprofit.io/blog/one",
+        (2, "A2"), "sentence 5",
+    )
+    r = detect(b, "x")
+    ok &= run("FR directly above 2nd H2 warns", any("above H2 #2" in w for w in r["warnings"]))
+
+    # Mid-section (more content after it) -> no warning
+    b = text_blocks(
+        (2, "A1"), (3, "H3a"), "sentence 3",
+        "Further Reading", "https://www.trueprofit.io/blog/one",
+        "sentence 4", (3, "H3b"), "sentence 5",
+        (2, "A2"),
+    )
+    r = detect(b, "x")
+    ok &= run("FR mid-section does NOT warn", not any("Further Reading" in w for w in r["warnings"]))
+
+    # Directly above the 6th H2 -> outside the 2nd-5th window, no warning
+    b = text_blocks(*(h2s(5) + [
+        "Further Reading", "https://www.trueprofit.io/blog/one",
+        (2, "A6"), "prose under A6",
+    ]))
+    r = detect(b, "x")
+    ok &= run("FR above 6th H2 does NOT warn", not any("Further Reading" in w for w in r["warnings"]))
+
+    # Directly above the 1st H2 -> no warning
+    b = text_blocks("Intro", "Further Reading", "https://www.trueprofit.io/blog/one", (2, "A1"))
+    r = detect(b, "x")
+    ok &= run("FR above 1st H2 does NOT warn", not any("Further Reading" in w for w in r["warnings"]))
+
+    # Multi-URL block: only the run of URLs belongs to it
+    b = text_blocks(
+        (2, "A1"), "sentence 1",
+        "Further Reading", "https://a/1", "https://a/2", "https://a/3",
+        (2, "A2"),
+    )
+    r = detect(b, "x")
+    ok &= run("FR with 3 URLs above 2nd H2 warns", any("above H2 #2" in w for w in r["warnings"]))
 
     print()
     print("ALL PASS" if ok else "SOME FAILED")
