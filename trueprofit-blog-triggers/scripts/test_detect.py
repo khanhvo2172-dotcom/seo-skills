@@ -53,11 +53,16 @@ def run(name, cond):
     return cond
 
 
+# The finished Gutenberg block, byte for byte as the CMS expects it.
 CTA_LINE = (
-    "Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA-3.webp, "
-    "Link is https://apps.shopify.com/trueprofit?utm_source=trueprofit.io"
-    "&utm_medium=blog&utm_campaign=how-to-track-dropship-expenses, "
-    "Alt is TrueProfit CTA\n"
+    '<!-- wp:image {"lightbox":{"enabled":false},"sizeSlug":"full",'
+    '"linkDestination":"custom","align":"center"} -->\n'
+    '<figure class="wp-block-image aligncenter size-full">'
+    '<a href="https://apps.shopify.com/trueprofit?utm_source=trueprofit.io'
+    '&amp;utm_medium=blog&amp;utm_campaign=how-to-track-dropship-expenses" rel="nofollow">'
+    '<img src="https://be.trueprofit.io/uploads/app-listing-CTA-3.webp" '
+    'alt="TrueProfit CTA"/></a></figure>\n'
+    "<!-- /wp:image -->\n"
 )
 
 
@@ -217,7 +222,7 @@ def main():
     r = detect(b, cta_campaign="how-to-track-dropship-expenses")
     cta_ins = [x for x in r["insertions"] if "app-listing-CTA-3" in x["text"]]
     ok &= run("CTA added when article has 6 H2s", r["cta_added"] == 1 and len(cta_ins) == 1)
-    ok &= run("CTA line exact (Link before Alt)", cta_ins and cta_ins[0]["text"] == CTA_LINE)
+    ok &= run("CTA Gutenberg block exact", cta_ins and cta_ins[0]["text"] == CTA_LINE)
     ok &= run("CTA inserted above the [cta] marker", cta_ins and cta_ins[0]["index"] == b[-1]["start"])
     ok &= run("CTA marker counted", r["cta_markers"] == 1)
     ok &= run("no CTA warning on a long article", not any("CTA" in w for w in r["warnings"]))
@@ -239,13 +244,24 @@ def main():
     r = detect(b)
     ok &= run("missing campaign warns", r["cta_added"] == 0 and any("utm_campaign" in w for w in r["warnings"]))
 
-    # 13c. CTA already triggered -> skipped, no duplicate
+    # 13c. CTA already present (Gutenberg block) -> skipped, no duplicate
+    b = text_blocks(*(h2s(6) + [
+        '<!-- wp:image {"lightbox":{"enabled":false},"sizeSlug":"full","linkDestination":"custom","align":"center"} -->',
+        '<figure class="wp-block-image aligncenter size-full"><a href="https://apps.shopify.com/trueprofit?utm_campaign=x" rel="nofollow"><img src="https://be.trueprofit.io/uploads/app-listing-CTA-3.webp" alt="TrueProfit CTA"/></a></figure>',
+        "<!-- /wp:image -->",
+        "[cta]",
+    ]))
+    r = detect(b, cta_campaign="slug")
+    ok &= run("already-present CTA block skipped", r["cta_added"] == 0)
+
+    # 13d. The older one-line CTA form is still recognised, so a re-run on a doc
+    # processed by the previous version doesn't stack a second CTA on top of it.
     b = text_blocks(*(h2s(6) + [
         "Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA-3.webp, Link is https://apps.shopify.com/trueprofit?utm_campaign=x, Alt is TrueProfit CTA",
         "[cta]",
     ]))
     r = detect(b, cta_campaign="slug")
-    ok &= run("already-triggered CTA skipped", r["cta_added"] == 0)
+    ok &= run("legacy one-line CTA skipped", r["cta_added"] == 0)
 
     # ---- 14. Further Reading placement --------------------------------------
     # Directly above the 2nd H2 -> warn

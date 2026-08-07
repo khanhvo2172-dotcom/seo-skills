@@ -34,6 +34,7 @@ from detect_triggers import (
     _clean,
     RE_CONTENT_HIGHLIGHT,
     RE_EXISTING_IMAGE_TRIGGER,
+    RE_CTA_BLOCK,
 )
 
 SCOPES = ["https://www.googleapis.com/auth/documents"]
@@ -202,17 +203,21 @@ def build_requests(insertions, tab_id):
 
 def trigger_paragraphs(blocks):
     """
-    The trigger LABEL lines this skill owns: a standalone "Content Highlight"
-    paragraph, and any "Image (sentence note): http..." line (the CTA image line
-    included - it shares the same prefix). These are the lines we keep as plain
-    text and the ones --reset removes.
+    The trigger lines this skill owns: a standalone "Content Highlight"
+    paragraph, any "Image (sentence note): http..." line, and every line of a CTA
+    Gutenberg block (all three of them, plus the older one-line CTA form). These
+    are the lines we keep as plain text and the ones --reset removes.
     """
     out = []
     for b in blocks:
         t = _clean(b["text"])
         if not t:
             continue
-        if t.lower() == "content highlight" or RE_EXISTING_IMAGE_TRIGGER.search(t):
+        if (
+            t.lower() == "content highlight"
+            or RE_EXISTING_IMAGE_TRIGGER.search(t)
+            or RE_CTA_BLOCK.search(t)
+        ):
             out.append(b)
     return out
 

@@ -33,16 +33,24 @@ IMAGE_URL_TEMPLATE = "https://be.trueprofit.io/uploads/{slug}-{n}.webp"
 # fixed shared asset, and it must carry a link to the Shopify app listing tagged
 # with the article's main keyword.
 #
-# NOTE on field order: "Link is" comes BEFORE "Alt is" on purpose. Alt parsing
-# runs to the end of the line, so putting the link last would make the alt read
-# "TrueProfit CTA, Link is https://..." instead of "TrueProfit CTA".
+# Unlike the other triggers, the CTA is NOT a "sentence note" line the n8n parser
+# rewrites: it is the finished Gutenberg block, pasted verbatim into the doc and
+# carried straight through to WordPress. That is why the ampersands in the href
+# are HTML-escaped (&amp;) and the block spans three paragraphs.
 CTA_IMAGE_URL = "https://be.trueprofit.io/uploads/app-listing-CTA-3.webp"
 CTA_IMAGE_ALT = "TrueProfit CTA"
 CTA_LINK_TEMPLATE = (
     "https://apps.shopify.com/trueprofit"
-    "?utm_source=trueprofit.io&utm_medium=blog&utm_campaign={campaign}"
+    "?utm_source=trueprofit.io&amp;utm_medium=blog&amp;utm_campaign={campaign}"
 )
-CTA_TRIGGER_TEMPLATE = "Image (sentence note): {url}, Link is {link}, Alt is {alt}"
+CTA_TRIGGER_TEMPLATE = (
+    '<!-- wp:image {{"lightbox":{{"enabled":false}},"sizeSlug":"full",'
+    '"linkDestination":"custom","align":"center"}} -->\n'
+    '<figure class="wp-block-image aligncenter size-full">'
+    '<a href="{link}" rel="nofollow">'
+    '<img src="{url}" alt="{alt}"/></a></figure>\n'
+    "<!-- /wp:image -->"
+)
 # A CTA image only belongs in a long-enough article. "Long enough" is measured in
 # Heading 2 sections, FAQ included: MORE than this many, or no CTA.
 CTA_MIN_H2 = 5
@@ -84,6 +92,13 @@ RE_YOUR_TAKEAWAY = re.compile(r"^\s*your\s+takeaway\s*:", re.I)
 
 # An Image trigger that already exists in the doc (so we don't duplicate it).
 RE_EXISTING_IMAGE_TRIGGER = re.compile(r"^\s*Image\b[^:]*:\s*https?://", re.I)
+
+# Any line of an existing CTA block. Matches all three lines of the Gutenberg
+# block plus the older one-line "Image (sentence note): ...app-listing-CTA..."
+# form, so dedup, --reset and style normalisation all cover both shapes.
+RE_CTA_BLOCK = re.compile(
+    r"(^\s*<!--\s*/?wp:image\b|^\s*<figure\s+class=\"wp-block-image|app-listing-CTA)", re.I
+)
 
 # Already-present Content Highlight label (dedup guard).
 RE_CONTENT_HIGHLIGHT = re.compile(r"^\s*Content\s+Highlight\b", re.I)
@@ -275,8 +290,9 @@ def detect(blocks, base_slug=None, image_map=None, cta_campaign=None):
         if RE_CTA_MARKER.search(text):
             cta_markers += 1
             prevb = _prev_nonempty(blocks, i)
-            if prevb is not None and RE_EXISTING_IMAGE_TRIGGER.search(_clean(prevb["text"])):
-                notes.append("CTA marker already has an image trigger above it - skipped.")
+            prevt = _clean(prevb["text"]) if prevb is not None else ""
+            if RE_CTA_BLOCK.search(prevt) or RE_EXISTING_IMAGE_TRIGGER.search(prevt):
+                notes.append("CTA marker already has an image block above it - skipped.")
             elif h2_count <= CTA_MIN_H2:
                 warnings.append(
                     "CTA image NOT added: the article has only %d Heading 2 section(s) "
@@ -297,7 +313,7 @@ def detect(blocks, base_slug=None, image_map=None, cta_campaign=None):
                     {
                         "index": b["start"],
                         "text": line + "\n",
-                        "reason": "CTA image trigger (utm_campaign: %s)" % cta_campaign,
+                        "reason": "CTA image block (utm_campaign: %s)" % cta_campaign,
                     }
                 )
                 cta_added += 1
