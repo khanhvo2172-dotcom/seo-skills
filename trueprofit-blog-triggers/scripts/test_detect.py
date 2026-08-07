@@ -6,8 +6,9 @@ Run:  python test_detect.py
 from detect_triggers import detect
 
 
-def blk(kind, text, start, end, level=0):
-    return {"kind": kind, "text": text, "start": start, "end": end, "level": level}
+def blk(kind, text, start, end, level=0, bullet=False):
+    return {"kind": kind, "text": text, "start": start, "end": end,
+            "level": level, "bullet": bullet}
 
 
 def text_blocks(*texts):
@@ -16,7 +17,9 @@ def text_blocks(*texts):
 
     Each item is either a string (body text, or "<IMG>" for an image) or a
     (level, text) tuple to give the paragraph a heading level - e.g. (2, "FAQ")
-    for a Heading 2. Levels matter to the CTA and Further Reading checks.
+    for a Heading 2. Levels matter to the CTA and Further Reading checks. A
+    leading "* " on a string marks the paragraph as a list item (bullet), which
+    is how real reading-list entries appear.
     """
     out = []
     idx = 1
@@ -24,10 +27,13 @@ def text_blocks(*texts):
         level = 0
         if isinstance(t, tuple):
             level, t = t
+        bullet = t.startswith("* ")
+        if bullet:
+            t = t[2:]
         kind = "image" if t == "<IMG>" else "text"
         body = "" if t == "<IMG>" else t
         end = idx + max(len(body), 1) + 1
-        out.append(blk(kind, body, idx, end, level))
+        out.append(blk(kind, body, idx, end, level, bullet))
         idx = end
     return out
 
@@ -282,6 +288,42 @@ def main():
     )
     r = detect(b, "x")
     ok &= run("FR with 3 URLs above 2nd H2 warns", any("above H2 #2" in w for w in r["warnings"]))
+
+    # Real-world shape: the entries are BULLETS whose URLs hide behind link text,
+    # so there is no visible "http" to scan for.
+    b = text_blocks(
+        (2, "A1"), "sentence 1",
+        "Further Reading:",
+        "* Dropshipping for Dummies: Guide to Start Profitable in 2026",
+        "* Best Dropshipping Suppliers for a Profitable Business in 2026",
+        (2, "A2"), "prose under A2",
+    )
+    r = detect(b, "x")
+    ok &= run("FR with bulleted link titles above 2nd H2 warns", any("above H2 #2" in w for w in r["warnings"]))
+
+    # Same bulleted shape, but the next H2 is the 6th -> outside the window
+    b = text_blocks(*(h2s(5) + [
+        "Further Reading", "* Title one", "* Title two",
+        (2, "A6"), "prose under A6",
+    ]))
+    r = detect(b, "x")
+    ok &= run("bulleted FR above 6th H2 does NOT warn", not any("Further Reading" in w for w in r["warnings"]))
+
+    # A single-line FR (label + inline link, no list under it) followed by an H3
+    b = text_blocks(
+        (2, "A1"), "sentence 1",
+        "Further Reading: How to Start a Private Label Dropshipping Business in 2026?",
+        (3, "H3b"), "sentence 2", (2, "A2"),
+    )
+    r = detect(b, "x")
+    ok &= run("single-line FR above an H3 does NOT warn", not any("Further Reading" in w for w in r["warnings"]))
+
+    # Prose (not a bullet) after the label ends the block - even if it has a link
+    b = text_blocks(
+        (2, "A1"), "Further Reading", "Ordinary prose with an inline link.", (2, "A2"),
+    )
+    r = detect(b, "x")
+    ok &= run("prose after FR label ends the block (no warn)", not any("Further Reading" in w for w in r["warnings"]))
 
     print()
     print("ALL PASS" if ok else "SOME FAILED")

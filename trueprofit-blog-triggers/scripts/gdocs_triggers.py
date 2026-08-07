@@ -131,7 +131,7 @@ def heading_level(para):
 def flatten(content):
     """
     Turn a body 'content' list into ordered blocks the detector understands:
-        { kind: 'text'|'image', text, start, end, level }
+        { kind: 'text'|'image', text, start, end, level, bullet }
     Only top-level paragraphs are considered (tables/TOC are skipped - triggers
     never live inside those).
 
@@ -152,6 +152,9 @@ def flatten(content):
         if start is None or end is None:
             continue
         level = heading_level(para)
+        # Reading-list entries are list items; the Further Reading check needs to
+        # know which paragraphs are bullets (their URLs hide behind link text).
+        bullet = "bullet" in para
         text_parts = []
         has_image = False
         for pe in para.get("elements", []):
@@ -161,11 +164,11 @@ def flatten(content):
                 has_image = True
         text = "".join(text_parts)
         if has_image:
-            blocks.append({"kind": "image", "text": "", "start": start, "end": end, "level": level})
+            blocks.append({"kind": "image", "text": "", "start": start, "end": end, "level": level, "bullet": bullet})
             if text.strip():
-                blocks.append({"kind": "text", "text": text, "start": start, "end": end, "level": level})
+                blocks.append({"kind": "text", "text": text, "start": start, "end": end, "level": level, "bullet": bullet})
         else:
-            blocks.append({"kind": "text", "text": text, "start": start, "end": end, "level": level})
+            blocks.append({"kind": "text", "text": text, "start": start, "end": end, "level": level, "bullet": bullet})
     return blocks
 
 

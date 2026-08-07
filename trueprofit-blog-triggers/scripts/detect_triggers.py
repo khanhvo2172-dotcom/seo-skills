@@ -130,8 +130,17 @@ def _next_nonempty_at(blocks, i):
 def _fr_block_end(blocks, i):
     """
     Return the position of the LAST block belonging to the Further Reading block
-    that starts at position i - i.e. the trailing run of URL lines under the
-    "Further Reading" label. Blank lines inside the run are tolerated.
+    that starts at position i - i.e. the trailing run of reading-list entries
+    under the "Further Reading" label. Blank lines inside the run are tolerated.
+
+    An entry is a LIST ITEM (the usual shape: hyperlinked article titles as
+    bullets) or a line whose visible text is a bare URL. Bullets matter because
+    these lists rarely show the URL as text - the link hides behind the title -
+    so scanning for "http" alone finds nothing and the block looks one line long.
+
+    A link-bearing line that is NOT a bullet does not count: body prose in these
+    articles is full of inline internal links, and absorbing it would run the
+    block past the end of the reading list.
     """
     last = i
     j = i + 1
@@ -141,7 +150,10 @@ def _fr_block_end(blocks, i):
         if b["kind"] == "text" and not t:
             j += 1
             continue
-        if b["kind"] == "text" and "http" in t.lower():
+        is_entry = b["kind"] == "text" and b.get("level", 0) == 0 and (
+            b.get("bullet") or t.lower().startswith("http")
+        )
+        if is_entry:
             last = j
             j += 1
             continue
