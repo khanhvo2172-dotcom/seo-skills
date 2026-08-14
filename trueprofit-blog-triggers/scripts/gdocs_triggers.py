@@ -165,11 +165,13 @@ def flatten(content):
                 has_image = True
         text = "".join(text_parts)
         if has_image:
-            blocks.append({"kind": "image", "text": "", "start": start, "end": end, "level": level, "bullet": bullet})
+            blocks.append({"kind": "image", "text": "", "start": start, "end": end, "level": level, "bullet": bullet, "with_image": True})
             if text.strip():
-                blocks.append({"kind": "text", "text": text, "start": start, "end": end, "level": level, "bullet": bullet})
+                # Same range as the image block above it. Anything that DELETES by
+                # range must leave this alone - see reset_triggers.
+                blocks.append({"kind": "text", "text": text, "start": start, "end": end, "level": level, "bullet": bullet, "with_image": True})
         else:
-            blocks.append({"kind": "text", "text": text, "start": start, "end": end, "level": level, "bullet": bullet})
+            blocks.append({"kind": "text", "text": text, "start": start, "end": end, "level": level, "bullet": bullet, "with_image": False})
     return blocks
 
 
@@ -203,10 +205,11 @@ def build_requests(insertions, tab_id):
 
 def trigger_paragraphs(blocks):
     """
-    The trigger lines this skill owns: a standalone "Content Highlight"
-    paragraph, any "Image (sentence note): http..." line, and every line of a CTA
-    Gutenberg block (all three of them, plus the older one-line CTA form). These
-    are the lines we keep as plain text and the ones --reset removes.
+    The trigger LABEL lines this skill owns: a standalone "Content Highlight"
+    paragraph, and any "Image (sentence note): http..." line (the CTA image line
+    included - it shares the same prefix). These are the lines we keep as plain
+    text and the ones --reset removes. Raw Gutenberg image markup is swept up too
+    so --reset can clean a doc that wrongly received it.
     """
     out = []
     for b in blocks:
@@ -269,6 +272,18 @@ def reset_triggers(service, did, blocks, tab_id, dry_run):
     trigger lines), so a fresh run re-creates them in the current style/position.
     """
     targets = trigger_paragraphs(blocks)
+    # NEVER delete a paragraph that also holds an inline image: the trigger text
+    # and the image share one range, so deleting the range destroys the image.
+    # This happens when an inserted trigger line ends up merged into the image's
+    # own paragraph. Report those and leave them for the author to fix by hand.
+    unsafe = [b for b in targets if b.get("with_image")]
+    targets = [b for b in targets if not b.get("with_image")]
+    if unsafe:
+        print("SKIPPED - these trigger lines share a paragraph with an image, so")
+        print("deleting them would delete the image. Remove them by hand (%d):" % len(unsafe))
+        for b in unsafe:
+            print("  @%-7d %s" % (b["start"], _clean(b["text"])[:80]))
+        print()
     if not targets:
         print("No existing triggers to remove.")
         return 0

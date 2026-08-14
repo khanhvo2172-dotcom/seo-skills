@@ -34,7 +34,7 @@ tells you when those are missing so you can write them.
 |---|---|
 | **Content Highlight** | **Adds** a `Content Highlight` label line above qualifying content (see rules below). |
 | **Image** | **Adds** an `Image (sentence note): <url>, Alt is "<alt>"` line **above** each embedded image. URL+alt come from either a base slug (auto-numbered, blank alt) or an explicit per-image list. |
-| **CTA image** | **Adds** the finished `<!-- wp:image -->` Gutenberg block above a `[cta]` marker — fixed image URL and alt, linked to the Shopify app listing and tagged with the article's main keyword — **but only when the article has more than 5 Heading 2 sections** (FAQ counted). A shorter article gets a **warning** and nothing is inserted. |
+| **CTA image** | **Adds** an image trigger above a `[cta]` marker — fixed URL and alt, plus a `Link is` to the Shopify app listing tagged with the article's main keyword — **but only when the article has more than 5 Heading 2 sections** (FAQ counted). A shorter article gets a **warning** and nothing is inserted. |
 | **Quick Recap** | **Flags only.** If the first tab has no Quick Recap, it tells you — it does not write one. |
 | **FAQ** | **Flags only.** Same — reports missing, never fabricates Q&A. |
 | **Further Reading** | **Flags only.** Warns when a Further Reading block sits directly above the 2nd–5th Heading 2 (it reads as belonging to the heading below it). Never moved automatically. |
@@ -247,20 +247,13 @@ in the `--image-list`.
 **Length gate first.** Count the **Heading 2** paragraphs in the first tab, with
 the FAQ heading counted as one. If the article has **5 or fewer**, the skill
 **inserts nothing and warns** — a CTA banner in a short article is a judgement
-call for the author. Only with **more than 5** H2s does it add the block above
+call for the author. Only with **more than 5** H2s does it add the trigger above
 the marker:
 
 ```
-<!-- wp:image {"lightbox":{"enabled":false},"sizeSlug":"full","linkDestination":"custom","align":"center"} -->
-<figure class="wp-block-image aligncenter size-full"><a href="https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&amp;utm_medium=blog&amp;utm_campaign=<main-keyword>" rel="nofollow"><img src="https://be.trueprofit.io/uploads/app-listing-CTA-3.webp" alt="TrueProfit CTA"/></a></figure>
-<!-- /wp:image -->
+Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA-3.webp, Link is https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&utm_medium=blog&utm_campaign=<main-keyword>, Alt is TrueProfit CTA
 [cta]
 ```
-
-**The CTA is not a sentence note.** Unlike every other trigger, it isn't a line
-the n8n parser rewrites — it's the **finished Gutenberg block**, carried straight
-through to WordPress. So it spans three paragraphs, and the ampersands in the
-`href` are HTML-escaped as `&amp;`. Reproduce it byte for byte.
 
 Fixed parts: the image URL `https://be.trueprofit.io/uploads/app-listing-CTA-3.webp`
 and the alt `TrueProfit CTA`. Only `utm_campaign` varies — it's the article's
@@ -268,10 +261,22 @@ main keyword slug (e.g. `dropship-skincare`), from `--cta-campaign` or, failing
 that, `--base-slug`. With neither, the skill warns instead of writing a link with
 a missing campaign tag.
 
-All three lines are treated as skill-owned: `--reset` removes them together, and
-a re-run recognises an existing block (as well as the older one-line
-`Image (sentence note): …app-listing-CTA…` form) so it never stacks a second CTA
-on top.
+**`Link is` comes before `Alt is` on purpose.** Alt parsing runs to the end of
+the line, so with the link last the alt would come out as
+`TrueProfit CTA, Link is https://…`. Keeping alt last leaves it exactly
+`TrueProfit CTA`.
+
+**Never put raw markup in the doc.** The Google Doc carries the trigger line; the
+CMS block is n8n's job. For reference, the same CTA lands in WordPress as:
+
+```
+<!-- wp:image {"lightbox":{"enabled":false},"sizeSlug":"full","linkDestination":"custom","align":"center"} -->
+<figure class="wp-block-image aligncenter size-full"><a href="https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&amp;utm_medium=blog&amp;utm_campaign=<main-keyword>" rel="nofollow"><img src="https://be.trueprofit.io/uploads/app-listing-CTA-3.webp" alt="TrueProfit CTA"/></a></figure>
+<!-- /wp:image -->
+```
+
+That is the **output** contract, not doc input. `--reset` will strip such markup
+if it ever ends up in a doc.
 
 ### Further Reading placement (warn only)
 
@@ -300,8 +305,7 @@ is left alone.
 ### Plain-text guarantee
 
 Every trigger line this skill writes — the `Content Highlight` labels, the
-`Image (sentence note): …` lines and all three lines of the CTA Gutenberg
-block — is forced to **normal body
+`Image (sentence note): …` lines and the CTA line — is forced to **normal body
 text** (`NORMAL_TEXT`, bold/italic/underline cleared). Inserted text otherwise
 inherits the style at the insertion point, so a label dropped above a heading
 could come out heading-sized or bold. The script re-reads the doc after
