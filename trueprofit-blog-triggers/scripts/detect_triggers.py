@@ -39,7 +39,7 @@ IMAGE_URL_TEMPLATE = "https://be.trueprofit.io/uploads/{slug}-{n}.webp"
 # NOTE on field order: "Link is" comes BEFORE "Alt is" on purpose. Alt parsing
 # runs to the end of the line, so putting the link last would make the alt read
 # "TrueProfit CTA, Link is https://..." instead of "TrueProfit CTA".
-CTA_IMAGE_URL = "https://be.trueprofit.io/uploads/app-listing-CTA-3.webp"
+CTA_IMAGE_URL = "https://be.trueprofit.io/uploads/app-listing-CTA.webp"
 CTA_IMAGE_ALT = "TrueProfit CTA"
 CTA_LINK_TEMPLATE = (
     "https://apps.shopify.com/trueprofit"

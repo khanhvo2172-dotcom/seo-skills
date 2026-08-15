@@ -251,11 +251,11 @@ call for the author. Only with **more than 5** H2s does it add the trigger above
 the marker:
 
 ```
-Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA-3.webp, Link is https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&utm_medium=blog&utm_campaign=<main-keyword>, Alt is TrueProfit CTA
+Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA.webp, Link is https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&utm_medium=blog&utm_campaign=<main-keyword>, Alt is TrueProfit CTA
 [cta]
 ```
 
-Fixed parts: the image URL `https://be.trueprofit.io/uploads/app-listing-CTA-3.webp`
+Fixed parts: the image URL `https://be.trueprofit.io/uploads/app-listing-CTA.webp`
 and the alt `TrueProfit CTA`. Only `utm_campaign` varies — it's the article's
 main keyword slug (e.g. `dropship-skincare`), from `--cta-campaign` or, failing
 that, `--base-slug`. With neither, the skill warns instead of writing a link with
@@ -271,7 +271,7 @@ CMS block is n8n's job. For reference, the same CTA lands in WordPress as:
 
 ```
 <!-- wp:image {"lightbox":{"enabled":false},"sizeSlug":"full","linkDestination":"custom","align":"center"} -->
-<figure class="wp-block-image aligncenter size-full"><a href="https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&amp;utm_medium=blog&amp;utm_campaign=<main-keyword>" rel="nofollow"><img src="https://be.trueprofit.io/uploads/app-listing-CTA-3.webp" alt="TrueProfit CTA"/></a></figure>
+<figure class="wp-block-image aligncenter size-full"><a href="https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&amp;utm_medium=blog&amp;utm_campaign=<main-keyword>" rel="nofollow"><img src="https://be.trueprofit.io/uploads/app-listing-CTA.webp" alt="TrueProfit CTA"/></a></figure>
 <!-- /wp:image -->
 ```
 

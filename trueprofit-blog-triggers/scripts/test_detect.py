@@ -54,7 +54,7 @@ def run(name, cond):
 
 
 CTA_LINE = (
-    "Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA-3.webp, "
+    "Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA.webp, "
     "Link is https://apps.shopify.com/trueprofit?utm_source=trueprofit.io"
     "&utm_medium=blog&utm_campaign=how-to-track-dropship-expenses, "
     "Alt is TrueProfit CTA\n"
@@ -215,7 +215,7 @@ def main():
     # ---- 12. CTA image: long article (>5 H2) -> trigger above the [cta] note --
     b = text_blocks(*(h2s(6) + ["[cta]"]))
     r = detect(b, cta_campaign="how-to-track-dropship-expenses")
-    cta_ins = [x for x in r["insertions"] if "app-listing-CTA-3" in x["text"]]
+    cta_ins = [x for x in r["insertions"] if "app-listing-CTA" in x["text"]]
     ok &= run("CTA added when article has 6 H2s", r["cta_added"] == 1 and len(cta_ins) == 1)
     ok &= run("CTA line exact (Link before Alt)", cta_ins and cta_ins[0]["text"] == CTA_LINE)
     ok &= run("CTA inserted above the [cta] marker", cta_ins and cta_ins[0]["index"] == b[-1]["start"])
@@ -243,7 +243,7 @@ def main():
     # re-run doesn't stack a trigger line on top of the markup.
     b = text_blocks(*(h2s(6) + [
         '<!-- wp:image {"lightbox":{"enabled":false},"sizeSlug":"full","linkDestination":"custom","align":"center"} -->',
-        '<figure class="wp-block-image aligncenter size-full"><a href="https://apps.shopify.com/trueprofit?utm_campaign=x" rel="nofollow"><img src="https://be.trueprofit.io/uploads/app-listing-CTA-3.webp" alt="TrueProfit CTA"/></a></figure>',
+        '<figure class="wp-block-image aligncenter size-full"><a href="https://apps.shopify.com/trueprofit?utm_campaign=x" rel="nofollow"><img src="https://be.trueprofit.io/uploads/app-listing-CTA.webp" alt="TrueProfit CTA"/></a></figure>',
         "<!-- /wp:image -->",
         "[cta]",
     ]))
@@ -252,7 +252,7 @@ def main():
 
     # 13d. The normal case: a CTA trigger line already sits above the marker.
     b = text_blocks(*(h2s(6) + [
-        "Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA-3.webp, Link is https://apps.shopify.com/trueprofit?utm_campaign=x, Alt is TrueProfit CTA",
+        "Image (sentence note): https://be.trueprofit.io/uploads/app-listing-CTA.webp, Link is https://apps.shopify.com/trueprofit?utm_campaign=x, Alt is TrueProfit CTA",
         "[cta]",
     ]))
     r = detect(b, cta_campaign="slug")
