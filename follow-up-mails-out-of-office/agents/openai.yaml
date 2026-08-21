@@ -1,0 +1,4 @@
+interface:
+  display_name: "Out-of-office follow-ups"
+  short_description: "Follow up with partners after OOO replies"
+  default_prompt: "Use $follow-up-mails-out-of-office to find partner OOO replies, prepare follow-ups for people who are back, and report anyone still away."
