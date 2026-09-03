@@ -3,7 +3,7 @@
 > A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, guest post content, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-10-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-11-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -37,6 +37,25 @@ Runs a structured **pre-publish QA review** of a TrueProfit blog article in a Go
 - Reads **only the tab in the URL** (never sibling tabs); advisory by default - only the Step 2 CTA insertion edits the doc, and only after you confirm
 
 **Requires:** Google Docs API credentials (`token.json`) and the personal link-checker Streamlit app for Step 1.
+
+---
+
+### `review-trueprofit-live-blog-urls`
+Reviews a published TrueProfit blog article without requiring its Google Docs source.
+
+**Triggers when you say:** *"review this live blog URL"*, *"QA this TrueProfit article"*, *"check this published article"*
+
+**What it does:**
+- Reconstructs streamed React components so Quick Recap, Further Reading, and FAQs are not missed
+- Checks heading hierarchy, numbering, semantic depth, and repetitive heading intent
+- Reports Quick Recap presence and placement
+- Checks Further Reading placement using the TrueProfit H2 rule
+- Flags FAQ questions that duplicate headings or answers already covered in the body
+- Flags only genuinely missing or empty image alt text
+- Asks whether to run the optional content and factual review; it never runs that pass without confirmation
+- Excludes Google Docs comparison, internal-link audits, general copy editing, CTA eligibility, and generic priority findings
+
+**Requires:** Python with `requests` and `beautifulsoup4`, plus network access to the live article.
 
 ---
 
@@ -198,6 +217,7 @@ cp -R trueprofit-blog-localization ~/.claude/skills/
 cp -R trueprofit-blog-triggers ~/.claude/skills/
 cp -R trueprofit-blog-multilingual-tabs-triggers ~/.claude/skills/
 cp -R review-google-docs-article ~/.claude/skills/
+cp -R review-trueprofit-live-blog-urls ~/.claude/skills/
 cp -R browse-emails-to-find-opportunites ~/.claude/skills/
 cp -R generate-reponse-emails-to-reporters ~/.claude/skills/
 cp -R summarize-email-thread ~/.claude/skills/
@@ -212,6 +232,7 @@ Copy-Item -Recurse -Force trueprofit-blog-localization "$env:USERPROFILE\.claude
 Copy-Item -Recurse -Force trueprofit-blog-triggers "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force trueprofit-blog-multilingual-tabs-triggers "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force review-google-docs-article "$env:USERPROFILE\.claude\skills\"
+Copy-Item -Recurse -Force review-trueprofit-live-blog-urls "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force browse-emails-to-find-opportunites "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force generate-reponse-emails-to-reporters "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force summarize-email-thread "$env:USERPROFILE\.claude\skills\"
@@ -235,6 +256,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | `/trueprofit-blog-triggers` | Add CMS triggers to the English tab of a blog doc |
 | `/trueprofit-blog-multilingual-tabs-triggers` | Repair/sync triggers and links in ES/DE/FR tabs |
 | `/review-google-docs-article` | Pre-publish QA review of a blog doc (links, CTA, Further Reading, FAQ) |
+| `/review-trueprofit-live-blog-urls` | QA a live TrueProfit article's structure, recap, reading boxes, FAQs, and image alts |
 | `/browse-emails-to-find-opportunites` | Screen PR opportunity emails |
 | `/generate-reponse-emails-to-reporters` | Draft reporter response emails |
 | `/summarize-email-thread` | Brief link exchange partner email history |
@@ -253,6 +275,7 @@ Skills are available globally across all Claude Code sessions after installation
 | `trueprofit-blog-triggers` | Claude Code + Google Docs API credentials |
 | `trueprofit-blog-multilingual-tabs-triggers` | Claude Code + Google Docs API credentials |
 | `review-google-docs-article` | Claude Code + Google Docs API credentials + link-checker app |
+| `review-trueprofit-live-blog-urls` | Claude Code + Python (`requests`, `beautifulsoup4`) + network access |
 | `browse-emails-to-find-opportunites` | Claude Code + Gmail MCP |
 | `generate-reponse-emails-to-reporters` | Claude Code |
 | `summarize-email-thread` | Claude Code + Gmail MCP |

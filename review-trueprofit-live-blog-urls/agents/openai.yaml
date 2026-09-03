@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review TrueProfit Live Blog URLs"
+  short_description: "Audit live TrueProfit blog structure and QA"
+  default_prompt: "Use $review-trueprofit-live-blog-urls to review this live TrueProfit blog URL."
