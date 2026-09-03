@@ -82,6 +82,10 @@ List every FAQ question and classify it as:
 For redundant questions, recommend removal or a concrete uncovered re-angle. Prefer a re-angle
 when the topic is useful. Do not flag mere keyword overlap.
 
+Present the FAQ review as a Markdown table with exactly these columns:
+`FAQ`, `Classification`, and `Recommendation`. Put each FAQ question in its own row; do not
+use a numbered list for this section.
+
 If there is no FAQ component after raw verification, say so plainly.
 
 ### 5. Image alt text
