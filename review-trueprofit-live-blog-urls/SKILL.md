@@ -36,6 +36,12 @@ inside the article.
 Prefer `scripts/extract_live_article.py <URL>` for this extraction. If the script cannot run,
 perform the same raw-HTML verification manually. Never infer absence from markdown alone.
 
+Cross-check the extracted arrays against the reconstructed article. FAQ headings may use
+`Frequently Asked Question(s)` instead of `FAQs`, and questions may lack a special CSS class.
+An empty array is not proof of absence when the article still contains the relevant component.
+Inspect its questions and answers manually if necessary. Confirm that the author-bio boundary
+was found before reporting a complete audit.
+
 ## Default review
 
 Always report all five sections below. The absence of an element is a valid result, but only
@@ -54,15 +60,32 @@ Check:
 Suggest replacements only for unreasonable or repetitive headings. Do not provide general
 grammar or copy edits.
 
+Check semantic nesting, not only heading levels: an H3 must belong under its parent H2.
+For example, report-navigation instructions do not belong under a formula-only H2; recommend
+an appropriate H2 or a move to a relevant section. Check every independently numbered group.
+A short overview followed by a detailed section is not automatically redundant.
+
+Flag conflicting years between the H1 and other headings, including FAQ headings, as a heading
+consistency issue. Do not treat a suggested year alignment as factual verification or assume
+that changing the year alone updates the answer. Ignore extraction-only spacing artifacts
+unless they are confirmed in the rendered heading.
+
 ### 2. Quick Recap
 
 Report whether it exists, its number of bullets, and its location relative to the introduction
 and first H2. Do not judge claims or rewrite the recap unless the user asks for content review.
+An explicit request for a replacement recap also authorizes that narrow rewrite; base it on
+the current article rather than a generic template.
 
 ### 3. Further Reading
 
 List every Further Reading box with its linked titles and its position between surrounding
 headings.
+
+Use a Markdown table with `Box`, `Links`, `Placement`, and `Assessment` columns.
+Count H2s in the current live article, not a proposed revised outline. Verify whether ordinary
+body text separates a box from the next heading; the extractor's nearest-heading fields alone
+do not establish that the box is directly above that heading.
 
 Warn only when a box sits directly above the 2nd, 3rd, 4th, or 5th article H2, excluding a
 Quick Recap heading if one exists. Do not warn when it is above the first or 6th-and-later H2,
@@ -82,6 +105,11 @@ List every FAQ question and classify it as:
 For redundant questions, recommend removal or a concrete uncovered re-angle. Prefer a re-angle
 when the topic is useful. Do not flag mere keyword overlap.
 
+Compare each complete FAQ answer with the body, not just its question. A platform-specific or
+technical sub-angle may be `Partial` or `Clear` even if it shares keywords with a main heading.
+Do not recommend an alternative already covered elsewhere. A `Clear` classification or
+`Keep` recommendation concerns redundancy only; it does not endorse factual or legal accuracy.
+
 Present the FAQ review as a Markdown table with exactly these columns:
 `FAQ`, `Classification`, and `Recommendation`. Put each FAQ question in its own row; do not
 use a numbered list for this section.
@@ -97,6 +125,12 @@ Within the article scope, flag only images whose `alt` attribute is missing or e
 - Do not flag lazy-loading placeholders with `alt="Loading..."`.
 - Do not audit CTA eligibility, CTA placement, or tracking links unless explicitly requested.
 
+Identify each missing-alt image by its section or nearby heading. When asked to create alt
+text, inspect the actual image instead of inferring its content from a filename or nearby copy.
+Give the suggested alt text as plain, copyable lines in article order, without `alt="..."`
+wrappers, quotation marks, numbering, or extra commentary when the user asks for alt text only.
+If an image cannot be inspected, say so rather than inventing a description.
+
 ## Optional content and factual review
 
 Run this pass only when the user explicitly asks for content review, factual review, accuracy,
@@ -107,6 +141,12 @@ If the user has not said whether they want this pass, complete the five default 
 and end by asking: `Would you also like me to check content and factual issues for this article?`
 Do not run the pass until the user confirms. If the user already requested it, include it in the
 same review. If the user explicitly declined it, omit it and do not ask again for that article.
+
+For a continuing series of "Next" URL reviews, carry forward the user's established preference
+to exclude content and factual issues until they change it; do not repeat the confirmation
+question for every URL. Do not infer authorization for fact-checking from "next", "review",
+or a request for structural QA. A request limited to one article or one rewrite does not
+automatically enable factual review for subsequent articles.
 
 When requested, read and follow [references/content-factual-review.md](references/content-factual-review.md).
 

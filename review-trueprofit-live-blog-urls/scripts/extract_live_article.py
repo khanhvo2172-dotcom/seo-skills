@@ -10,7 +10,7 @@ import sys
 from typing import Any
 
 import requests
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Comment, NavigableString, Tag
 
 
 HEADING_TAGS = ("h1", "h2", "h3", "h4", "h5", "h6")
@@ -50,6 +50,37 @@ def in_scope_tags(soup: BeautifulSoup) -> tuple[list[Tag], Tag, Tag | None]:
     start = tags.index(h1)
     end = tags.index(bio) if bio in tags else len(tags)
     return tags[start:end], h1, bio
+
+
+def extract_faqs(scope: list[Tag]) -> list[dict[str, str]]:
+    """Read legacy and current FAQ markup without relying on question CSS classes."""
+    scope_ids = {id(tag) for tag in scope}
+    faqs = []
+    in_faq = False
+    for tag in scope:
+        if tag.name in ("h1", "h2"):
+            in_faq = tag.name == "h2" and bool(
+                re.search(r"\bfaqs?\b|\bfrequently\s+asked\s+questions?\b",
+                          clean_text(tag), re.IGNORECASE)
+            )
+        elif in_faq and tag.name == "h3":
+            question_text_ids = {id(node) for node in tag.descendants}
+            answer_parts = []
+            for node in tag.next_elements:
+                if isinstance(node, Tag):
+                    if id(node) not in scope_ids or node.name in ("h1", "h2", "h3"):
+                        break
+                elif (
+                    isinstance(node, NavigableString)
+                    and not isinstance(node, Comment)
+                    and id(node) not in question_text_ids
+                    and not node.find_parent(["script", "style", "svg"])
+                ):
+                    text = str(node).strip()
+                    if text:
+                        answer_parts.append(text)
+            faqs.append({"question": clean_text(tag), "answer": " ".join(answer_parts)})
+    return faqs
 
 
 def extract(url: str) -> dict[str, Any]:
@@ -102,28 +133,7 @@ def extract(url: str) -> dict[str, Any]:
             }
         )
 
-    faqs = []
-    faq_headings = [
-        tag
-        for tag in scope
-        if tag.name == "h2" and "faq" in clean_text(tag).lower()
-    ]
-    for faq_heading in faq_headings:
-        current = faq_heading.find_next()
-        while current and current is not bio:
-            if isinstance(current, Tag) and current.name == "h2":
-                break
-            if (
-                isinstance(current, Tag)
-                and current.name == "h3"
-                and "question" in " ".join(current.get("class", [])).lower()
-            ):
-                wrapper = current.parent
-                full = clean_text(wrapper)
-                question = clean_text(current)
-                answer = full[len(question) :].strip() if full.startswith(question) else full
-                faqs.append({"question": question, "answer": answer})
-            current = current.find_next()
+    faqs = extract_faqs(scope)
 
     missing_alt = []
     for image in scope:
