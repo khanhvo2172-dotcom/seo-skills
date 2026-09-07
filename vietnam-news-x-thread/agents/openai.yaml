@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vietnam News X Thread"
+  short_description: "Draft concise, verified Vietnam news threads"
+  default_prompt: "Use $vietnam-news-x-thread to turn this Vietnam news topic into a concise X post and comment thread."
