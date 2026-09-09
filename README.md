@@ -3,7 +3,7 @@
 > A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, guest post content, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-11-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-17-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -152,6 +152,23 @@ Searches Gmail for email threads related to a link exchange partner and produces
 
 ---
 
+### `summarize-unread-exchange-link-mails`
+Crawls **unread** Gmail from a start date, keeps only genuine link-exchange **partner** emails, and returns an **urgency-ranked inbox triage** - who is waiting on you, who you're waiting on, and what to close or ignore.
+
+**Triggers when you say:** *"summarize unread exchange link mails"*, *"crawl unread backlink emails from <date>"*, *"which partners are urgent to reply"*, *"recrawl and categorize"*
+
+**What it does:**
+- Runs a two-pass search (keywords + broad unread sweep) so bare "any update?" follow-ups aren't missed
+- Resolves each thread's true latest message via `get_thread` metadata (search results are truncated) and works out whose court the ball is in
+- Filters out Mailsuite trackers, out-of-office auto-replies, Apps Script failures, and SEO sales pitches
+- Consolidates multi-rep companies into one action and dedupes by partner, not thread
+- Buckets partners into 🔴 respond next / 🟠 pending / 🟢 low / ✅ waiting-on-them, then offers to draft the batch
+- Read-only: never marks read, replies, or sends without explicit confirmation
+
+**Requires:** Gmail MCP.
+
+---
+
 ### `trueprofit-guest-post`
 Generates TrueProfit guest post sections, blurbs, app listing entries, and link exchange content that matches a partner page's style and structure.
 
@@ -260,6 +277,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | `/browse-emails-to-find-opportunites` | Screen PR opportunity emails |
 | `/generate-reponse-emails-to-reporters` | Draft reporter response emails |
 | `/summarize-email-thread` | Brief link exchange partner email history |
+| `/summarize-unread-exchange-link-mails` | Triage unread link-exchange partner mail by urgency |
 | `/trueprofit-guest-post` | Generate partner-style TrueProfit guest post content |
 | `/youtube-seeding-comments-generate` | Generate YouTube seeding comments |
 
@@ -279,6 +297,7 @@ Skills are available globally across all Claude Code sessions after installation
 | `browse-emails-to-find-opportunites` | Claude Code + Gmail MCP |
 | `generate-reponse-emails-to-reporters` | Claude Code |
 | `summarize-email-thread` | Claude Code + Gmail MCP |
+| `summarize-unread-exchange-link-mails` | Claude Code + Gmail MCP |
 | `trueprofit-guest-post` | Claude Code |
 | `youtube-seeding-comments-generate` | Claude Code |
 
