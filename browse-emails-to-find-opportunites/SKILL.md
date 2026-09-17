@@ -1,5 +1,5 @@
 ---
-name: browse-emails-to-find-opportunites
+name: browse-emails-to-find-opportunities
 description: "Read personal emails from 3 platforms HARO, MentionMatch & Qwoted to find relevant opportunities for TrueProfit"
 ---
 
@@ -75,6 +75,14 @@ A request like:
 
 is only maybe relevant if framed narrowly around merchants using AI with Shopify/profit data via MCP. Otherwise treat as not a clean fit.
 
+## Suggested Source: Harry Chu vs Lila Le
+
+TrueProfit has two potential expert sources to pitch as the quote-giver:
+- **Harry Chu** — founder/CEO. Default source for profit analytics, margin/cost tracking, ecommerce finance ops, pricing/cost-tradeoff stories, and AI/MCP topics.
+- **Lila Le** — marketing manager (https://trueprofit.io/author/lila-le). Better source for ecommerce marketing, branding, creative strategy, campaign/conversion-marketing angles, and marketing-vs-AI-content stories — including some that don't clear the strict profit-analytics bar for Harry but are still on-topic for a marketing manager at an ecommerce SaaS.
+
+For every High-fit or Maybe-fit opportunity, always note which source is the better fit — Harry, Lila, or both — instead of defaulting to Harry only.
+
 ## Preferred Evaluation Output
 
 For each batch of HARO/Qwoted/MentionMatch emails, summarize:
@@ -83,6 +91,7 @@ For each batch of HARO/Qwoted/MentionMatch emails, summarize:
 3. Skip opportunities
 4. Why each fits or does not fit
 5. Suggested pitch angle only for genuinely relevant opportunities
+6. Suggested source (Harry Chu, Lila Le, or both) for each High-fit or Maybe-fit opportunity
 
 Do not over-recommend borderline opportunities. Be strict.
 
