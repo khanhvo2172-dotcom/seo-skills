@@ -15,6 +15,37 @@ from bs4 import BeautifulSoup, Comment, NavigableString, Tag
 
 HEADING_TAGS = ("h1", "h2", "h3", "h4", "h5", "h6")
 
+# Site chrome images that must always be ignored in the alt-text check,
+# regardless of their alt value. Matched as substrings of the image src
+# (Next.js static assets keep the same base name across content-hash variants).
+IGNORED_IMAGE_SRCS = (
+    "banner-cta-1",
+    "banner-cta-2",
+    "icon_toc",
+    "img_blog_cta",
+)
+
+# Byline / author-profile chrome. Author avatars vary per author, so match them
+# by their container class instead of a filename.
+BYLINE_CONTAINER_CLASSES = ("written-by", "meta-info")
+
+
+def _has_class_token(tag: Tag, token: str) -> bool:
+    classes = tag.get("class") if isinstance(tag, Tag) else None
+    return bool(classes) and any(token in c for c in classes)
+
+
+def is_ignored_image(image: Tag) -> bool:
+    src = image.get("src") or image.get("data-src") or ""
+    if any(token in src for token in IGNORED_IMAGE_SRCS):
+        return True
+    node = image.parent
+    while node is not None:
+        if any(_has_class_token(node, token) for token in BYLINE_CONTAINER_CLASSES):
+            return True
+        node = node.parent
+    return False
+
 
 def clean_text(node: Tag | None) -> str:
     return node.get_text(" ", strip=True) if node else ""
@@ -135,9 +166,35 @@ def extract(url: str) -> dict[str, Any]:
 
     faqs = extract_faqs(scope)
 
+    ordered_lists = []
+    for ol in scope:
+        if not isinstance(ol, Tag) or ol.name != "ol":
+            continue
+        items = ol.find_all("li", recursive=False)
+        bold_label_items = 0
+        first_items = []
+        for li in items:
+            label_tag = li.find(["b", "strong"])
+            label = clean_text(label_tag) if label_tag else ""
+            if label:
+                bold_label_items += 1
+            if len(first_items) < 3:
+                first_items.append({"label": label, "text": clean_text(li)[:120]})
+        ordered_lists.append(
+            {
+                "class": ol.get("class"),
+                "item_count": len(items),
+                "bold_label_items": bold_label_items,
+                "previous_heading": heading_record(ol.find_previous(HEADING_TAGS)),
+                "sample_items": first_items,
+            }
+        )
+
     missing_alt = []
     for image in scope:
         if image.name != "img":
+            continue
+        if is_ignored_image(image):
             continue
         alt = image.get("alt")
         if alt is None or not alt.strip():
@@ -155,6 +212,7 @@ def extract(url: str) -> dict[str, Any]:
         "quick_recaps": quick_recaps,
         "further_reading": further_reading,
         "faqs": faqs,
+        "ordered_lists": ordered_lists,
         "missing_or_empty_alt_images": missing_alt,
     }
 
