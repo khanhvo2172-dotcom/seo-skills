@@ -3,7 +3,7 @@
 > A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, guest post content, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-17-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-18-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -21,6 +21,23 @@ Compares a TrueProfit Google Docs article tab against its live `trueprofit.io` b
 - Checks H1, intros, headings, body text, links, benchmarks, Further Reading, FAQs, CTAs, and formatting
 - Handles TrueProfit callout block extraction limits and raw HTML verification
 - Returns `No` when synced, or a structured differences table when mismatches exist
+
+---
+
+### `review-outline-google-docs-file`
+Reviews SEO outlines in one or more Google Docs against their reference URLs, saved AIO/AI Mode insights, and current reliable sources.
+
+**Triggers when you say:** *"review these outlines"*, *"which headings are unnecessary"*, *"suggest missing headings"*, *"improve the outline FAQs"*
+
+**What it does:**
+- Reads outline tabs only, excluding n8n workflows and finished-article tabs
+- Reads the reference URLs at the top of each outline and verifies relevant claims
+- Starts with an overview table, followed by concise current-heading reviews
+- Gives exact proposed headings with a source or clear reason for every addition
+- Reviews each FAQ question with concise reasons and answer coverage
+- Returns advice in chat without editing the Docs; omits a final rewritten outline and a separate saved-AI-insights correction section
+
+**Requires:** Tab-aware Google Docs access and web browsing for reference research.
 
 ---
 
@@ -234,6 +251,7 @@ cp -R trueprofit-blog-localization ~/.claude/skills/
 cp -R trueprofit-blog-triggers ~/.claude/skills/
 cp -R trueprofit-blog-multilingual-tabs-triggers ~/.claude/skills/
 cp -R review-google-docs-article ~/.claude/skills/
+cp -R review-outline-google-docs-file ~/.claude/skills/
 cp -R review-trueprofit-live-blog-urls ~/.claude/skills/
 cp -R browse-emails-to-find-opportunites ~/.claude/skills/
 cp -R generate-reponse-emails-to-reporters ~/.claude/skills/
@@ -249,6 +267,7 @@ Copy-Item -Recurse -Force trueprofit-blog-localization "$env:USERPROFILE\.claude
 Copy-Item -Recurse -Force trueprofit-blog-triggers "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force trueprofit-blog-multilingual-tabs-triggers "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force review-google-docs-article "$env:USERPROFILE\.claude\skills\"
+Copy-Item -Recurse -Force review-outline-google-docs-file "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force review-trueprofit-live-blog-urls "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force browse-emails-to-find-opportunites "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force generate-reponse-emails-to-reporters "$env:USERPROFILE\.claude\skills\"
@@ -273,6 +292,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | `/trueprofit-blog-triggers` | Add CMS triggers to the English tab of a blog doc |
 | `/trueprofit-blog-multilingual-tabs-triggers` | Repair/sync triggers and links in ES/DE/FR tabs |
 | `/review-google-docs-article` | Pre-publish QA review of a blog doc (links, CTA, Further Reading, FAQ) |
+| `/review-outline-google-docs-file` | Review SEO outline headings and FAQs against reference pages |
 | `/review-trueprofit-live-blog-urls` | QA a live TrueProfit article's structure, recap, reading boxes, FAQs, and image alts |
 | `/browse-emails-to-find-opportunites` | Screen PR opportunity emails |
 | `/generate-reponse-emails-to-reporters` | Draft reporter response emails |
@@ -293,6 +313,7 @@ Skills are available globally across all Claude Code sessions after installation
 | `trueprofit-blog-triggers` | Claude Code + Google Docs API credentials |
 | `trueprofit-blog-multilingual-tabs-triggers` | Claude Code + Google Docs API credentials |
 | `review-google-docs-article` | Claude Code + Google Docs API credentials + link-checker app |
+| `review-outline-google-docs-file` | Tab-aware Google Docs access + web browsing |
 | `review-trueprofit-live-blog-urls` | Claude Code + Python (`requests`, `beautifulsoup4`) + network access |
 | `browse-emails-to-find-opportunites` | Claude Code + Gmail MCP |
 | `generate-reponse-emails-to-reporters` | Claude Code |
