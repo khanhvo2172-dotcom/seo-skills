@@ -1,0 +1,23 @@
+{
+  "_comment": "Run order matters only for the exclusion chain: clean keywords first, keywords that carry negatives last. Each negative is applied only on its own keyword's call. Semrush allows max 25 filters per call - gen_specs.py checks this.",
+  "keywords": ["shopify", "dropship", "commerce", "margin", "revenue", "income", "expense", "pricing", "financ", "analytic", "dashboard", "kpi", "sales", "marketing", "business",
+               "profit", "ecom", "cost", "metric", "roas", "sell", "product"],
+  "negatives": {
+    "shopify": ["migration"],
+    "commerce": ["migration"],
+    "financ": ["refinance", "microfinance"],
+    "sales": ["salesforce"],
+    "profit": ["nonprofit", "non-profit"],
+    "ecom": ["recommend", "becom", "telecom", "migration"],
+    "cost": ["costume", "costa"],
+    "metric": ["biometric", "symmetric", "photometr"],
+    "roas": ["roast"],
+    "sell": ["counsel", "russell"],
+    "product": ["productiv", "production"]
+  },
+  "caps": {"business": 10},
+  "default_cap": 100,
+  "min_keywords_zero_traffic": 5,
+  "database": "us",
+  "never_use": {"ads": "leads, downloads, uploads", "app": "approach, happy", "roi": "android, steroid", "loss": "glossary", "fee": "coffee, feedback", "meta": "metadata"}
+}

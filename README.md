@@ -3,7 +3,7 @@
 > A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, guest post content, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-18-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-19-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -186,6 +186,22 @@ Crawls **unread** Gmail from a start date, keeps only genuine link-exchange **pa
 
 ---
 
+### `review-partner-domains`
+Screens the website lists that link-exchange partners send and finds pages relevant to TrueProfit on each domain, while spending as few **Semrush API credits** as possible.
+
+**Triggers when you say:** *"review these domains"*, *"check these websites for exchange"*, *"find relevant pages on X"*, *"screen this partner's site list"*
+
+**What it does:**
+- **Free pre-check first:** warns when a domain name contains a filter keyword (e.g. `ecombalance.com` contains "ecom"), and scans the sitemap for false slug matches like `loss` inside `glossary`
+- Waits for your OK before spending any credits
+- Pulls only pages whose slug matches TrueProfit topics (shopify, dropship, commerce, margin, profit, cost, kpi...) and that have **US traffic > 0, or more than 5 organic keywords**
+- Uses an exclusion chain with per-keyword negatives (`recommend`, `productivity`, `nonprofit`, `migration`...) so no page is billed twice and junk pages are skipped
+- Exports a CSV of every kept page, plus a per-domain verdict and the pages worth pitching
+
+**Requires:** Semrush MCP + Python (`requests`). Gmail MCP is optional, for reading domains from a partner thread.
+
+---
+
 ### `trueprofit-guest-post`
 Generates TrueProfit guest post sections, blurbs, app listing entries, and link exchange content that matches a partner page's style and structure.
 
@@ -256,6 +272,7 @@ cp -R review-trueprofit-live-blog-urls ~/.claude/skills/
 cp -R browse-emails-to-find-opportunites ~/.claude/skills/
 cp -R generate-reponse-emails-to-reporters ~/.claude/skills/
 cp -R summarize-email-thread ~/.claude/skills/
+cp -R review-partner-domains ~/.claude/skills/
 cp -R trueprofit-guest-post ~/.claude/skills/
 cp -R youtube-seeding-comments-generate ~/.claude/skills/
 ```
@@ -272,6 +289,7 @@ Copy-Item -Recurse -Force review-trueprofit-live-blog-urls "$env:USERPROFILE\.cl
 Copy-Item -Recurse -Force browse-emails-to-find-opportunites "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force generate-reponse-emails-to-reporters "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force summarize-email-thread "$env:USERPROFILE\.claude\skills\"
+Copy-Item -Recurse -Force review-partner-domains "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force trueprofit-guest-post "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force youtube-seeding-comments-generate "$env:USERPROFILE\.claude\skills\"
 ```
@@ -298,6 +316,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | `/generate-reponse-emails-to-reporters` | Draft reporter response emails |
 | `/summarize-email-thread` | Brief link exchange partner email history |
 | `/summarize-unread-exchange-link-mails` | Triage unread link-exchange partner mail by urgency |
+| `/review-partner-domains` | Find TrueProfit-relevant pages on partner domains with minimal Semrush credits |
 | `/trueprofit-guest-post` | Generate partner-style TrueProfit guest post content |
 | `/youtube-seeding-comments-generate` | Generate YouTube seeding comments |
 
@@ -319,6 +338,7 @@ Skills are available globally across all Claude Code sessions after installation
 | `generate-reponse-emails-to-reporters` | Claude Code |
 | `summarize-email-thread` | Claude Code + Gmail MCP |
 | `summarize-unread-exchange-link-mails` | Claude Code + Gmail MCP |
+| `review-partner-domains` | Claude Code + Semrush MCP + Python (`requests`) |
 | `trueprofit-guest-post` | Claude Code |
 | `youtube-seeding-comments-generate` | Claude Code |
 
