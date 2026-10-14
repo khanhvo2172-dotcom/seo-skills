@@ -232,20 +232,19 @@ Add `Content and factual issues` only when explicitly requested. Keep the report
 actionable, and advisory; do not edit the live site. When the user's preference for the optional
 pass is unknown, finish with the confirmation question defined above.
 
-### Embedding article links (CMS, not the public URL)
+### Embedding article links (public front-end URL)
 
 When a review lists articles by name — the per-article detail sections of a multi-article
-review, and any place a specific article title is referenced — embed a link on each article
-title, and link to the **CMS** copy, not the public URL. `be.trueprofit.io` is the headless
-WordPress backend behind the public `trueprofit.io` site. Derive the CMS link by swapping the
-host and adding a trailing slash:
+review, summary tables, and any place a specific article title is referenced — embed a link on
+each article title pointing to the **public front-end URL**, with no `be.` subdomain and no
+trailing slash:
 
-- public: `https://trueprofit.io/blog/<slug>`
-- CMS:    `https://be.trueprofit.io/blog/<slug>/`
+- use:   `https://trueprofit.io/blog/<slug>`
+- never: `https://be.trueprofit.io/blog/<slug>/`
 
-Example: `## 2. [gross-sales-vs-net-sales](https://be.trueprofit.io/blog/gross-sales-vs-net-sales/)`.
-The CMS page renders the same article (verified: matching `<title>`), so it is safe to embed.
-A summary/overview table may still use the public URL, but detail listings use the CMS link.
+Example: `## 2. [gross-sales-vs-net-sales](https://trueprofit.io/blog/gross-sales-vs-net-sales)`.
+This only governs the links shown in the report; still read and edit content via the CMS
+(`be.trueprofit.io` WP REST) as described below.
 
 ## Applying fixes to the CMS
 

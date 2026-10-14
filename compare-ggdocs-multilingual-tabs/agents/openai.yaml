@@ -1,0 +1,4 @@
+interface:
+  display_name: "Compare Docs Multilingual Tabs"
+  short_description: "Compare source tab with localized tabs"
+  default_prompt: "Use $compare-ggdocs-multilingual-tabs to compare the first Google Docs tab with Spanish Version, German Version, and French Version."

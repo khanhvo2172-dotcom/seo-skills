@@ -1,6 +1,6 @@
 ---
 name: summarize-unread-exchange-link-mails
-description: "Crawls unread Gmail from a given start date, keeps only genuine backlink/link-exchange partner emails, and returns an urgency-ranked triage: who is waiting on you (ball in your court), who you're waiting on, and what to close or ignore. Use whenever the user says things like 'summarize unread exchange link mails', 'crawl unread backlink emails from <date>', 'which partners are urgent to reply', 'recrawl and categorize', or wants a fresh inbox triage of link-exchange outreach replies. Handles both fresh partner replies and follow-ups on historical threads, dedupes multi-rep companies, and filters out trackers, auto-replies, and sales pitches."
+description: "Crawls unread Gmail from a given start date, keeps only genuine backlink/link-exchange partner emails, and returns an urgency-ranked triage: who is waiting on you (ball in your court), who you're waiting on, and what to close or ignore. Use whenever the user says things like 'summarize unread exchange link mails', 'crawl unread backlink emails from a date', 'which partners are urgent to reply', 'recrawl and categorize', or wants a fresh inbox triage of link-exchange outreach replies. Handles both fresh partner replies and follow-ups on historical threads, dedupes multi-rep companies, and filters out trackers, auto-replies, and sales pitches."
 ---
 
 # Summarize Unread Link-Exchange Mails - Inbox Triage
@@ -59,6 +59,10 @@ For every candidate partner thread, call `get_thread` to find the real latest me
 
 For each thread record: partner name/domain/email, latest message date, **latest sender** (partner vs `khanhvv@…`), and whether the newest message is still `UNREAD`.
 
+### Completeness ledger (required)
+
+Maintain a ledger of every unique thread returned by the two searches. Give every thread one explicit disposition: **partner/action**, **partner/waiting**, **partner/low**, or a named noise category. Do not silently omit a genuine partner thread because it is old, has no immediate action, is part of a different outreach conversation, or is superseded by a newer reply.
+
 ---
 
 ## Step 4 - Filter out the noise
@@ -91,8 +95,10 @@ Then bucket by urgency:
 - **Replied - waiting on them:** you already answered; listed so the user knows they're covered.
 
 ### Consolidation rules
-- **Same company, multiple reps:** if several people from one domain (e.g. three `@userp.io` contacts) replied to separate outreach, treat as **one** action - pick a lead contact and note the others - so the user doesn't negotiate the same sites three times.
-- **Deduplicate by partner/company, not by thread.**
+- **Same company, multiple reps:** consolidate the recommended action to avoid parallel negotiation, but preserve a distinct, named row or indented sub-row for **each** matching thread/contact. State the chosen lead contact and the status of every other contact. Never replace the individual rows with an unexplained company-only summary.
+- **Same company, separate conversations:** do not merge threads that concern different placements, requests, or stages of a deal. List each conversation separately, even when the same person sent both.
+- **Deduplicate only exact duplicate search results.** Company-level consolidation is an action-planning aid, not a reason to hide threads.
+
 - Respect the user's stated state (e.g. "I've replied to everyone except Brenan") - reflect it, don't re-flag what they've handled unless a partner has since replied again.
 
 ---
@@ -100,6 +106,8 @@ Then bucket by urgency:
 ## Step 6 - Output the triage
 
 Lead with a one-line count of how many need action now. Then use urgency-bucketed tables. Suggested shape (adapt columns to what's there):
+
+Every surviving real partner thread must appear in one of the tables below. Include a **Partner / contact** column; do not collapse waiting contacts into a single inline company name. A compact parent row with explicitly named contact sub-rows is acceptable for a multi-rep company.
 
 **🔴 New replies - respond next (ball bounced back to you)**
 
@@ -117,7 +125,10 @@ Lead with a one-line count of how many need action now. Then use urgency-buckete
 |---|---|---|
 
 **✅ Replied - waiting on them (no action)**
-- Brief inline list.
+| Partner / contact | Latest | Why it is waiting |
+|---|---|---|
+
+Before sending the answer, reconcile the output against the completeness ledger: each genuine partner thread must be listed once, and each excluded result must have a stated noise reason. This does not require listing every tracker or repeated system failure separately; summarize those by noise type and count when useful.
 
 Close with a **bottom line**: *"N need you now: … "* and a one-line reply plan. Then offer:
 

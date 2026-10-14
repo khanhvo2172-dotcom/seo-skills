@@ -57,7 +57,6 @@ From the threads, extract:
 | Thread count | How many threads found |
 | Status | See status definitions below |
 | Next action | What we should do next |
-| Key notes | Up to 4 short notable facts |
 
 For every agreed link placement (both ours and theirs), extract:
 
@@ -67,7 +66,7 @@ For every agreed link placement (both ours and theirs), extract:
 | Anchor text | The exact clickable text agreed |
 | Status | Whether the link is published or not yet published |
 | Link type | dofollow, nofollow, or unknown |
-| Placement & added content | Exact before/after sentence, table row, or heading context specified in the email |
+| Placement & added content | Exact before/after sentence, the added sentence, the anchor, and the target page specified in the email |
 
 **Multiple agreed pages:** If both sides agreed on more than 2 link placements in total, list every single one - do not summarise or truncate.
 
@@ -82,30 +81,42 @@ For every agreed link placement (both ours and theirs), extract:
 
 ### Step 4 - Output the briefing
 
-Present the briefing in this format:
+Present the briefing in this format. Notes on the layout:
+- **Do NOT include a Summary section** unless the user explicitly asks for one.
+- **Do NOT include a Key notes section** unless the user explicitly asks for one.
+- The placements **table stays lean** - it does NOT contain the "Placement & added content" column. Each row is numbered and the full placement detail goes in the section below the table.
+- **Group placements: list all "Ours" rows first, then all "Theirs" rows.** Number them sequentially (1, 2, 3...) in that grouped order, and keep the same numbering in the details section.
 
 ---
 
-**Partner:** [Name] | [Domain] | [Email]
+**Partner:** [Name] | [Domain(s)] | [Email]
 **Status:** [Status]
 **Last contact:** [Date] | [N] thread(s) found
 
-**Summary**
-[2-3 sentences: how the relationship started, what was agreed, where things stand now]
-
 **Link placements**
 
-| Side | URL | Anchor text | Target Page | Status | Link type | Placement & added content |
+| # | Side | URL | Anchor text | Target Page | Status | Link type |
 |---|---|---|---|---|---|---|
-| Ours (on their site) | [URL] | [anchor] | Target URL (my website's URL that receives the backlink) | Published / Not yet published | dofollow / nofollow / unknown | [exact placement instruction] |
-| Theirs (on our site) | [URL] | [anchor] | Target URL (their website's URL that receives the backlink) | Published / Not yet published | dofollow / nofollow / unknown | [exact placement instruction] |
+| 1 | Ours (on their site) | [URL] | [anchor] | Target URL (my website's URL that receives the backlink) | Published / Not yet published | dofollow / nofollow / unknown |
+| 2 | Ours (on their site) | [URL] | [anchor] | Target URL | Published / Not yet published | dofollow / nofollow / unknown |
+| 3 | Theirs (on our site) | [URL] | [anchor] | Target URL (their website's URL that receives the backlink) | Published / Not yet published | dofollow / nofollow / unknown |
 
-If more than 2 total placements were agreed, add a row for each one.
+List every agreed placement as its own numbered row - do not summarise or truncate.
 
-**Key notes**
-- [note 1]
-- [note 2]
-...
+**Placement & added content (details)**
+
+For each numbered placement, restate the full request in this structure (use `Before:` or `After:` depending on what the email specified; include only the fields that apply):
+
+**#1 - [Ours/Theirs] on [domain]** *(Status; add any caveat, e.g. "dofollow agreed only after moving off the pillar page")*
+- Page to insert link: [full URL of the page where the link sits]
+- Before / After: [exact existing sentence the link is anchored next to]
+- Add: [the exact new sentence/content to be inserted]
+- Anchor: [exact anchor text]
+- Target page: [full URL that receives the backlink]
+
+(Repeat the block for #2, #3, ... in the same grouped Ours-then-Theirs order.)
+
+**Placements still under negotiation:** If a placement isn't settled - the two sides proposed different pages/anchors/content and no final version was agreed - show BOTH versions under the same numbered block, each as its own labelled sub-block with its own status. Use italic sub-headings like *Your original suggestion (sent [date]):* and *Their counter-proposal (sent [date] - awaiting your yes):*, and give each the full `Page to insert link / Before-After / Add / Anchor / Target page` structure. Note the status on each (e.g. "Declined by publisher - listicle requires 2:1"). Do not silently drop the superseded version - the user needs to see what was offered and why it changed.
 
 **Next action**
 [Concrete single action: e.g. "Follow up - no reply in 3 weeks", "Verify their link is still live", "Place our link on X page"]

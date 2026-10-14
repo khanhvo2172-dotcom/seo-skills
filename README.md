@@ -24,6 +24,19 @@ Compares a TrueProfit Google Docs article tab against its live `trueprofit.io` b
 
 ---
 
+### `compare-ggdocs-multilingual-tabs`
+Compares the first (English) tab of a Google Docs article with its `Spanish Version`, `German Version` and `French Version` tabs.
+
+**Triggers when you say:** *"compare the language tabs"*, *"check the ES/DE/FR tabs against English"*, *"audit the multilingual tabs"*
+
+**What it does:**
+- Skips translated body text and checks structure instead
+- Applies the same link and Further Reading rules as `compare-content-between-ggdocs-live-url`
+- Compares heading counts per level, FAQ counts, benchmarks, formatting, section order and CTA/product mentions
+- Returns one row per section, with a column for each language (`Same` or a short difference)
+
+---
+
 ### `review-outline-google-docs-file`
 Reviews SEO outlines in one or more Google Docs against their reference URLs, saved AIO/AI Mode insights, and current reliable sources.
 
@@ -311,6 +324,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | `/trueprofit-blog-multilingual-tabs-triggers` | Repair/sync triggers and links in ES/DE/FR tabs |
 | `/review-google-docs-article` | Pre-publish QA review of a blog doc (links, CTA, Further Reading, FAQ) |
 | `/review-outline-google-docs-file` | Review SEO outline headings and FAQs against reference pages |
+| `/compare-ggdocs-multilingual-tabs` | Compare the English tab with the ES/DE/FR tabs (structure, links, FAQs) |
 | `/review-trueprofit-live-blog-urls` | QA a live TrueProfit article's structure, recap, reading boxes, FAQs, and image alts |
 | `/browse-emails-to-find-opportunites` | Screen PR opportunity emails |
 | `/generate-reponse-emails-to-reporters` | Draft reporter response emails |

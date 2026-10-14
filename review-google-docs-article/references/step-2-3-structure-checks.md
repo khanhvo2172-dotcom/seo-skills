@@ -37,7 +37,41 @@ title / target keyword lowercased and hyphenated. Never invent one silently.
 The insertion is **idempotent** — if an `Image: …` trigger already sits above the
 `[cta]` marker, it's skipped.
 
-## Step 3 — Further Reading placement (report-only)
+## Step 3 — Further Reading format (auto-fix) + placement (report-only)
+
+### 3a. Format — always a label line plus bulleted links (auto-fix)
+
+Every Further Reading block must look like this:
+
+```
+Further Reading:
+  • Link A
+  • Link B
+```
+
+Writers often paste it as `Further Reading: [Link A]` on one line, put further
+links on plain (un-bulleted) lines, use soft line breaks (Shift+Enter), bullet the
+label itself, or drop the colon. `scripts/fix_further_reading.py` fixes all of
+these: it splits each link onto its own line, deletes leftover separators between
+links (spaces, commas, `|`, dashes, soft breaks), removes a bullet from the label,
+adds the missing colon, and bullets every link line under the label. Links,
+anchor text and text styles are untouched.
+
+This fix is **pre-authorized** (no confirmation needed). Run it **before** the
+placement check, since the placement check detects blocks by their bullets:
+
+```bash
+python fix_further_reading.py --doc "<DOC_URL_WITH_?tab=...>"           # dry-run: list blocks
+python fix_further_reading.py --doc "<DOC_URL_WITH_?tab=...>" --apply   # fix them
+python fix_further_reading.py --doc "<DOC_URL_WITH_?tab=...>"           # verify: expect 0
+```
+
+Report how many blocks were fixed per doc (or "already formatted"). Never claim a
+fix unless the apply run printed `APPLIED` and the verify run shows 0. Note the
+link count per fixed block. If it differs from what you saw earlier in the
+session, say so: the docs are often edited live by writers.
+
+### 3b. Placement (report-only)
 
 A "Further Reading" block is a label line followed by a short list of links. It
 should live **inside** the section it was written for, not stranded right before
@@ -56,7 +90,8 @@ literal "http" text match, which misses every hyperlinked list.
 
 ## How to run it
 
-Always dry-run first (the default), show the user, then apply the CTA if wanted.
+Run 3a's `fix_further_reading.py --apply` first. Then, for the CTA and placement
+checks, always dry-run first (the default), show the user, then apply the CTA if wanted.
 
 ```bash
 # from scripts/ — report only (no edits), includes both checks.
