@@ -199,7 +199,7 @@ Crawls **unread** Gmail from a start date, keeps only genuine link-exchange **pa
 
 ---
 
-### `review-partner-domains`
+### `review-partner-domains-using-semrush-mcp`
 Screens the website lists that link-exchange partners send and finds pages relevant to TrueProfit on each domain, while spending as few **Semrush API credits** as possible.
 
 **Triggers when you say:** *"review these domains"*, *"check these websites for exchange"*, *"find relevant pages on X"*, *"screen this partner's site list"*
@@ -285,7 +285,7 @@ cp -R review-trueprofit-live-blog-urls ~/.claude/skills/
 cp -R browse-emails-to-find-opportunites ~/.claude/skills/
 cp -R generate-reponse-emails-to-reporters ~/.claude/skills/
 cp -R summarize-email-thread ~/.claude/skills/
-cp -R review-partner-domains ~/.claude/skills/
+cp -R review-partner-domains-using-semrush-mcp ~/.claude/skills/
 cp -R trueprofit-guest-post ~/.claude/skills/
 cp -R youtube-seeding-comments-generate ~/.claude/skills/
 ```
@@ -302,7 +302,7 @@ Copy-Item -Recurse -Force review-trueprofit-live-blog-urls "$env:USERPROFILE\.cl
 Copy-Item -Recurse -Force browse-emails-to-find-opportunites "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force generate-reponse-emails-to-reporters "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force summarize-email-thread "$env:USERPROFILE\.claude\skills\"
-Copy-Item -Recurse -Force review-partner-domains "$env:USERPROFILE\.claude\skills\"
+Copy-Item -Recurse -Force review-partner-domains-using-semrush-mcp "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force trueprofit-guest-post "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force youtube-seeding-comments-generate "$env:USERPROFILE\.claude\skills\"
 ```
@@ -330,7 +330,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | `/generate-reponse-emails-to-reporters` | Draft reporter response emails |
 | `/summarize-email-thread` | Brief link exchange partner email history |
 | `/summarize-unread-exchange-link-mails` | Triage unread link-exchange partner mail by urgency |
-| `/review-partner-domains` | Find TrueProfit-relevant pages on partner domains with minimal Semrush credits |
+| `/review-partner-domains-using-semrush-mcp` | Find TrueProfit-relevant pages on partner domains with minimal Semrush credits |
 | `/trueprofit-guest-post` | Generate partner-style TrueProfit guest post content |
 | `/youtube-seeding-comments-generate` | Generate YouTube seeding comments |
 
@@ -352,7 +352,7 @@ Skills are available globally across all Claude Code sessions after installation
 | `generate-reponse-emails-to-reporters` | Claude Code |
 | `summarize-email-thread` | Claude Code + Gmail MCP |
 | `summarize-unread-exchange-link-mails` | Claude Code + Gmail MCP |
-| `review-partner-domains` | Claude Code + Semrush MCP + Python (`requests`) |
+| `review-partner-domains-using-semrush-mcp` | Claude Code + Semrush MCP + Python (`requests`) |
 | `trueprofit-guest-post` | Claude Code |
 | `youtube-seeding-comments-generate` | Claude Code |
 
