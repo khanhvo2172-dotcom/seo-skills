@@ -12,7 +12,7 @@ description: >-
   Image triggers / sentence notes / CTA image / Further Reading placement, gives
   a Google Docs link for the TrueProfit blog pipeline, or is about to push a doc
   through the n8n blog automation. Edits the doc in place via the Google Docs
-  API, first tab only. Prefer this skill over editing the doc by hand or
+  API, selected article tab only. Prefer this skill over editing the doc by hand or
   eyeballing the triggers.
 ---
 
@@ -20,7 +20,7 @@ description: >-
 
 Blog drafts live in Google Docs. Before the n8n workflow can turn a doc into a
 WordPress post, the doc has to contain plain-text **trigger lines** that tell the
-parser where the special CMS blocks go. This skill rechecks a doc's **first tab**
+parser where the special CMS blocks go. This skill rechecks a doc's **selected article tab**
 and adds the triggers that are missing, so the author doesn't have to remember
 the exact syntax.
 
@@ -33,9 +33,9 @@ tells you when those are missing so you can write them.
 | Element | Behaviour |
 |---|---|
 | **Content Highlight** | **Adds** a `Content Highlight` label line above qualifying content (see rules below). |
-| **Image** | **Adds** an `Image (sentence note): <url>, Alt is "<alt>"` line **above** each embedded image. URL+alt come from either a base slug (auto-numbered, blank alt) or an explicit per-image list. |
+| **Image** | **Adds** an `Image (sentence note): <url>, Alt is "<alt>"` line **above** each embedded image. Use an explicit per-image URL/alt list with contextual descriptions by default; base-slug mode leaves alt blank and is only for explicitly requested blank alts. |
 | **CTA image** | **Adds** an image trigger above a `[cta]` marker — fixed URL and alt, plus a `Link is` to the Shopify app listing tagged with the article's main keyword — **but only when the article has more than 5 Heading 2 sections** (FAQ counted). A shorter article gets a **warning** and nothing is inserted. |
-| **Quick Recap** | **Flags only.** If the first tab has no Quick Recap, it tells you — it does not write one. |
+| **Quick Recap** | **Flags only.** If the selected tab has no Quick Recap, it tells you — it does not write one. |
 | **FAQ** | **Flags only.** Same — reports missing, never fabricates Q&A. |
 | **Further Reading** | **Flags only.** Warns when a Further Reading block sits directly above the 2nd–5th Heading 2 (it reads as belonging to the heading below it). Never moved automatically. |
 
@@ -63,16 +63,10 @@ in a fresh session that has no files:
 
 The Google account behind the token needs **edit access** to the doc.
 
-You always need these from the user:
+## Select the article tab and prepare images
 
-1. The **Google Doc** (URL or ID).
-2. **Whether the doc has a CTA image, and where.** Many articles end with a
-   fixed call-to-action image (e.g. `https://be.trueprofit.io/uploads/<slug>-N.webp`
-   with alt `TrueProfit CTA`) that should keep its own fixed URL/alt rather than
-   following the same naming rule as the other images. Ask this **before**
-   picking a naming mode — if there's a CTA image, its URL+alt is fixed and the
-   position (usually last) should be excluded from the base-slug/alt-rule
-   pattern applied to the rest.
+1. Use the article tab explicitly named by the user (for example, Final), then the URL's `tab=` parameter, otherwise the first tab. Pass `--tab-title "Final"` for an exact title or `--tab t.xxxx` for an ID; both override URL selection. If the requested tab is missing or its title is ambiguous, stop and clarify instead of editing another tab. Sibling drafts and notes are outside scope.
+2. **Inspect embedded images yourself before choosing the naming mode.** Determine whether there is a CTA banner and where it sits; ask only if the visual evidence is ambiguous or inaccessible. Preserve its approved fixed URL/alt and exclude it from ordinary image numbering.
 
    A `[cta]` **marker line** in the doc is handled automatically (see the CTA
    rule below) — it's an author note, not an embedded image, so it never
@@ -90,17 +84,20 @@ You always need these from the user:
    "dashboard" is not enough — use the per-image URL from the naming rule.
 3. **How to name the images** — one of two modes (ask which, if unclear):
 
-   **Mode A — base slug (auto-number, blank alt).** One slug drives every image
-   URL, numbered by order, alt left empty. Good for a fresh article where the
-   images will be uploaded as `<slug>-1.webp`, `<slug>-2.webp`, …
+   **Mode A — base slug (auto-number, blank alt; explicit opt-in).** One slug drives every image
+   URL, numbered by order, alt left empty. Use only when Khanh explicitly requests blank
+   alts. For normal preparation, generate the numbered URLs and contextual alts in Mode B.
 
    ```bash
    python gdocs_triggers.py --doc "<DOC>" --base-slug "marginal-benefit-vs-marginal-cost" --dry-run
    ```
 
-   **Mode B — explicit URL + alt list.** The user supplies a list where each line
-   is a full image URL and its alt text, one per image **in document order**.
-   Save the pasted list to a text file (one `url<TAB>alt` per line) and pass it:
+   **Mode B — explicit URL + alt list (default).** Prepare a full image URL and alt
+   text for each image **in selected-tab order**, using supplied filenames or the approved
+   base slug for ordinary numbered images. Preserve fixed CTA/dashboard mappings. Inspect
+   each image and its nearby section, then write a concise natural description of visible
+   content; do not invent details or merely repeat headings. Preserve approved URLs.
+   Save the list as UTF-8 (one `url<TAB>alt` per line) and pass it:
 
    ```
    https://be.trueprofit.io/uploads/V1-2.webp        Large preview
@@ -108,15 +105,15 @@ You always need these from the user:
    ...
    ```
    ```bash
-   python gdocs_triggers.py --doc "<DOC>" --image-list "images.txt" --dry-run
+   python gdocs_triggers.py --doc "<DOC>" --tab-title "Final" --image-list "images.txt" --dry-run
    ```
 
    **Generating alt text yourself (Mode B, when the user gives a rule instead of
    literal text).** Often the user gives a *rule* rather than the exact alt
    strings — e.g. "alt is the app name in each heading 3 plus 'homepage'", or
    "each image demonstrates its heading 3 topic, generate the alt". When you
-   have to generate the wording (not just plug in a name), ask **which style**
-   they want, since this changes the output a lot:
+   have to generate wording, default to **Contextual/natural**. A specific supplied
+   rule or literal alt text takes priority:
 
    - **Formula** — a fixed template applied mechanically, e.g. `<name> homepage`
      for every image. Good when the rule already fully determines the string.
@@ -128,8 +125,8 @@ You always need these from the user:
      handling customer service using AI"). Avoid restating the heading text
      unchanged — rephrase it naturally.
 
-   If unclear which the user wants, ask before generating the full list — it's
-   much cheaper than generating, applying, then reset + regenerating.
+   Do not ask for an alt style when the image and section provide enough context.
+   Ask only when the evidence or an explicit naming requirement is unresolved.
 
    The two modes are mutually exclusive. In Mode B, image #1 takes line 1, image
    #2 line 2, and so on — order matters. If the list length doesn't match the
@@ -146,8 +143,9 @@ You always need these from the user:
      --cta-campaign "how-to-track-dropship-expenses" --dry-run
    ```
 
-**Always dry-run first** so the user can see the full plan (and verify the image
-mapping) before the doc changes. If it looks right, re-run without `--dry-run`.
+**Always dry-run first** and check the selected tab, image mapping and warnings.
+Show a concise plan; do not paste the full execution log. Honor any requested slug
+confirmation before applying. Once the plan is authorized, re-run without `--dry-run`.
 
 The dry run prints: Quick Recap / FAQ presence, the Heading 2 count, images
 found, any warnings (short-article CTA, mis-placed Further Reading, image-list
@@ -217,7 +215,7 @@ Your Takeaway: Lead with one hero     -->   Content Highlight
 
 ### Image
 
-For every embedded image in the first tab, in order, add a trigger line
+For every embedded image in the selected tab, in order, add a trigger line
 **immediately above** it:
 
 ```
@@ -244,7 +242,7 @@ Authors mark where the call-to-action banner should go with a **`[cta]`** note
 count). It's a text marker, not an embedded image, so it never consumes a slot
 in the `--image-list`.
 
-**Length gate first.** Count the **Heading 2** paragraphs in the first tab, with
+**Length gate first.** Count the **Heading 2** paragraphs in the selected tab, with
 the FAQ heading counted as one. If the article has **5 or fewer**, the skill
 **inserts nothing and warns** — a CTA banner in a short article is a judgement
 call for the author. Only with **more than 5** H2s does it add the trigger above
@@ -327,8 +325,8 @@ Report back to the user, concisely:
 
 ## Scope and assumptions
 
-- **First tab only.** Multi-tab docs (e.g. a "Final" tab plus drafts) are common;
-  only the first tab is rechecked, matching the English publishing workflow.
+- **Selected article tab only.** Honor the named tab or URL tab ID for reads, insertions,
+  reset and style normalization. Use the first tab only when none was specified.
 - The signed-in Google account needs **edit access** to the doc.
 - This skill is about *trigger syntax*, not translation or content. For ES/DE/FR
   versions see the separate localization workflow.

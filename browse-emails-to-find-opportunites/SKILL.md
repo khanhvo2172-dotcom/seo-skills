@@ -39,6 +39,8 @@ Only prioritize PR/source opportunities when they clearly match TrueProfit’s e
 - B2B ecommerce if the angle includes conversion, fulfillment, cost-to-serve, or margins
 - Small business commerce tools if the angle connects to sales, payments, fees, reporting, or profitability
 
+Retail pricing strategy and pricing psychology are also strong candidates when the actual request explicitly concerns profit/margin or cost tradeoffs, even if it does not say Shopify or ecommerce. For example, a retailer pricing just below $10/$20 thresholds despite sacrificing profit is worth surfacing.
+
 ### Conditional-fit topics
 AI opportunities are only relevant if the angle is about:
 - Merchants using AI with Shopify/store/profit data
@@ -79,7 +81,7 @@ is only maybe relevant if framed narrowly around merchants using AI with Shopify
 
 TrueProfit has two potential expert sources to pitch as the quote-giver:
 - **Harry Chu** — founder/CEO. Default source for profit analytics, margin/cost tracking, ecommerce finance ops, pricing/cost-tradeoff stories, and AI/MCP topics.
-- **Lila Le** — marketing manager (https://trueprofit.io/author/lila-le). Better source for ecommerce marketing, branding, creative strategy, campaign/conversion-marketing angles, and marketing-vs-AI-content stories — including some that don't clear the strict profit-analytics bar for Harry but are still on-topic for a marketing manager at an ecommerce SaaS.
+- **Lila Le** — marketing manager (https://trueprofit.io/author/lila-le). Better source for qualifying ecommerce marketing, branding, creative strategy, campaign/conversion-marketing, and marketing-vs-AI-content requests. Source suitability does not waive the fit bar: an ecommerce-adjacent story alone is insufficient.
 
 For every High-fit or Maybe-fit opportunity, always note which source is the better fit — Harry, Lila, or both — instead of defaulting to Harry only.
 
@@ -93,7 +95,7 @@ For each batch of HARO/Qwoted/MentionMatch emails, summarize:
 5. Suggested pitch angle only for genuinely relevant opportunities
 6. Suggested source (Harry Chu, Lila Le, or both) for each High-fit or Maybe-fit opportunity
 
-Do not over-recommend borderline opportunities. Be strict.
+Do not over-recommend borderline opportunities. Require a direct profit, margin, cost-tracking or specific Shopify merchant-operations angle in the actual request; do not invent an indirect profit angle for generic channel, AI-checkout or founder-story topics. When unsure, default to Skip rather than Maybe. Sales-pipeline and CRM-software listicles are Skip; commerce tools tied to payments, fees, reporting or profitability can still qualify.
 
 ## Drafting Follow-up Emails
 
@@ -127,10 +129,9 @@ The user uses Gmail MCP to search/read emails from:
 - MentionMatch
 
 When asked to scan emails:
-- Ask users the exact date ranges.
-- Read only unread messages unless the user explicitly asks for all messages.
-- Use Gmail search with `is:unread` and exclude trash/spam.
-- Read relevant messages.
-- Ignore previously reviewed opportunities if user asks.
+- Use the exact requested date window. Resolve phrases such as yesterday to today in the user's timezone; ask only when the window is missing or ambiguous. Do not backfill older mail.
+- Read only unread messages unless the user explicitly asks for all messages. Search with `is:unread after:YYYY/M/D before:YYYY/M/D -in:spam -in:trash` plus each source filter; use an exclusive end date that covers the requested final day.
+- Read each opened message's full body and every individual reporter request in a digest, including requirements and source credentials. Titles and snippets alone are insufficient. Cover HARO, Qwoted and MentionMatch, paginate results, and report any unavailable source or incomplete coverage.
+- Ignore previously reviewed opportunities if the user asks.
 - Avoid raw operational detail; provide ranked summaries.
-- After crawling, always mark the scanned messages as read (remove the `UNREAD` label from every thread that was opened/evaluated), so the same opportunities are not re-surfaced on the next run.
+- After the scan, remove `UNREAD` from only the message IDs actually opened/evaluated, including skipped opportunities. Do not clear unseen messages that merely appeared in search, or other unread replies in the same thread. Re-search to verify; use the working Gmail connector if another mark-read method fails.

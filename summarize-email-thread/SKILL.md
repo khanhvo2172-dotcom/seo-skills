@@ -84,10 +84,14 @@ For every agreed link placement (both ours and theirs), extract:
 Present the briefing in this format. Notes on the layout:
 - **Do NOT include a Summary section** unless the user explicitly asks for one.
 - **Do NOT include a Key notes section** unless the user explicitly asks for one.
-- The placements **table stays lean** - it does NOT contain the "Placement & added content" column. Each row is numbered and the full placement detail goes in the section below the table.
+- Start with a short overview paragraph including confirmed published links **received** and **given** separately. Count individual placements, not exchanges or threads; exclude requested, agreed, declined and unverified placements. If publication evidence is missing, say the count is unconfirmed rather than assuming completion.
+- The placements **table stays lean** - it does NOT contain the "Placement & added content" column. Each row is numbered. Show the full placement-detail section **only when the user explicitly requests it**; otherwise omit it entirely.
+- Show published placements as **🟢 Published** and pending requests as **🟠 Requested** when colored text is unavailable. Use green Published and orange Requested when supported. Retain accurate labels such as Declined or Unverified for other states; Requested does not imply acceptance.
 - **Group placements: list all "Ours" rows first, then all "Theirs" rows.** Number them sequentially (1, 2, 3...) in that grouped order, and keep the same numbering in the details section.
 
 ---
+
+[Short overview: confirmed published links received: N; given: M; current exchange context. For example, 2 received and 1 given, with a further request pending.]
 
 **Partner:** [Name] | [Domain(s)] | [Email]
 **Status:** [Status]
@@ -97,15 +101,15 @@ Present the briefing in this format. Notes on the layout:
 
 | # | Side | URL | Anchor text | Target Page | Status | Link type |
 |---|---|---|---|---|---|---|
-| 1 | Ours (on their site) | [URL] | [anchor] | Target URL (my website's URL that receives the backlink) | Published / Not yet published | dofollow / nofollow / unknown |
-| 2 | Ours (on their site) | [URL] | [anchor] | Target URL | Published / Not yet published | dofollow / nofollow / unknown |
-| 3 | Theirs (on our site) | [URL] | [anchor] | Target URL (their website's URL that receives the backlink) | Published / Not yet published | dofollow / nofollow / unknown |
+| 1 | Ours (on their site) | [URL] | [anchor] | Target URL (my website's URL that receives the backlink) | 🟢 Published / 🟠 Requested / Unverified | dofollow / nofollow / unknown |
+| 2 | Ours (on their site) | [URL] | [anchor] | Target URL | 🟢 Published / 🟠 Requested / Unverified | dofollow / nofollow / unknown |
+| 3 | Theirs (on our site) | [URL] | [anchor] | Target URL (their website's URL that receives the backlink) | 🟢 Published / 🟠 Requested / Unverified | dofollow / nofollow / unknown |
 
 List every agreed placement as its own numbered row - do not summarise or truncate.
 
-**Placement & added content (details)**
+**Placement & added content (details)** *(include only on explicit request)*
 
-For each numbered placement, restate the full request in this structure (use `Before:` or `After:` depending on what the email specified; include only the fields that apply):
+When details are requested, for each numbered placement, restate the full request in this structure (use `Before:` or `After:` depending on what the email specified; include only the fields that apply):
 
 **#1 - [Ours/Theirs] on [domain]** *(Status; add any caveat, e.g. "dofollow agreed only after moving off the pillar page")*
 - Page to insert link: [full URL of the page where the link sits]
@@ -116,7 +120,7 @@ For each numbered placement, restate the full request in this structure (use `Be
 
 (Repeat the block for #2, #3, ... in the same grouped Ours-then-Theirs order.)
 
-**Placements still under negotiation:** If a placement isn't settled - the two sides proposed different pages/anchors/content and no final version was agreed - show BOTH versions under the same numbered block, each as its own labelled sub-block with its own status. Use italic sub-headings like *Your original suggestion (sent [date]):* and *Their counter-proposal (sent [date] - awaiting your yes):*, and give each the full `Page to insert link / Before-After / Add / Anchor / Target page` structure. Note the status on each (e.g. "Declined by publisher - listicle requires 2:1"). Do not silently drop the superseded version - the user needs to see what was offered and why it changed.
+**Placements still under negotiation (inside the optional details section):** If a placement isn't settled - the two sides proposed different pages/anchors/content and no final version was agreed - show BOTH versions under the same numbered block, each as its own labelled sub-block with its own status. Use italic sub-headings like *Your original suggestion (sent [date]):* and *Their counter-proposal (sent [date] - awaiting your yes):*, and give each the full `Page to insert link / Before-After / Add / Anchor / Target page` structure. Note the status on each (e.g. "Declined by publisher - listicle requires 2:1"). Do not silently drop the superseded version - the user needs to see what was offered and why it changed.
 
 **Next action**
 [Concrete single action: e.g. "Follow up - no reply in 3 weeks", "Verify their link is still live", "Place our link on X page"]

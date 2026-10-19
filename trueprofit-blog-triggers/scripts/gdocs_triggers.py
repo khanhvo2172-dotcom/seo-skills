@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Add TrueProfit CMS "highlight triggers" to a blog Google Doc (first tab only).
+Add TrueProfit CMS "highlight triggers" to a blog Google Doc (selected article tab).
 
 What it does, end to end:
   1. Authenticates to the Google Docs API (OAuth desktop flow, token cached).
-  2. Reads the document WITH tab content and isolates the FIRST tab.
+  2. Reads the document WITH tab content and isolates the selected tab.
   3. Flattens that tab's paragraphs into ordered blocks (text + image markers),
      carrying each paragraph's heading level.
   4. Runs the pure-logic detector (detect_triggers.detect) to plan insertions:
@@ -28,6 +28,7 @@ import json
 import os
 import re
 import sys
+from urllib.parse import parse_qs, urlparse
 
 from detect_triggers import (
     detect,
@@ -102,20 +103,45 @@ def get_service(creds_path, token_path):
     return build("docs", "v1", credentials=creds)
 
 
-def first_tab(document):
-    """
-    Return (body_content, tab_id) for the first tab.
+def tab_id_from_url(value):
+    """Read a tab ID from the query or fragment of a Docs URL."""
+    parsed = urlparse(value)
+    for part in (parsed.query, parsed.fragment):
+        values = parse_qs(part).get("tab")
+        if values:
+            return values[0]
+    return None
 
-    The modern Docs API nests content under tabs[].documentTab.body. Older docs
-    (or the API without tab support) expose body directly with no tab id.
-    """
-    tabs = document.get("tabs")
-    if tabs:
+
+def select_tab(document, tab_id=None, tab_title=None):
+    """Return (body_content, tab_id); never fall back from an explicit selector."""
+    def walk(tabs):
+        for tab in tabs:
+            yield tab
+            yield from walk(tab.get("childTabs", []) or [])
+
+    tabs = list(walk(document.get("tabs", []) or []))
+    if tab_id is not None or tab_title is not None:
+        matches = [tab for tab in tabs if (
+            tab.get("tabProperties", {}).get("tabId") == tab_id
+            if tab_id is not None else
+            tab.get("tabProperties", {}).get("title") == tab_title
+        )]
+        if len(matches) != 1:
+            raise ValueError("Cannot select requested tab %r: matched %d tabs." % (
+                tab_id if tab_id is not None else tab_title, len(matches)))
+        tab = matches[0]
+    elif tabs:
         tab = tabs[0]
-        tab_id = tab.get("tabProperties", {}).get("tabId")
-        body = tab.get("documentTab", {}).get("body", {})
-        return body.get("content", []), tab_id
-    return document.get("body", {}).get("content", []), None
+    else:
+        return document.get("body", {}).get("content", []), None
+    return (tab.get("documentTab", {}).get("body", {}).get("content", []),
+            tab.get("tabProperties", {}).get("tabId"))
+
+
+def first_tab(document):
+    """Compatibility helper for callers that explicitly want tab 0."""
+    return select_tab(document)
 
 
 def heading_level(para):
@@ -232,7 +258,7 @@ def _range(b, tab_id):
     return rng
 
 
-def normalize_styles(service, did):
+def normalize_styles(service, did, tab_id=None):
     """
     Force every trigger line to plain body text. Inserted text inherits the style
     at the insertion point, so a Content Highlight dropped above a heading - or an
@@ -242,7 +268,7 @@ def normalize_styles(service, did):
     Returns the number of trigger lines normalized.
     """
     document = service.documents().get(documentId=did, includeTabsContent=True).execute()
-    content, tab_id = first_tab(document)
+    content, tab_id = select_tab(document, tab_id=tab_id)
     targets = trigger_paragraphs(flatten(content))
     if not targets:
         return 0
@@ -325,8 +351,11 @@ def parse_image_list(path):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Add CMS triggers to a blog Google Doc (first tab).")
-    ap.add_argument("--doc", required=True, help="Google Doc ID or URL")
+    ap = argparse.ArgumentParser(description="Add CMS triggers to a blog Google Doc (selected tab).")
+    ap.add_argument("--doc", required=True, help="Google Doc ID or URL, including tab= when supplied")
+    tabs = ap.add_mutually_exclusive_group()
+    tabs.add_argument("--tab", help="Exact tab ID; overrides the URL tab")
+    tabs.add_argument("--tab-title", help="Exact unique tab title, e.g. Final; overrides the URL tab")
     ap.add_argument("--base-slug", help='Auto-number image URLs from this slug, empty alt (mode A). Mutually exclusive with --image-list.')
     ap.add_argument("--image-list", help='Path to a file of "<url><tab><alt>" lines mapped to images in order (mode B). Mutually exclusive with --base-slug.')
     ap.add_argument("--cta-campaign", help="utm_campaign value (main-keyword slug) for the CTA image link. Defaults to --base-slug when given.")
@@ -339,7 +368,11 @@ def main():
     did = doc_id_from(args.doc)
     service = get_service(args.creds, args.token)
     document = service.documents().get(documentId=did, includeTabsContent=True).execute()
-    content, tab_id = first_tab(document)
+    want_tab = None if args.tab_title is not None else (args.tab or tab_id_from_url(args.doc))
+    try:
+        content, tab_id = select_tab(document, tab_id=want_tab, tab_title=args.tab_title)
+    except ValueError as exc:
+        sys.exit(str(exc))
     blocks = flatten(content)
     title = document.get("title", "(untitled)")
 
@@ -410,7 +443,7 @@ def main():
     service.documents().batchUpdate(documentId=did, body={"requests": requests}).execute()
     print("Applied %d insertion(s) to '%s'." % (len(requests), title))
     # Force all trigger lines (new + any pre-existing) to plain body text.
-    n = normalize_styles(service, did)
+    n = normalize_styles(service, did, tab_id)
     print("Normalized %d trigger line(s) to normal text." % n)
     return 0
 

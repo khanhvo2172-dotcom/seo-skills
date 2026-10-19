@@ -3,7 +3,7 @@
 > A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, guest post content, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-19-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-22-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -105,14 +105,15 @@ Translates TrueProfit blog markdown files into **Spanish (Spain)**, **German (Ge
 ---
 
 ### `trueprofit-blog-triggers`
-Adds the CMS "highlight triggers" that the n8n publishing workflow needs before a blog post can be built, operating on the **English (first) tab** of a TrueProfit blog Google Doc.
+Adds the CMS "highlight triggers" that the n8n publishing workflow needs before a blog post can be built, operating only on the **selected article tab** of a TrueProfit blog Google Doc (explicit tab title/ID, URL tab, then first-tab default).
 
 **Triggers when you say:** *"check the doc"*, *"prep for publish"*, *"add triggers to this doc"*, *"recheck the triggers"*, *"is the doc ready for n8n"*
 
 **What it does:**
 - Detects inline formulas (line containing "formula" + next line with `=`) and adds a `Content Highlight` label above them
 - Detects `Pro tip` and `Note:` callouts and adds a `Content Highlight` label above them
-- Adds an `Image (sentence note): <url>, Alt is "<alt>"` line above each embedded image — either auto-numbered from a base slug (Mode A) or from an explicit URL+alt list (Mode B)
+- Inspects embedded images for CTA banners and preserves fixed asset mappings
+- Adds an `Image (sentence note): <url>, Alt is "<alt>"` line above each embedded image, using contextual alt text by default; blank-alt base-slug mode is explicit opt-in
 - Reports whether **Quick Recap** and **FAQ** sections are present (never fabricates them)
 - Idempotent — already-present triggers are detected and skipped; re-running never creates duplicates
 - Normalizes all trigger lines to plain body text after inserting
@@ -178,7 +179,19 @@ Searches Gmail for email threads related to a link exchange partner and produces
 - Reads full thread bodies instead of relying on snippets
 - Extracts agreed URLs, anchor text, placement context, link type, and status
 - Classifies status as completed, active, pending, stalled, or exchange agreed
+- Includes confirmed published link counts received and given separately, with 🟢 Published / 🟠 Requested placement markers
+- Shows full placement details only when explicitly requested
 - Returns a concise briefing before you reply to a partner
+
+---
+
+### `generate-reponse-mails-to-partners`
+Drafts concise partner replies in the original email thread, with numbered full publisher URLs and bulleted placement instructions. Preserves selected pages and explicit anchors, complements publisher content, includes exact figures for benchmark targets, and checks pending-page availability before detailed requests. Creates unsent Gmail drafts when requested; sending requires explicit authorization.
+
+---
+
+### `mark-noise-mails-read`
+Marks only verified unread Apps Script failure notifications and delivery-status bounces as read by default. Honors requested categories/date bounds, checks every matched thread for human replies, and verifies completion. Real partner emails remain outside cleanup.
 
 ---
 
@@ -205,7 +218,9 @@ Screens the website lists that link-exchange partners send and finds pages relev
 **Triggers when you say:** *"review these domains"*, *"check these websites for exchange"*, *"find relevant pages on X"*, *"screen this partner's site list"*
 
 **What it does:**
-- **Free pre-check first:** warns when a domain name contains a filter keyword (e.g. `ecombalance.com` contains "ecom"), and scans the sitemap for false slug matches like `loss` inside `glossary`
+- Checks tracking history only through the last populated Name cell, ignoring autofilled trailing rows
+- Warns when a domain name contains a filter keyword (e.g. `ecombalance.com` contains "ecom"); skips sitemap checks unless requested
+- Shows full clickable URLs for candidate pages
 - Waits for your OK before spending any credits
 - Pulls only pages whose slug matches TrueProfit topics (shopify, dropship, commerce, margin, profit, cost, kpi...) and that have **US traffic > 0, or more than 5 organic keywords**
 - Uses an exclusion chain with per-keyword negatives (`recommend`, `productivity`, `nonprofit`, `migration`...) so no page is billed twice and junk pages are skipped
@@ -320,7 +335,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | Command | Description |
 |---|---|
 | `/trueprofit-blog-localization` | Translate blog articles to ES/DE/FR |
-| `/trueprofit-blog-triggers` | Add CMS triggers to the English tab of a blog doc |
+| `/trueprofit-blog-triggers` | Add CMS triggers to the selected article tab of a blog doc |
 | `/trueprofit-blog-multilingual-tabs-triggers` | Repair/sync triggers and links in ES/DE/FR tabs |
 | `/review-google-docs-article` | Pre-publish QA review of a blog doc (links, CTA, Further Reading, FAQ) |
 | `/review-outline-google-docs-file` | Review SEO outline headings and FAQs against reference pages |
@@ -329,6 +344,8 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | `/browse-emails-to-find-opportunites` | Screen PR opportunity emails |
 | `/generate-reponse-emails-to-reporters` | Draft reporter response emails |
 | `/summarize-email-thread` | Brief link exchange partner email history |
+| `/generate-reponse-mails-to-partners` | Draft partner replies and contextual placement requests |
+| `/mark-noise-mails-read` | Mark verified notification noise read |
 | `/summarize-unread-exchange-link-mails` | Triage unread link-exchange partner mail by urgency |
 | `/review-partner-domains-using-semrush-mcp` | Find TrueProfit-relevant pages on partner domains with minimal Semrush credits |
 | `/trueprofit-guest-post` | Generate partner-style TrueProfit guest post content |
@@ -351,6 +368,8 @@ Skills are available globally across all Claude Code sessions after installation
 | `browse-emails-to-find-opportunites` | Claude Code + Gmail MCP |
 | `generate-reponse-emails-to-reporters` | Claude Code |
 | `summarize-email-thread` | Claude Code + Gmail MCP |
+| `generate-reponse-mails-to-partners` | Gmail and tracking Sheet access; web access to verify placements |
+| `mark-noise-mails-read` | Gmail search/read/label tools |
 | `summarize-unread-exchange-link-mails` | Claude Code + Gmail MCP |
 | `review-partner-domains-using-semrush-mcp` | Claude Code + Semrush MCP + Python (`requests`) |
 | `trueprofit-guest-post` | Claude Code |
