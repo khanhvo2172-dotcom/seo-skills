@@ -63,7 +63,9 @@ The outline is a structure baseline, not proof that its factual claims are true.
 
 ## Report in chat
 
-Use one row per marked sentence (or per distinct subclaim when necessary):
+Report only claims requiring review, clarification, evidence, or an edit. Use one row
+per actionable sentence (or distinct subclaim when necessary); omit individually
+verified claims and sound advice/examples requiring no change:
 
 | Location | Note | Exact sentence / claim | Evidence and source | Verdict | Recommended action / wording |
 |---|---|---|---|---|---|
@@ -74,14 +76,18 @@ uncertain, use Partly supported or Unverified and name the uncertainty. Recommen
 specific corrected wording and a citation, or explain what evidence is still needed.
 For a contradiction, show both the draft's value/claim and the source's correction.
 
-Report all marked sentences, including those verified, so coverage is reviewable.
-Give the total marked sentences checked and verdict counts; distinguish sentence
-counts from subclaim counts if a sentence needed multiple rows. If there are no labels,
-say "No [Inference], [Speculation], or [Unverified] notes found in the selected tab."
-This does not skip the material unmarked-claim review above or certify every sentence.
-Report material unmarked findings separately, with the same evidence and verdict
-columns, and summarize the additional claims checked. State any source-access or
-coverage limitations; never imply that an unchecked claim has been verified.
+Still check every marked sentence and material unmarked claim. Summarize passing
+results concisely, such as "36 marked sentences checked; no factual corrections
+needed; worked-example calculations verified." Do not print a sentence-by-sentence
+pass table, duplicate all sound advice, or list correct calculations unless needed
+to explain an actionable issue. Include verdict counts only when useful.
+
+If there are no labels, say "No [Inference], [Speculation], or [Unverified] notes found
+in the selected tab." This does not skip material unmarked-claim verification or
+certify every sentence. Report actionable unmarked findings with the same columns.
+State material source-access or coverage limitations separately from passed checks;
+never imply that an unchecked claim has been verified. Provide the full per-sentence
+audit trail only when the user explicitly asks for it.
 
 This pass is **report-only**. Leave sentences and markers in the Doc unchanged unless
 the user explicitly authorizes edits. A verified claim can receive a recommendation to

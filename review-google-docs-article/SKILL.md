@@ -26,11 +26,19 @@ avoid unsolicited stylistic restructuring. Future steps slot in the same way.
    the article with the outline first (Step 7), prioritize fact verification (Step 6),
    then run the other checks in their existing order (1 -> 2 -> 3 -> 4 -> 5).
 2. For each requested step, open its reference file and follow it exactly.
-3. Deliver each step's findings as a **report in chat** (not a file) using the structure the
-   step defines. If running multiple steps, give one clearly-headed section per step.
-   Lead with material factual corrections and outline mismatches; keep clean-check
-   summaries brief. Existing link, CTA, Further Reading, FAQ, and tracking rules remain
-   unchanged.
+3. Deliver findings as a **report in chat**, focusing detail only on items requiring
+   review, a decision, or an edit. For each actionable item, give its location, the
+   exact problematic text or missing part, why it matters, supporting evidence where
+   relevant, and a concrete correction. Prioritize factual issues and outline gaps.
+4. Summarize everything that passed in a short paragraph or compact checklist, with
+   useful counts. Do not enumerate correct sentences, sound advice, passing links,
+   matching headings, or FAQs that should simply be kept. An exhaustive audit trail
+   is provided only if the user explicitly requests it. Keep unresolved verification
+   limits visible; an unchecked item is not a pass.
+5. This reporting rule overrides reference-file instructions to show every checked
+   item or a separate section/table for each clean step. Use the references' detailed
+   tables only for actionable findings. Perform all selected checks just as thoroughly;
+   link, CTA, Further Reading, FAQ, tracking, and edit-authorization rules are unchanged.
 
 ## Available steps
 
