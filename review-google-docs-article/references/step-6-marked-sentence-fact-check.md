@@ -89,6 +89,44 @@ State material source-access or coverage limitations separately from passed chec
 never imply that an unchecked claim has been verified. Provide the full per-sentence
 audit trail only when the user explicitly asks for it.
 
-This pass is **report-only**. Leave sentences and markers in the Doc unchanged unless
-the user explicitly authorizes edits. A verified claim can receive a recommendation to
-replace its note with a citation, but never silently strip uncertainty labels.
+## Remove verified tags in the Google Doc
+
+This is a **pre-authorized edit**: after verification, remove `[Inference]`,
+`[Speculation]`, or `[Unverified]` from the verified sentence in the selected article
+tab. Keep the sentence itself exactly as written. No extra confirmation is needed
+for this tag-only cleanup. All sentence rewrites and factual corrections remain
+advisory unless separately authorized.
+
+- Remove a tag only when the **entire sentence or block it annotates** has been
+  verified. Evidence for premises alone, plausible inference, reasonable advice,
+  hypothetical input values, or a prediction is not proof of a factual outcome.
+  A verified calculation verifies its arithmetic, not invented business inputs.
+  A sentence explicitly describing a hypothetical example can be verified as such
+  without treating the example as observed merchant data.
+- Keep the tag when evidence is partial, conflicting, inaccessible, outdated, or
+  absent, when the sentence requires a rewrite to become accurate, or when user
+  confirmation/internal data is needed. Mere acceptance as advice/opinion does not
+  qualify automatically. Mark these as needing user review and retain the tag until
+  the user verifies the specific sentence. Silence or elapsed time is not verification.
+- If the user explicitly verifies a sentence, record that user-supplied confirmation
+  as its basis and remove that sentence's tag. Do not describe user confirmation as
+  independent external verification or clear other unrelated tags.
+- If a tag covers several sentences or claims, remove it only after all are cleared.
+  For an ambiguous standalone note, keep it pending scope clarification.
+- Remove only the tag token and directly adjacent redundant spaces needed to keep
+  spacing natural. Preserve every sentence, uncertainty qualifier such as "may" or
+  "could", link, heading, table, formatting, and all unrelated content. Do not replace
+  the tag with other visible text or add a citation to the Doc without authorization.
+- Make an allowlist of the exact verified sentences/tags and their verification basis.
+  Re-read the live tab before editing, use exact paragraph/text-run indices including
+  table cells, and plan tag-only ranges. Never globally replace all three labels.
+  Use a revision-guarded batch of deletions in descending index order with the selected
+  tab ID. If the text or revision changed, refresh and recompute the plan.
+- Read back after applying: verify the intended tags are gone, sentence text and links
+  are preserved, and every unresolved tag remains. Re-running must not remove more
+  tags without new verification. If writing fails or edit access is absent, report
+  the unapplied cleanup; do not claim the tags were removed.
+
+In chat, give only a short cleanup count (removed versus retained for user review),
+then detail the unresolved claims that need attention under the reporting rules above.
+Do not print a long list of verified sentences just because their tags were removed.

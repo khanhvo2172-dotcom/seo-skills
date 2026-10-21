@@ -8,7 +8,8 @@ description: >-
   structure with its outline tab and prioritize factual accuracy. Review the selected
   article tab, using its outline tab only as the structure baseline. Produce
   recommendations, with the existing authorized exceptions
-  for CTA insertion, Further Reading formatting, and AI tracking-param cleanup.
+  for CTA insertion, Further Reading formatting, AI tracking-param cleanup, and
+  removal of verified sentence tags.
 ---
 
 # Review a TrueProfit Google Docs Article
@@ -38,7 +39,9 @@ avoid unsolicited stylistic restructuring. Future steps slot in the same way.
 5. This reporting rule overrides reference-file instructions to show every checked
    item or a separate section/table for each clean step. Use the references' detailed
    tables only for actionable findings. Perform all selected checks just as thoroughly;
-   link, CTA, Further Reading, FAQ, tracking, and edit-authorization rules are unchanged.
+   link, CTA, Further Reading, FAQ, and tracking checks remain unchanged. Step 6
+   automatically removes tags only from fully verified sentences; unresolved tags
+   remain until verified, including by the user when their confirmation is needed.
 
 ## Available steps
 
@@ -49,7 +52,7 @@ avoid unsolicited stylistic restructuring. Future steps slot in the same way.
 | 3 | Further Reading format + placement | `references/step-2-3-structure-checks.md` | **Auto-fixes** every block to a `Further Reading:` label plus one bulleted link per line (`scripts/fix_further_reading.py`), then warns when a block sits directly above the 2nd–5th H2 (report-only) |
 | 4 | FAQ redundancy | `references/step-4-faq-redundancy.md` | Flags FAQ questions that duplicate a heading's intent or are already answered in the body (report-only, model-driven) |
 | 5 | AI tracking params | `references/step-5-ai-tracking-params.md` | Detects **and removes** AI-tool `utm_source` params (chatgpt, claude, perplexity, gemini, …) from every link in the tab, incl. tables; keeps all other params |
-| 6 | Fact verification | `references/step-6-marked-sentence-fact-check.md` | Verifies all marked sentences and material factual claims across the article against sources; reports evidence, verdicts, and suggested corrections without editing the Doc |
+| 6 | Fact verification | `references/step-6-marked-sentence-fact-check.md` | Verifies all marked sentences and material factual claims across the article against sources; reports actionable findings and automatically removes only verified sentence tags, preserving the sentences; keeps unresolved tags |
 | 7 | Article structure vs. outline | `references/step-7-article-outline-comparison.md` | Compares the full article with its outline tab to detect missing sections, wrong headings or hierarchy/order, extra sections, and content that fails to deliver the outlined topic (report-only) |
 
 Steps 2 and 3 share one pass over the doc's headings, so `scripts/review_structure.py`
@@ -97,13 +100,18 @@ If a step's required input is missing, ask for it before running that step.
   article, edit it, or flag its notes as article content. If a `tab=` param is missing,
   the scripts fall back to the first
   tab and say so — confirm the intended tab with the user rather than reviewing everything.
-- **Advisory by default; three exceptions.** Every step produces *recommendations* the user
+- **Advisory by default; four exceptions.** Every step produces *recommendations* the user
   applies themselves — **except Step 2's CTA insertion**, **Step 3a's Further Reading
-  bullet formatting** and **Step 5's AI-param removal**, which edit the Doc in place.
+  bullet formatting**, **Step 5's AI-param removal**, and **Step 6's verified-tag
+  removal**, which edit the Doc in place.
   Step 3a (`scripts/fix_further_reading.py`) is pre-authorized: dry-run, apply, re-verify. For Step 2 (`scripts/review_structure.py`), always dry-run and
   show the plan first; only `--apply` after the user confirms (especially the `utm_campaign`
   keyword). Step 5 (`scripts/strip_ai_utm.py`) is pre-authorized: dry-run, apply, re-verify. Never claim an edit was
   made unless the apply run actually succeeded.
+  Step 6 tag removal is pre-authorized after verification: plan exact tag-only
+  deletions, apply to the selected article tab, and read back to verify. Keep tags on
+  any sentence needing user verification, pending explicit confirmation. Do not
+  rewrite the sentence or remove uncertainty words from its prose.
 - **Be selective, not exhaustive.** For opportunities (like missing links), recommend only
   what genuinely makes the content more valuable or better for SEO. Quality over coverage.
 - **Show your reasoning.** For every recommendation, say *why* (SEO value, relevance,
