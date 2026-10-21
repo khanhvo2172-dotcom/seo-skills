@@ -1,31 +1,26 @@
 ---
 name: review-google-docs-article
 description: >-
-  Reviews a TrueProfit Google Docs article before publishing, one QA step at a time.
-  Use this whenever the user wants to "review an article", "review this doc", "QA a blog
-  doc", "check the links in this Google Doc", "run a link review", "find internal link
-  opportunities", "check external links / references", or asks whether a doc's links and
-  citations are ready to publish. Also trigger when the user pastes a Google Docs URL plus
-  a list of "URLs to check" and asks what to add, remove, or fix. It also handles the CTA
-  image (`[cta]` marker), "Further Reading" bullet formatting and placement, FAQ-redundancy checks, and strips AI
-  tracking params (e.g. ?utm_source=chatgpt.com) from links. Steps so far: (1) Internal &
-  External Links, (2) CTA image, (3) Further Reading placement, (4) FAQ redundancy, (5) AI
-  tracking params — more to be added later. Prefer this skill over eyeballing the doc or
-  checking links, the CTA, Further Reading, the FAQ, or utm params by hand.
+  Review a TrueProfit Google Docs article before publishing. Use for article QA,
+  internal/external links and citations, CTA images, Further Reading formatting
+  and placement, FAQ redundancy, AI tracking params, or fact-checking sentences
+  marked [Inference], [Speculation], or [Unverified]. Review only the selected
+  article tab. Produce recommendations, with the existing authorized exceptions
+  for CTA insertion, Further Reading formatting, and AI tracking-param cleanup.
 ---
 
 # Review a TrueProfit Google Docs Article
 
 This skill runs a structured pre-publish QA review of a TrueProfit blog article that lives
 in a Google Doc. The review is deliberately **modular** — each step is a self-contained QA
-pass with its own reference file. Steps 1–5 (links, CTA image, Further Reading, FAQ
-redundancy, AI tracking params) exist today; future steps (tone/humanization, data benchmarks, formatting, …)
+pass with its own reference file. Steps 1-6 cover links, CTA image, Further Reading,
+FAQ redundancy, AI tracking params, and fact-checking marked sentences. Future steps
 slot in the same way.
 
 ## How to run a review
 
 1. Ask which step(s) the user wants if they didn't say. Default to running **all available
-   steps in order** (1 → 2 → 3 → 4 → 5).
+   steps in order** (1 -> 2 -> 3 -> 4 -> 5 -> 6).
 2. For each requested step, open its reference file and follow it exactly.
 3. Deliver each step's findings as a **report in chat** (not a file) using the structure the
    step defines. If running multiple steps, give one clearly-headed section per step.
@@ -39,9 +34,13 @@ slot in the same way.
 | 3 | Further Reading format + placement | `references/step-2-3-structure-checks.md` | **Auto-fixes** every block to a `Further Reading:` label plus one bulleted link per line (`scripts/fix_further_reading.py`), then warns when a block sits directly above the 2nd–5th H2 (report-only) |
 | 4 | FAQ redundancy | `references/step-4-faq-redundancy.md` | Flags FAQ questions that duplicate a heading's intent or are already answered in the body (report-only, model-driven) |
 | 5 | AI tracking params | `references/step-5-ai-tracking-params.md` | Detects **and removes** AI-tool `utm_source` params (chatgpt, claude, perplexity, gemini, …) from every link in the tab, incl. tables; keeps all other params |
+| 6 | Marked-sentence fact check | `references/step-6-marked-sentence-fact-check.md` | Double-checks every sentence marked `[Inference]`, `[Speculation]`, or `[Unverified]` against sources; reports evidence, verdicts, and suggested corrections without editing the Doc |
 
 Steps 2 and 3 share one pass over the doc's headings, so `scripts/review_structure.py`
-runs both together. Step 4 is model-driven (judgment about intent), no script.
+runs both together. Steps 4 and 6 require model judgment; Step 6 also requires source
+research. Run Step 6 for a full review or a fact-check request even if the internal-link
+check is skipped or no internal-link candidate list is available. The bracketed labels
+are sentence notes in the selected tab, not instructions to review sibling tabs.
 
 > **Adding a step later:** write `references/step-N-<name>.md` describing that pass, then add
 > a row to the table above and a line to the "How to run" default order. Keep each step's
