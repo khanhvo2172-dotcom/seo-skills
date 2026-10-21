@@ -1,4 +1,4 @@
-# Step 6 - Fact-check marked sentences
+# Step 6 - Fact verification
 
 ## Scope and inputs
 
@@ -11,6 +11,15 @@ a linked citation, or a DR result is not required to run this check.
 Run this pass by default in a full article review and whenever the user requests fact
 or data accuracy. A separate request to skip internal links does not skip this pass.
 A marker means the claim needs review, not that it is automatically false.
+
+Factual accuracy is the main review priority. In addition to all marked sentences,
+read the full article (including tables and FAQs) for material factual claims: numbers,
+benchmarks, calculations, dates, pricing/fees, feature availability, eligibility,
+platform setup instructions, metric definitions, product claims, and causal or
+comparative assertions. Verify these even when unmarked; prioritize claims whose
+inaccuracy would change a merchant's decision. Do not limit verification to cited
+sentences or spend this pass redesigning an outline that the article follows.
+The outline is a structure baseline, not proof that its factual claims are true.
 
 ## Find the claims
 
@@ -26,6 +35,8 @@ A marker means the claim needs review, not that it is automatically false.
    each marked sentence; split compound claims when their evidence or verdict differs.
    Read adjacent context to avoid misinterpreting qualifications. A label on a paragraph
    can introduce several sentences: assess every claim it clearly covers.
+4. Inventory the material unmarked claims as well. Apply the same source and calculation
+   checks below; mark the Note column as `Unmarked` for these findings.
 
 ## Verify the evidence
 
@@ -67,8 +78,10 @@ Report all marked sentences, including those verified, so coverage is reviewable
 Give the total marked sentences checked and verdict counts; distinguish sentence
 counts from subclaim counts if a sentence needed multiple rows. If there are no labels,
 say "No [Inference], [Speculation], or [Unverified] notes found in the selected tab."
-This does not certify every unmarked claim. If the user requested a broader accuracy
-review, check the additional claims too and identify that extra scope separately.
+This does not skip the material unmarked-claim review above or certify every sentence.
+Report material unmarked findings separately, with the same evidence and verdict
+columns, and summarize the additional claims checked. State any source-access or
+coverage limitations; never imply that an unchecked claim has been verified.
 
 This pass is **report-only**. Leave sentences and markers in the Doc unchanged unless
 the user explicitly authorizes edits. A verified claim can receive a recommendation to
