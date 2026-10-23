@@ -1,0 +1,4 @@
+interface:
+  display_name: "Outline Generate TrueProfit"
+  short_description: "Insights, Area to Win and lean SEO outlines for TrueProfit articles"
+  default_prompt: "Use $outline-generate-trueprofit for this keyword: "

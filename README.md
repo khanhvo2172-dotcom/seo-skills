@@ -37,6 +37,20 @@ Compares the first (English) tab of a Google Docs article with its `Spanish Vers
 
 ---
 
+### `outline-generate-trueprofit`
+Builds TrueProfit SEO outlines for Shopify merchants in three gated stages: Insights (keyword intent), Area to Win (gap from ranking URLs and AI Overview/AI Mode), then a lean outline.
+
+**Triggers when you say:** *"build an outline for [keyword]"*, *"insights for this keyword"*, *"here are the top URLs, find the area to win"*, *"paste the outline into the insights & outline tab"*
+
+**What it does:**
+- Waits for your input between stages and never writes the full article
+- Reads the ranking URLs and names one merchant-focused, executable content gap
+- Sizes the outline for a 1,500–2,000-word article: about 4–6 core H2s, one `Coverage:` line per heading, 1–3 FAQs, Final Thoughts
+- Applies the team's recurring review corrections (intent drift, overlapping headings, benchmark/metric rules, TrueProfit positioning)
+- Optionally writes Insights, Area to Win and the outline into the Google Doc outline tab
+
+---
+
 ### `review-outline-google-docs-file`
 Reviews SEO outlines in one or more Google Docs against their reference URLs, saved AIO/AI Mode insights, and current reliable sources.
 
@@ -295,6 +309,7 @@ cp -R trueprofit-blog-localization ~/.claude/skills/
 cp -R trueprofit-blog-triggers ~/.claude/skills/
 cp -R trueprofit-blog-multilingual-tabs-triggers ~/.claude/skills/
 cp -R review-google-docs-article ~/.claude/skills/
+cp -R outline-generate-trueprofit ~/.claude/skills/
 cp -R review-outline-google-docs-file ~/.claude/skills/
 cp -R review-trueprofit-live-blog-urls ~/.claude/skills/
 cp -R browse-emails-to-find-opportunites ~/.claude/skills/
@@ -312,6 +327,7 @@ Copy-Item -Recurse -Force trueprofit-blog-localization "$env:USERPROFILE\.claude
 Copy-Item -Recurse -Force trueprofit-blog-triggers "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force trueprofit-blog-multilingual-tabs-triggers "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force review-google-docs-article "$env:USERPROFILE\.claude\skills\"
+Copy-Item -Recurse -Force outline-generate-trueprofit "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force review-outline-google-docs-file "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force review-trueprofit-live-blog-urls "$env:USERPROFILE\.claude\skills\"
 Copy-Item -Recurse -Force browse-emails-to-find-opportunites "$env:USERPROFILE\.claude\skills\"
@@ -338,6 +354,7 @@ Once installed, invoke any skill by typing `/` in Claude Code:
 | `/trueprofit-blog-triggers` | Add CMS triggers to the selected article tab of a blog doc |
 | `/trueprofit-blog-multilingual-tabs-triggers` | Repair/sync triggers and links in ES/DE/FR tabs |
 | `/review-google-docs-article` | Pre-publish QA review of a blog doc (links, CTA, Further Reading, FAQ) |
+| `/outline-generate-trueprofit` | Build Insights, Area to Win and a lean SEO outline for a keyword |
 | `/review-outline-google-docs-file` | Review SEO outline headings and FAQs against reference pages |
 | `/compare-ggdocs-multilingual-tabs` | Compare the English tab with the ES/DE/FR tabs (structure, links, FAQs) |
 | `/review-trueprofit-live-blog-urls` | QA a live TrueProfit article's structure, recap, reading boxes, FAQs, and image alts |
@@ -363,6 +380,7 @@ Skills are available globally across all Claude Code sessions after installation
 | `trueprofit-blog-triggers` | Claude Code + Google Docs API credentials |
 | `trueprofit-blog-multilingual-tabs-triggers` | Claude Code + Google Docs API credentials |
 | `review-google-docs-article` | Claude Code + Google Docs API credentials + link-checker app |
+| `outline-generate-trueprofit` | Web browsing; Google Docs access to write into a Doc tab |
 | `review-outline-google-docs-file` | Tab-aware Google Docs access + web browsing |
 | `review-trueprofit-live-blog-urls` | Claude Code + Python (`requests`, `beautifulsoup4`) + network access |
 | `browse-emails-to-find-opportunites` | Claude Code + Gmail MCP |
