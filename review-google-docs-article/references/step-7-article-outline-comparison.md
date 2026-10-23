@@ -18,10 +18,7 @@ This pass is report-only; do not edit either tab without explicit authorization.
 - If the baseline is ambiguous, ask which outline to use and continue factual and
   other independent checks. If unavailable, report this comparison as incomplete;
   never invent the baseline or silently compare to an unrelated draft.
-- Use `scripts/dump_tab.py --doc "<url with exact tab ID>"` separately for each tab.
-  Preserve each tab's identity. Inspect same-tab tables through the Docs API if needed,
-  because the current dump only emits `{table}` for table contents. Do not concatenate
-  all tabs with a whole-document reader or edit any sibling tab.
+- Use the shared helper's `dump --tab <resolved-title-or-id>` separately for each tab, preserving links and table cells. Use its module interface for exact structure when needed. Never concatenate tabs or edit a sibling tab.
 
 ## Compare structure and coverage
 

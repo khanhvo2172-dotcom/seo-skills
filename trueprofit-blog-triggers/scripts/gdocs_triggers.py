@@ -3,7 +3,7 @@
 Add TrueProfit CMS "highlight triggers" to a blog Google Doc (selected article tab).
 
 What it does, end to end:
-  1. Authenticates to the Google Docs API (OAuth desktop flow, token cached).
+  1. Uses the shared gdocs.py helper for authentication, reads and guarded writes.
   2. Reads the document WITH tab content and isolates the selected tab.
   3. Flattens that tab's paragraphs into ordered blocks (text + image markers),
      carrying each paragraph's heading level.
@@ -51,56 +51,10 @@ def doc_id_from(value):
     return value.strip()
 
 
-def get_service(creds_path, token_path):
-    try:
-        from google.auth.transport.requests import Request
-        from google.oauth2.credentials import Credentials
-        from google_auth_oauthlib.flow import InstalledAppFlow
-        from googleapiclient.discovery import build
-    except ImportError:
-        sys.exit(
-            "Missing Google libraries. Install them first:\n"
-            "  pip install -r requirements.txt\n"
-            "(see ../references/setup-google-api.md)"
-        )
-
-    # Credentials can come from (in order): the GOOGLE_TOKEN_JSON env var, a
-    # token.json file, or - first time only - an interactive OAuth flow using
-    # GOOGLE_CLIENT_SECRET_JSON / credentials.json. The env-var path makes the
-    # skill portable to a fresh session (e.g. Claude.ai) that has no local files:
-    # paste your authorized-user token JSON into GOOGLE_TOKEN_JSON and go.
-    creds = None
-    token_env = os.environ.get("GOOGLE_TOKEN_JSON")
-    if token_env:
-        creds = Credentials.from_authorized_user_info(json.loads(token_env), SCOPES)
-    elif os.path.exists(token_path):
-        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            client_env = os.environ.get("GOOGLE_CLIENT_SECRET_JSON")
-            if client_env:
-                flow = InstalledAppFlow.from_client_config(json.loads(client_env), SCOPES)
-            elif os.path.exists(creds_path):
-                flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
-            else:
-                sys.exit(
-                    "No Google credentials found. Provide one of:\n"
-                    "  - GOOGLE_TOKEN_JSON env var (authorized-user token), or\n"
-                    "  - a token.json file next to this script, or\n"
-                    "  - GOOGLE_CLIENT_SECRET_JSON / credentials.json for first-time OAuth.\n"
-                    "See references/setup-google-api.md."
-                )
-            creds = flow.run_local_server(port=0)
-        # Best-effort cache so we don't refresh every run; ignore read-only FS.
-        try:
-            with open(token_path, "w") as f:
-                f.write(creds.to_json())
-        except OSError:
-            pass
-    return build("docs", "v1", credentials=creds)
+def get_service(creds_path=None, token_path=None):
+    """Compatibility arguments are ignored; authentication belongs to shared gdocs.py."""
+    from shared_docs_service import SharedDocsService
+    return SharedDocsService()
 
 
 def tab_id_from_url(value):
@@ -132,7 +86,13 @@ def select_tab(document, tab_id=None, tab_title=None):
                 tab_id if tab_id is not None else tab_title, len(matches)))
         tab = matches[0]
     elif tabs:
-        tab = tabs[0]
+        finals = [tab for tab in tabs if tab.get("tabProperties", {}).get("title", "").strip().lower() == "final"]
+        if len(finals) > 1:
+            raise ValueError("Final article tab is ambiguous.")
+        tab = finals[0] if finals else tabs[0]
+        title = tab.get("tabProperties", {}).get("title", "").lower()
+        if not finals and any(word in title for word in ("outline", "research", "notes")):
+            raise ValueError("No article tab identified; name the intended source explicitly.")
     else:
         return document.get("body", {}).get("content", []), None
     return (tab.get("documentTab", {}).get("body", {}).get("content", []),
@@ -369,6 +329,8 @@ def main():
     service = get_service(args.creds, args.token)
     document = service.documents().get(documentId=did, includeTabsContent=True).execute()
     want_tab = None if args.tab_title is not None else (args.tab or tab_id_from_url(args.doc))
+    if args.tab is None and args.tab_title is None and want_tab == "t.0":
+        want_tab = None  # a normal outline URL does not select the article
     try:
         content, tab_id = select_tab(document, tab_id=want_tab, tab_title=args.tab_title)
     except ValueError as exc:

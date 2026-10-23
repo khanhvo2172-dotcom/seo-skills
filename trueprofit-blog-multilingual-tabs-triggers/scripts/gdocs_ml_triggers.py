@@ -85,50 +85,10 @@ def doc_id_from(value):
     return value.strip()
 
 
-def get_service(creds_path, token_path):
-    try:
-        from google.auth.transport.requests import Request
-        from google.oauth2.credentials import Credentials
-        from google_auth_oauthlib.flow import InstalledAppFlow
-        from googleapiclient.discovery import build
-    except ImportError:
-        sys.exit(
-            "Missing Google libraries. Install them first:\n"
-            "  pip install -r requirements.txt\n"
-            "(see ../references/setup-google-api.md)"
-        )
-
-    creds = None
-    token_env = os.environ.get("GOOGLE_TOKEN_JSON")
-    if token_env:
-        creds = Credentials.from_authorized_user_info(json.loads(token_env), SCOPES)
-    elif os.path.exists(token_path):
-        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            client_env = os.environ.get("GOOGLE_CLIENT_SECRET_JSON")
-            if client_env:
-                flow = InstalledAppFlow.from_client_config(json.loads(client_env), SCOPES)
-            elif os.path.exists(creds_path):
-                flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
-            else:
-                sys.exit(
-                    "No Google credentials found. Provide one of:\n"
-                    "  - GOOGLE_TOKEN_JSON env var (authorized-user token), or\n"
-                    "  - a token.json file next to this script, or\n"
-                    "  - GOOGLE_CLIENT_SECRET_JSON / credentials.json for first-time OAuth.\n"
-                    "See references/setup-google-api.md."
-                )
-            creds = flow.run_local_server(port=0)
-        try:
-            with open(token_path, "w") as f:
-                f.write(creds.to_json())
-        except OSError:
-            pass
-    return build("docs", "v1", credentials=creds)
+def get_service(creds_path=None, token_path=None):
+    """Compatibility arguments are ignored; authentication belongs to shared gdocs.py."""
+    from shared_docs_service import SharedDocsService
+    return SharedDocsService()
 
 
 # ---------------------------------------------------------------------------
@@ -160,35 +120,41 @@ def iter_tabs(document):
 
 
 def resolve_tabs(document):
-    """
-    Return {lang: (title, tab_id, content)} for en/es/de/fr.
-
-    Match by title hint first; for any language still unmatched, fall back to the
-    positional default (tab 0=en, 1=es, 2=de, 3=fr). A language stays absent if
-    neither resolves.
-    """
+    """Resolve named language tabs; use position only for an unambiguous legacy set."""
     tabs = list(iter_tabs(document))
     found = {}
     used_ids = set()
-
+    finals = [tab for tab in tabs if tab[0].strip().lower() == "final"]
+    if len(finals) > 1:
+        raise ValueError("English Final tab is ambiguous.")
+    if finals:
+        found["en"] = finals[0]
+        used_ids.add(finals[0][1])
     for lang, hints in TAB_TITLE_HINTS.items():
-        for title, tab_id, content in tabs:
-            if tab_id in used_ids:
-                continue
-            low = (title or "").lower()
-            if any(h in low for h in hints):
-                found[lang] = (title, tab_id, content)
-                used_ids.add(tab_id)
-                break
-
-    for pos, lang in POSITIONAL.items():
         if lang in found:
             continue
-        if pos < len(tabs):
-            title, tab_id, content = tabs[pos]
-            if tab_id not in used_ids:
-                found[lang] = (title, tab_id, content)
-                used_ids.add(tab_id)
+        matches = [tab for tab in tabs if tab[1] not in used_ids
+                   and not any(word in tab[0].lower() for word in ("outline", "research", "notes"))
+                   and (tab[0].strip().lower() == lang or any(h in tab[0].lower() for h in hints))]
+        if len(matches) > 1:
+            raise ValueError("Ambiguous %s language tabs; name the intended tab before applying." % lang)
+        if matches:
+            found[lang] = matches[0]
+            used_ids.add(matches[0][1])
+    legacy = len(tabs) == 4 and not any(
+        any(word in title.lower() for word in ("outline", "research", "notes"))
+        for title, _tid, _content in tabs)
+    if legacy:
+        for pos, lang in POSITIONAL.items():
+            if lang in found:
+                if found[lang][1] != tabs[pos][1]:
+                    legacy = False
+                    break
+        if legacy:
+            for pos, lang in POSITIONAL.items():
+                if lang not in found and tabs[pos][1] not in used_ids:
+                    found[lang] = tabs[pos]
+                    used_ids.add(tabs[pos][1])
     return found
 
 
@@ -473,7 +439,11 @@ def main():
             if lang not in tabs:
                 print("  [%s] tab not found - skipped." % lang)
                 continue
-            _t, tab_id, content = tabs[lang]
+            fresh = service.documents().get(documentId=did, includeTabsContent=True).execute()
+            fresh_tabs = resolve_tabs(fresh)
+            if lang not in fresh_tabs or fresh_tabs[lang][1] != tabs[lang][1]:
+                raise RuntimeError("Language mapping changed; rerun the dry-run plan.")
+            _t, tab_id, content = fresh_tabs[lang]
             total += reset_tab(service, did, flatten(content), tab_id, lang, args.dry_run)
         print("\n%s%d trigger line(s) across %d tab(s)."
               % ("(dry-run) would remove " if args.dry_run else "Removed ", total, len(langs)))
@@ -494,7 +464,12 @@ def main():
         if lang not in tabs:
             print("== %s (%s): tab NOT FOUND - skipped ==\n" % (name, lang))
             continue
-        _t, tab_id, content = tabs[lang]
+        # Refresh target indexes before each language, not just before the first.
+        fresh = service.documents().get(documentId=did, includeTabsContent=True).execute()
+        fresh_tabs = resolve_tabs(fresh)
+        if fresh_tabs.get("en") != tabs.get("en") or lang not in fresh_tabs or fresh_tabs[lang][1] != tabs[lang][1]:
+            raise RuntimeError("English source or language mapping changed; rerun the dry-run plan.")
+        _t, tab_id, content = fresh_tabs[lang]
         blocks = flatten(content)
         translated_alts = alts.get(lang, [])
 

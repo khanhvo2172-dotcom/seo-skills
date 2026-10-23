@@ -21,9 +21,9 @@ If one of the three localized tabs is missing or renamed, report it before compa
 
 ### 1. Fetch the Google Doc
 
-Read the Google Doc content with the available Google Drive or Google Docs file-reading tool, using the file ID from the Docs URL.
+Use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` after reading its adjacent README: list tabs, then dump each selected tab separately. Do not use an all-tabs Drive export, browser editing or a one-off Docs API script.
 
-- Treat the first tab as the source of truth.
+- Resolve the English article source from the user's explicit selection, otherwise prefer **Final**. A `tab=t.0` link usually points to the outline. Use the first tab only when it actually contains the source article; never compare translated prose to outline notes. Below, “first tab” means this resolved English source, regardless of its position.
 - Compare only against the tabs named `Spanish Version`, `German Version`, and `French Version`.
 - Ignore unrelated tabs such as outlines, research, SERP notes, content briefs, CMS notes, images, or old drafts.
 - Preserve each tab's heading hierarchy, link targets, ordered list structure, table rows, and FAQ blocks while extracting content.

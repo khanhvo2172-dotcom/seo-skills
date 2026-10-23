@@ -18,10 +18,10 @@ Optionally use an uploaded raw HTML file, usually named like `view-source_*.html
 
 ### 1. Fetch the Google Doc source
 
-Read the Google Doc content with the available Google Drive file-reading tool, using the file ID from the Docs URL.
+Read the adjacent README and use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py`: list tabs, then dump only the selected source tab with its links, tables and headings. Do not use a flattened all-tabs Drive reader or write a one-off Docs API script.
 
 - Compare only the specific tab or section the user shared.
-- If the Docs URL includes `?tab=t.xxxx`, treat that tab as the source of truth.
+- Honor an explicitly named source tab. For article comparisons, prefer **Final**; a `tab=t.0` link usually points to the outline. If a linked tab is clearly another article version, use it within the requested scope; clarify genuine ambiguity rather than comparing an outline to live prose.
 - If there are multiple content versions such as `Content 2025`, `Content 2026`, localized tabs, research, SERP, or outline tabs, ignore unrelated tabs.
 - If no tab is explicit but the live URL or title implies a year, choose the content version matching the live article year.
 

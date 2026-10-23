@@ -1,28 +1,20 @@
 ---
 name: trueprofit-blog-multilingual-tabs-triggers
 description: >-
-  Fix the TrueProfit CMS "highlight triggers" in the Spanish, German and French
-  tabs of a blog Google Doc, using the already-triggered English (first) tab as
-  the source of truth. Translated tabs carry trigger lines over from translation
-  but stale - old/test image URLs & alts, image triggers split across two lines,
-  and "Content Highlight:" with a colon. This skill REPAIRS them: reformats each
-  image line to the canonical one-line form with the matching English URL and a
-  translated alt, normalizes Content Highlight labels, and adds any Content
-  Highlight that is genuinely missing. Also bulk-localizes internal
-  trueprofit.io/blog links and Shopify app utm_campaign tags in the three
-  language tabs via update_links.py. Use this AFTER the English-only
-  trueprofit-blog-triggers skill has prepped tab 1, whenever the user asks to add,
-  fix, sync, or repair triggers in the other language tabs / ES-DE-FR tabs /
-  translated versions / multilingual tabs of a blog doc, or to "do the same for
-  the other languages", or to "update/localize the internal links". Edits the doc
-  in place via the Google Docs API.
+  Repair CMS image and Content Highlight triggers in Spanish, German and French
+  Google Docs tabs using the prepared English article (normally Final) as the
+  source. Translate image alts, repair stale or missing trigger lines, and
+  optionally localize internal blog links and Shopify app campaign tags. Use
+  after trueprofit-blog-triggers when asked to fix or sync ES/DE/FR translated
+  tabs or their internal links. Uses the shared Docs helper for in-place edits.
+
 ---
 
 # TrueProfit multilingual tab trigger repair + link localization (ES / DE / FR)
 
-A blog Google Doc has tabs: **English** (tab 1, often titled "article"), then
+A blog Google Doc has an **English article** tab (normally **Final**) and
 **Spanish**, **German** and **French** versions. The English-only
-[`trueprofit-blog-triggers`](../trueprofit-blog-triggers/SKILL.md) skill preps tab 1.
+[`trueprofit-blog-triggers`](../trueprofit-blog-triggers/SKILL.md) skill preps the English article tab.
 This skill does two things to the **three translated tabs**:
 
 1. **Repair / place CMS triggers** — so the n8n multilingual publisher picks up
@@ -31,7 +23,11 @@ This skill does two things to the **three translated tabs**:
    links and Shopify app `utm_campaign` tags for each language.
 
 **Run the English skill first.** This skill reads the English tab's image triggers
-to learn the shared image URLs (in order), so tab 1 must already be triggered.
+to learn the shared image URLs (in order), so the selected English article tab must already be triggered.
+
+## Shared Google Docs access on this PC
+
+Use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` for Docs reads and writes; read its adjacent README first. Use `tabs` and a tab-specific `dump` for review. The packaged planners use `scripts/shared_docs_service.py` to call the same helper for authentication, revision-guarded writes and readback; do not create separate OAuth tokens or one-off Docs API scripts, and do not edit through the browser. For operations beyond the CLI, use the documented `gdocs.read`/`gdocs.guarded_batch` module interface with explicit tab IDs. Inspect a dry run before applying and verify the intended text/styles/links afterward; on a conflict, reread and recompute the plan.
 
 ## Two image modes: repair vs. placement
 
@@ -80,10 +76,7 @@ Trigger **labels stay in English** in every tab (`Content Highlight`,
 
 ## How to run it
 
-Run everything from this skill's `scripts/` directory. Auth is identical to the
-English skill (`GOOGLE_TOKEN_JSON` env var → `token.json` → first-time OAuth); see
-[references/setup-google-api.md](references/setup-google-api.md). The English
-skill's token works here.
+Run the packaged planners from this skill's `scripts/` directory through the shared helper; see [references/setup-google-api.md](references/setup-google-api.md). No per-skill credentials are needed.
 
 ### Step 1 — see the English images (what to translate)
 
@@ -188,12 +181,11 @@ two-line form, so they become canonical and removable.
 
 ## How tabs are identified
 
-Tabs are matched by **full language name** in the title (case-insensitive contains):
+The English source prefers the exact title **Final** before language-title hints or legacy positional fallback. Never use an outline as the English source; verify the dump mapping before applying.
+
+Tabs are matched by exact language codes (`en`, `es`, `de`, `fr`) or **full language name** in the title (case-insensitive contains):
 `english`, `spanish`/`español`, `german`/`deutsch`, `french`/`français`. Bare
-2-letter codes are deliberately NOT used (e.g. "en" hides inside "fr**en**ch"). If a
-title doesn't match (the English tab is often titled "article"), it falls back to
-**position** (tab 0 = en, 1 = es, 2 = de, 3 = fr). The dump/dry-run header prints the
-final mapping and the full tab list — check it before applying.
+2-letter code substrings are deliberately NOT used (e.g. "en" hides inside "fr**en**ch"). Positional fallback is allowed only for exactly four article tabs with no outline/research/notes tabs and with all named matches agreeing with their expected positions. Ambiguous language names fail before writing. The dump/dry-run header prints the final mapping; check it before applying. Each language target is refreshed before planning writes. An English-source or mapping change stops the run for a new dry run.
 
 ## How the code is organized
 

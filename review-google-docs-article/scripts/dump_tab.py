@@ -19,8 +19,7 @@ Usage:
     python dump_tab.py --doc <DOC_URL_OR_ID> [--tab t.xxxx] [--out path.md]
 
 If --tab is omitted it is taken from the --doc URL's `tab=` parameter; if neither
-is present it falls back to the first tab (and says so). Auth mirrors
-review_structure.py (GOOGLE_TOKEN_JSON -> token.json -> credentials.json OAuth).
+is present it prefers Final. An unresolved explicit selector fails. Reads use the shared gdocs.py helper.
 """
 import argparse
 import re
@@ -55,18 +54,21 @@ def _iter_tabs(document):
 
 
 def select_tab(document, tab_id):
-    """Return (tab_id, title, body_content) for the requested tab.
-
-    Matches the given tab_id; if not found (or None), returns the first tab and
-    reports the fallback so the caller can warn.
-    """
-    all_tabs = list(_iter_tabs(document))
+    """Resolve an exact ID/title, preferring Final only without a selector."""
+    tabs = list(_iter_tabs(document))
     if tab_id:
-        for tid, title, body in all_tabs:
-            if tid == tab_id:
-                return tid, title, body, False
-    first = all_tabs[0]
-    return first[0], first[1], first[2], bool(tab_id)  # fell_back if a tab_id was asked for
+        matches = [t for t in tabs if t[0] == tab_id or t[1] == tab_id]
+        if len(matches) != 1:
+            raise ValueError("Requested tab is missing or ambiguous: %r" % tab_id)
+        tid, title, body = matches[0]
+    else:
+        finals = [t for t in tabs if t[1].strip().lower() == "final"]
+        if len(finals) > 1:
+            raise ValueError("Final article tab is ambiguous.")
+        tid, title, body = finals[0] if finals else tabs[0]
+        if not finals and any(word in title.lower() for word in ("outline", "research", "notes")):
+            raise ValueError("No article tab identified; name the intended source explicitly.")
+    return tid, title, body, False
 
 
 def render_para(para):
@@ -101,13 +103,15 @@ def render_para(para):
 def main():
     ap = argparse.ArgumentParser(description="Dump one tab of a blog Google Doc as text.")
     ap.add_argument("--doc", required=True, help="Google Doc ID or URL (URL may carry ?tab=t.xxx)")
-    ap.add_argument("--tab", help="Tab id (t.xxxx). Defaults to the --doc URL's tab= param, else first tab.")
+    ap.add_argument("--tab", help="Tab id (t.xxxx). Defaults to the --doc URL's tab= param, otherwise Final (URL t.0 is treated as an outline link). Explicit selectors must resolve.")
     ap.add_argument("--out", help="Write to this file instead of stdout.")
     ap.add_argument("--creds", default=DEFAULT_CREDS)
     ap.add_argument("--token", default=DEFAULT_TOKEN)
     args = ap.parse_args()
 
     tab_id = args.tab or tab_id_from_url(args.doc)
+    if not args.tab and tab_id == "t.0":
+        tab_id = None
     did = doc_id_from(args.doc)
     service = get_service(args.creds, args.token)
     document = service.documents().get(documentId=did, includeTabsContent=True).execute()

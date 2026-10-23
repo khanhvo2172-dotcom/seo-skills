@@ -1,0 +1,4 @@
+interface:
+  display_name: "Suggest Internal Links"
+  short_description: "Plan TrueProfit outline links and Further Reading"
+  default_prompt: "Use $suggest-internal-links to add heading-level internal links and missing pillar-page Further Reading suggestions to these outlines."

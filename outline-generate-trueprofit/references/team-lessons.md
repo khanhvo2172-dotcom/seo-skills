@@ -25,7 +25,9 @@ Distilled from the October 2026 outlines in the SEO sheet `Content Plan 10/2026`
 - Put each point under the heading it belongs to: "measure social performance by profit" is not a social-media strategy, it belongs in the measurement section; profit metrics don't belong in a "sales & conversion metrics" table.
 - A heading must deliver what it promises. A heading "Top-performing stores" makes readers (and search engines) expect benchmark numbers for top stores, not a note. "Eligibility requirements" means address/ID/plan requirements, not fees.
 - Cut obvious or trivial sections and FAQs ("Should I use Facebook Ads for a new Shopify store?" — obviously yes; "Why you need a business plan" — too simple).
-- Lists of metrics or comparisons work better as tables.
+- Lists of metrics or comparisons work better as tables. This does not apply to article Further Reading: use a simple label and separate URLs, not a table.
+- Add a short writer note under an H2 with H3s to preview the actual steps/categories in order, without generic filler.
+- Product listicles need the buyer need and a concrete reason each item has selling potential, alongside costs/risks; product description or sourcing alone is insufficient. Treat opportunities as reasons to test, not proven demand or profit.
 - Evergreen posts must not be framed to one period ("Q4 2026"). Update roundups: newest first, date in each H2 with the year (e.g. "Oct 9, 2026"), and focus on updates that affect merchants' profit (include agentic-commerce changes when relevant).
 
 ## 3. Benchmarks and data
@@ -51,7 +53,7 @@ Distilled from the October 2026 outlines in the SEO sheet `Content Plan 10/2026`
 
 ## 6. TrueProfit and sister products
 
-- Mention TrueProfit only where it fits, normally the profitability/measurement section.
+- Introduce TrueProfit from the section's practical merchant question: information gap → relevant feature/action → useful decision. Avoid an appended generic product description or detached feature list. A closing CTA alone can fit some articles; do not require a body pitch everywhere. Verify specific capabilities before making claims, and never imply access to competitors' private finances.
 - Emphasize net profit (the core of the product) and that it tracks every cost a seller has: COGS, shipping, transaction fees, ad spend, refunds, apps and other expenses.
 - Ad platforms and Shopify dashboards, even combined, don't show true profit because they miss the other running costs; that is why a profit-tracking tool is needed.
 - Marketing Attribution: shows which orders an ad channel actually drove and whether they were profitable; Meta, Google Ads and Shopify cannot track this themselves, TrueProfit uses its own tracking. Its main message is real contribution, not just "compare campaign profitability". Reference: https://trueprofit.io/solutions/marketing-attribution
@@ -62,6 +64,8 @@ Distilled from the October 2026 outlines in the SEO sheet `Content Plan 10/2026`
 
 - Be concrete. Budget advice like "spend what you can afford, divide by 30.4" was too generic; give a test budget per product, then a scale budget.
 - Shopify plan guidance by audience: Basic for beginners; Grow for newer sellers with high-ticket products who need more; Advanced/Plus for experienced sellers or those migrating with an existing customer base.
+- Avoid unnecessary supplier-brand timing paragraphs that read as promotion. Keep advice about actual lead times, capacity, transit and destination cutoffs; retain attribution when necessary for a concrete comparison or reproducible price example.
+- For article links, vary natural anchors while retaining the destination's key intent/qualifiers. A verified benchmark figure can be the anchor. Outline link tables still omit anchor suggestions. Introduce a free tool as `Content Highlight` followed by `Pro Tips: Use our free ...`; incidental table mentions need no extra callout.
 - Cost lists must be complete (e.g. platform alternatives: hosting, extensions, maintenance, apps, payment fees, domain, themes).
 
 ## 8. Example outline in team format

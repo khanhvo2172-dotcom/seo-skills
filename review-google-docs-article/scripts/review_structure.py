@@ -3,7 +3,7 @@
 Structure review for a TrueProfit blog Google Doc (first tab) - Steps 2 & 3 of
 the review-google-docs-article skill.
 
-Reports, for the article's first tab:
+Reports, for the selected article tab (normally Final):
   - Quick Recap / FAQ presence.
   - Heading-2 count (Quick Recap excluded, FAQ counted).
   - CTA image: whether a "[cta]" marker qualifies (> 5 H2). If it does and a
@@ -16,9 +16,8 @@ Default is a DRY RUN (report only). Pass --apply to write the CTA line.
 Usage:
     python review_structure.py --doc <DOC_ID_OR_URL> [--cta-campaign <slug>] [--apply]
 
-Auth mirrors the trueprofit-blog-triggers skill: GOOGLE_TOKEN_JSON env var, then
-a local token.json, then first-time OAuth via credentials.json. The signed-in
-account needs EDIT access to the doc if you intend to --apply.
+Auth and guarded transport use the shared gdocs.py helper. The signed-in
+account needs edit access to apply changes.
 """
 import argparse
 import json
@@ -40,46 +39,10 @@ def doc_id_from(value):
     return value.strip()
 
 
-def get_service(creds_path, token_path):
-    try:
-        from google.auth.transport.requests import Request
-        from google.oauth2.credentials import Credentials
-        from google_auth_oauthlib.flow import InstalledAppFlow
-        from googleapiclient.discovery import build
-    except ImportError:
-        sys.exit(
-            "Missing Google libraries. Install them first:\n"
-            "  pip install -r requirements.txt"
-        )
-
-    creds = None
-    token_env = os.environ.get("GOOGLE_TOKEN_JSON")
-    if token_env:
-        creds = Credentials.from_authorized_user_info(json.loads(token_env), SCOPES)
-    elif os.path.exists(token_path):
-        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            client_env = os.environ.get("GOOGLE_CLIENT_SECRET_JSON")
-            if client_env:
-                flow = InstalledAppFlow.from_client_config(json.loads(client_env), SCOPES)
-            elif os.path.exists(creds_path):
-                flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
-            else:
-                sys.exit(
-                    "No Google credentials found. Provide GOOGLE_TOKEN_JSON, a "
-                    "token.json, or credentials.json for first-time OAuth."
-                )
-            creds = flow.run_local_server(port=0)
-        try:
-            with open(token_path, "w") as f:
-                f.write(creds.to_json())
-        except OSError:
-            pass
-    return build("docs", "v1", credentials=creds)
+def get_service(creds_path=None, token_path=None):
+    """Compatibility arguments are ignored; authentication belongs to shared gdocs.py."""
+    from shared_docs_service import SharedDocsService
+    return SharedDocsService()
 
 
 def tab_id_from_url(value):
@@ -106,18 +69,21 @@ def _iter_tabs(document):
 
 
 def select_tab(document, tab_id):
-    """Return (tab_id, title, body_content, fell_back) for the requested tab.
-
-    Matches the given tab_id; if not found (or None given), returns the FIRST tab.
-    `fell_back` is True only when a specific tab_id was asked for but not found.
-    """
-    all_tabs = list(_iter_tabs(document))
+    """Resolve an exact ID/title, preferring Final only without a selector."""
+    tabs = list(_iter_tabs(document))
     if tab_id:
-        for tid, title, body in all_tabs:
-            if tid == tab_id:
-                return tid, title, body, False
-    first = all_tabs[0]
-    return first[0], first[1], first[2], bool(tab_id)
+        matches = [t for t in tabs if t[0] == tab_id or t[1] == tab_id]
+        if len(matches) != 1:
+            raise ValueError("Requested tab is missing or ambiguous: %r" % tab_id)
+        tid, title, body = matches[0]
+    else:
+        finals = [t for t in tabs if t[1].strip().lower() == "final"]
+        if len(finals) > 1:
+            raise ValueError("Final article tab is ambiguous.")
+        tid, title, body = finals[0] if finals else tabs[0]
+        if not finals and any(word in title.lower() for word in ("outline", "research", "notes")):
+            raise ValueError("No article tab identified; name the intended source explicitly.")
+    return tid, title, body, False
 
 
 def first_tab(document):
@@ -203,7 +169,7 @@ CIMG_RE = re.compile(r"^\s*Image\b[^:]*:\s*%s" % re.escape(CTA_IMAGE_URL), re.I)
 def main():
     ap = argparse.ArgumentParser(description="Structure review for a blog Google Doc (first tab).")
     ap.add_argument("--doc", required=True, help="Google Doc ID or URL (URL may carry ?tab=t.xxx)")
-    ap.add_argument("--tab", help="Tab id (t.xxxx). Defaults to the --doc URL's tab= param, else first tab.")
+    ap.add_argument("--tab", help="Tab id (t.xxxx). Defaults to the --doc URL's tab= param, otherwise Final (URL t.0 is treated as an outline link). Explicit selectors must resolve.")
     ap.add_argument("--cta-campaign", help="utm_campaign slug (article main keyword) for the CTA link")
     ap.add_argument("--apply", action="store_true", help="Insert the CTA line (default is a dry-run report)")
     ap.add_argument("--creds", default=DEFAULT_CREDS)
@@ -216,6 +182,8 @@ def main():
 
     did = doc_id_from(args.doc)
     want_tab = args.tab or tab_id_from_url(args.doc)
+    if not args.tab and want_tab == "t.0":
+        want_tab = None
     service = get_service(args.creds, args.token)
     document = service.documents().get(documentId=did, includeTabsContent=True).execute()
     tab_id, tab_title, content, fell_back = select_tab(document, want_tab)

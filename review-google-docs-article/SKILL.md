@@ -21,6 +21,10 @@ FAQ redundancy, AI tracking params, fact verification, and article-versus-outlin
 structure comparison. Prioritize factual accuracy and departures from the outline;
 avoid unsolicited stylistic restructuring. Future steps slot in the same way.
 
+## Shared Google Docs access on this PC
+
+Use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` for Docs reads and writes; read its adjacent README first. Use `tabs` and a tab-specific `dump` for review. The packaged planners use `scripts/shared_docs_service.py` to call the same helper for authentication, revision-guarded writes and readback; do not create separate OAuth tokens or one-off Docs API scripts, and do not edit through the browser. For operations beyond the CLI, use the documented `gdocs.read`/`gdocs.guarded_batch` module interface with explicit tab IDs. Inspect a dry run before applying and verify the intended text/styles/links afterward; on a conflict, reread and recompute the plan.
+
 ## How to run a review
 
 1. Default to **all available steps** unless the user specifies a subset. Compare
@@ -49,7 +53,7 @@ avoid unsolicited stylistic restructuring. Future steps slot in the same way.
 |---|------|----------------|----------------|
 | 1 | Internal & External Links | `references/step-1-internal-external-links.md` | Missing internal-link opportunities (with anchor-text proposals), duplicate links to remove, and external-reference accuracy (benchmark matching + DR≥65 authority + broken links) |
 | 2 | CTA image | `references/step-2-3-structure-checks.md` | Whether a `[cta]` marker qualifies for the CTA image (> 5 H2, Quick Recap excluded, FAQ counted) and, if so, **inserts** the CTA image trigger; warns on short articles |
-| 3 | Further Reading format + placement | `references/step-2-3-structure-checks.md` | **Auto-fixes** every block to a `Further Reading:` label plus one bulleted link per line (`scripts/fix_further_reading.py`), then warns when a block sits directly above the 2nd–5th H2 (report-only) |
+| 3 | Further Reading format + placement | `references/step-2-3-structure-checks.md` | **Auto-fixes** every block to a `Further Reading:` label plus separate link lines, preserving the user's plain-URL format (`scripts/fix_further_reading.py`), then warns when a block sits directly above the 2nd–5th H2 (report-only) |
 | 4 | FAQ redundancy | `references/step-4-faq-redundancy.md` | Flags FAQ questions that duplicate a heading's intent or are already answered in the body (report-only, model-driven) |
 | 5 | AI tracking params | `references/step-5-ai-tracking-params.md` | Detects **and removes** AI-tool `utm_source` params (chatgpt, claude, perplexity, gemini, …) from every link in the tab, incl. tables; keeps all other params |
 | 6 | Fact verification | `references/step-6-marked-sentence-fact-check.md` | Verifies all marked sentences and material factual claims across the article against sources; reports actionable findings and automatically removes only verified sentence tags, preserving the sentences; keeps unresolved tags |
@@ -67,10 +71,7 @@ are sentence notes in the selected tab, not instructions to review sibling tabs.
 
 ## Inputs the user must provide
 
-- **Google Doc URL** — the article to review. **The URL's `tab=t.xxxx` parameter names the exact
-  article tab to review.** The outline tab is read separately only for Step 7. The doc
-  must be readable by the link-checker app's
-  Google service account, or shared as "anyone with the link can view".
+- **Google Doc URL** — list tabs and honor the user's explicit article selection; otherwise prefer **Final**. A `tab=t.0` link usually points to the outline. Read the outline separately only for Step 7. Use the shared helper's existing access; do not make a private document public just to read it.
 - **Outline tab** *(Step 7)* - use the user-named outline tab or locate the unique
   outline section in a tab such as `Outline` or `Insights & outline`. Confirm if
   multiple candidate outlines exist or none is identifiable; continue independent
@@ -93,16 +94,11 @@ If a step's required input is missing, ask for it before running that step.
   notes tab, AI-research dumps). These are separate tabs, **not** scratch content inside the
   article, and must never be flagged as "delete these blocks." The Drive reader
   (`read_file_content`) concatenates *every tab* into one blob — do **not** use it for this skill.
-  Read article text with **`scripts/dump_tab.py`** (it honors the URL's `tab=` param and emits just
-  that tab, with links inline as `[anchor](url)`). The structure script (`review_structure.py`) is
-  already tab-scoped the same way. For Step 7, dump the outline tab separately by its
-  exact ID and treat it only as the comparison baseline. Never concatenate it with the
-  article, edit it, or flag its notes as article content. If a `tab=` param is missing,
-  the scripts fall back to the first
-  tab and say so — confirm the intended tab with the user rather than reviewing everything.
+  Read article text with the shared helper's `dump --tab Final` or the resolved exact ID. It preserves links, tables and image markers. Read the outline separately for Step 7. Never concatenate tabs or flag outline notes as article content.
+- For comment-led review/revision, read every paginated thread, quoted anchor and reply, including resolved threads, before planning edits. Map each requirement to an edit or explicit preserve/no-change decision, respect newer user edits and exclusions, and verify each disposition. Do not claim comments were resolved merely because content was edited.
 - **Advisory by default; four exceptions.** Every step produces *recommendations* the user
   applies themselves — **except Step 2's CTA insertion**, **Step 3a's Further Reading
-  bullet formatting**, **Step 5's AI-param removal**, and **Step 6's verified-tag
+  separate-link formatting**, **Step 5's AI-param removal**, and **Step 6's verified-tag
   removal**, which edit the Doc in place.
   Step 3a (`scripts/fix_further_reading.py`) is pre-authorized: dry-run, apply, re-verify. For Step 2 (`scripts/review_structure.py`), always dry-run and
   show the plan first; only `--apply` after the user confirms (especially the `utm_campaign`

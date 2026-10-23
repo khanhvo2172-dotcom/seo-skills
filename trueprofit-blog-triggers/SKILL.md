@@ -28,6 +28,10 @@ It does the mechanical, easy-to-forget parts. It deliberately does **not**
 invent editorial content (it won't write a Quick Recap or FAQ for you) — it just
 tells you when those are missing so you can write them.
 
+## Shared Google Docs access on this PC
+
+Use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` for Docs reads and writes; read its adjacent README first. Use `tabs` and a tab-specific `dump` for review. The packaged planners use `scripts/shared_docs_service.py` to call the same helper for authentication, revision-guarded writes and readback; do not create separate OAuth tokens or one-off Docs API scripts, and do not edit through the browser. For operations beyond the CLI, use the documented `gdocs.read`/`gdocs.guarded_batch` module interface with explicit tab IDs. Inspect a dry run before applying and verify the intended text/styles/links afterward; on a conflict, reread and recompute the plan.
+
 ## What it adds vs. flags
 
 | Element | Behaviour |
@@ -44,28 +48,15 @@ real editorial judgement (which points to summarise, which questions matter,
 which section a reading list belongs to). Formulas, callouts, image URLs and the
 CTA image are mechanical, so those are safe to automate.
 
+Free-tool introductions should be a plain `Content Highlight` line immediately followed by `Pro Tips: Use our free ...`. Keep a useful natural tool link and its limitations; an incidental table mention needs no duplicate callout. Preserve supported existing introductions rather than inventing new prose during trigger preparation.
+
 ## How to run it
 
-The skill is a Python script over the Google Docs API. Run everything from this
-skill's `scripts/` directory. First time in a new environment, do the **one-time
-setup** in [references/setup-google-api.md](references/setup-google-api.md)
-(install the libs, supply credentials, authorize).
-
-**Credentials** are looked up in this order, so the skill works both locally and
-in a fresh session that has no files:
-
-1. `GOOGLE_TOKEN_JSON` env var — your authorized-user token JSON (the portable
-   path; set this in Claude.ai / any new environment and you're done).
-2. A `token.json` file next to the script (written automatically after a local
-   authorization, reused on later runs).
-3. `GOOGLE_CLIENT_SECRET_JSON` env var or a `credentials.json` file — used only
-   for the first-time interactive OAuth that mints the token.
-
-The Google account behind the token needs **edit access** to the doc.
+Run the packaged planner from this skill's `scripts/` directory. It uses the shared helper; see [references/setup-google-api.md](references/setup-google-api.md). The shared account needs edit access for apply runs.
 
 ## Select the article tab and prepare images
 
-1. Use the article tab explicitly named by the user (for example, Final), then the URL's `tab=` parameter, otherwise the first tab. Pass `--tab-title "Final"` for an exact title or `--tab t.xxxx` for an ID; both override URL selection. If the requested tab is missing or its title is ambiguous, stop and clarify instead of editing another tab. Sibling drafts and notes are outside scope.
+1. List tabs with the shared helper. Use the article tab explicitly named by the user; otherwise prefer **Final**. A `tab=t.0` link usually points to the outline, so do not treat it as article selection. Resolve another clearly linked article tab when Final is absent; clarify an ambiguous source. Pass `--tab-title "Final"` for an exact title or `--tab t.xxxx` for an ID; both override URL selection. If the requested tab is missing or its title is ambiguous, stop and clarify instead of editing another tab. Sibling drafts and notes are outside scope.
 2. **Inspect embedded images yourself before choosing the naming mode.** Determine whether there is a CTA banner and where it sits; ask only if the visual evidence is ambiguous or inaccessible. Preserve its approved fixed URL/alt and exclude it from ordinary image numbering.
 
    A `[cta]` **marker line** in the doc is handled automatically (see the CTA
@@ -326,7 +317,7 @@ Report back to the user, concisely:
 ## Scope and assumptions
 
 - **Selected article tab only.** Honor the named tab or URL tab ID for reads, insertions,
-  reset and style normalization. Use the first tab only when none was specified.
+  reset and style normalization. Resolve Final by default; use a different source only when selected or clearly identified.
 - The signed-in Google account needs **edit access** to the doc.
 - This skill is about *trigger syntax*, not translation or content. For ES/DE/FR
   versions see the separate localization workflow.

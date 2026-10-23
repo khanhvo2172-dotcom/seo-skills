@@ -1,15 +1,8 @@
 # Steps 2 & 3 — Structure checks (CTA image + Further Reading placement)
 
-Both checks read **the tab named in the URL** (`review_structure.py` reads the
-`?tab=t.xxxx` param; pass the full URL, or add `--tab t.xxxx`). It never reads
-sibling tabs. Step 2 (CTA) is the one place in this whole skill that **edits the
-Doc in place**; Step 3 (Further Reading) is report-only.
+Both checks read the resolved article tab. Pass `--tab <resolved-id>` after listing tabs with the shared helper; honor an explicit selector, otherwise prefer Final. An implicit URL `t.0` usually denotes the outline and does not override that default. Missing explicit selectors fail. Step 2 inserts an authorized CTA; Step 3a normalizes malformed reading blocks. Placement remains report-only.
 
-Auth is the same OAuth setup as the `trueprofit-blog-triggers` skill — see that
-skill's `references/setup-google-api.md`. Provide credentials via the
-`GOOGLE_TOKEN_JSON` env var or a local `scripts/token.json` (git-ignored); the
-first run otherwise falls back to an OAuth flow using `scripts/credentials.json`.
-The signed-in Google account needs **edit access** to the Doc to apply the CTA.
+The packaged planners use the shared gdocs.py helper through `shared_docs_service.py`. Read the shared helper README; do not create per-skill tokens or separate OAuth scripts.
 
 ## Step 2 — CTA image
 
@@ -39,26 +32,25 @@ The insertion is **idempotent** — if an `Image: …` trigger already sits abov
 
 ## Step 3 — Further Reading format (auto-fix) + placement (report-only)
 
-### 3a. Format — always a label line plus bulleted links (auto-fix)
+### 3a. Format — label and separate link lines (auto-fix)
 
-Every Further Reading block must look like this:
+Use a simple label followed by each link on its own line; preserve the user's edited plain-URL format and do not create a table:
 
 ```
 Further Reading:
-  • Link A
-  • Link B
+https://trueprofit.io/blog/example-a
+https://trueprofit.io/blog/example-b
 ```
 
-Writers often paste it as `Further Reading: [Link A]` on one line, put further
-links on plain (un-bulleted) lines, use soft line breaks (Shift+Enter), bullet the
+Writers often paste it as `Further Reading: [Link A]` on one line, use soft line breaks (Shift+Enter), bullet the
 label itself, or drop the colon. `scripts/fix_further_reading.py` fixes all of
 these: it splits each link onto its own line, deletes leftover separators between
 links (spaces, commas, `|`, dashes, soft breaks), removes a bullet from the label,
-adds the missing colon, and bullets every link line under the label. Links,
+adds the missing colon. Existing separate plain lines are already valid; bullets are optional and must not be forced onto them. Links,
 anchor text and text styles are untouched.
 
 This fix is **pre-authorized** (no confirmation needed). Run it **before** the
-placement check, since the placement check detects blocks by their bullets:
+placement check; placement detection accepts plain URLs and existing linked bullets:
 
 ```bash
 python fix_further_reading.py --doc "<DOC_URL_WITH_?tab=...>"           # dry-run: list blocks
@@ -83,7 +75,7 @@ the next big heading.
 - **Don't warn** when it's above the 1st or the 6th-and-later H2, above an **H3**,
   or when ordinary body text sits between it and the next H2.
 
-The block's list items are detected by their **list bullet**, so it works whether
+The block's items are detected by a plain URL or an existing **list bullet**, so it works whether
 the links are plain-text URLs or hyperlinks (anchor text with the URL hidden in
 the link attribute — the common case). This is deliberately more robust than a
 literal "http" text match, which misses every hyperlinked list.
@@ -102,9 +94,7 @@ python review_structure.py --doc "<DOC_URL_WITH_?tab=...>" --cta-campaign "<main
 python review_structure.py --doc "<DOC_URL_WITH_?tab=...>" --cta-campaign "<main-keyword>" --apply
 ```
 
-The header line prints the resolved tab (`Tab : <title> [t.xxxx]`); if it warns
-that the tab wasn't found and it fell back to the first tab, stop and confirm the
-correct tab with the user before trusting the results.
+The header line prints the resolved tab (`Tab : <title> [t.xxxx]`); if a requested tab is missing or ambiguous, stop and clarify the correct tab before running.
 
 Report to the user, concisely:
 - Quick Recap / FAQ presence; the H2 count.

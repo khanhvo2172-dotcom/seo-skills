@@ -86,7 +86,7 @@ Run through `references/team-lessons.md` and confirm: no section drifts from int
 
 ## Writing into a Google Doc
 
-When the user asks to put the result in a Doc, write into the tab whose name contains "outline" (or the tab they name), keeping any existing content and other tabs untouched. Load the `google-workspace` skill first and follow its guarded-write and read-back rules.
+When the user asks to put the result in a Doc, write into the tab whose name contains "outline" (or the tab they name), keeping any existing content and other tabs untouched. Use the shared `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` helper for every Docs read/edit; read its adjacent README first. Use `tabs` and a separate `dump --tab <title-or-id>` per source. Do not use browser editing, a flattened all-tabs reader or a one-off Docs API script. For tables/styles or other operations beyond the CLI, use the README's `gdocs.read`/`gdocs.guarded_batch` module interface, with a fresh revision and explicit tab IDs. Dry-run or inspect the exact request plan before applying, then read back text, links, formatting and unchanged sibling tabs.
 
 Team tab layout, top to bottom: Insights → Area to Win → Top url (the ranking URLs) → Outline → (Internal Link Suggestions and Further Reading, added later by the internal-link workflow) → pasted AI Overview / AI Mode.
 

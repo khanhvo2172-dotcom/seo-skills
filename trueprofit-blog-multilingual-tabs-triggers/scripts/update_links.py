@@ -90,40 +90,10 @@ def doc_id_from(value):
     return value.strip()
 
 
-def get_service(creds_path, token_path):
-    try:
-        from google.auth.transport.requests import Request
-        from google.oauth2.credentials import Credentials
-        from google_auth_oauthlib.flow import InstalledAppFlow
-        from googleapiclient.discovery import build
-    except ImportError:
-        sys.exit("Missing Google libraries. Run: pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib")
-
-    creds = None
-    token_env = os.environ.get("GOOGLE_TOKEN_JSON")
-    if token_env:
-        creds = Credentials.from_authorized_user_info(json.loads(token_env), SCOPES)
-    elif os.path.exists(token_path):
-        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            client_env = os.environ.get("GOOGLE_CLIENT_SECRET_JSON")
-            if client_env:
-                flow = InstalledAppFlow.from_client_config(json.loads(client_env), SCOPES)
-            elif os.path.exists(creds_path):
-                flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
-            else:
-                sys.exit("No Google credentials found. Provide token.json next to this script.")
-            creds = flow.run_local_server(port=0)
-        try:
-            with open(token_path, "w") as f:
-                f.write(creds.to_json())
-        except OSError:
-            pass
-    return build("docs", "v1", credentials=creds)
+def get_service(creds_path=None, token_path=None):
+    """Compatibility arguments are ignored; authentication belongs to shared gdocs.py."""
+    from shared_docs_service import SharedDocsService
+    return SharedDocsService()
 
 
 def collect_links(content):

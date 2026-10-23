@@ -11,7 +11,7 @@ import sys
 from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 
 from review_structure import get_service, doc_id_from, DEFAULT_CREDS, DEFAULT_TOKEN
-from dump_tab import tab_id_from_url
+from dump_tab import tab_id_from_url, select_tab
 
 AI_TOKENS = r"chatgpt|openai|claude|anthropic|perplexity|gemini|bard|copilot|deepseek|grok|you\.com|phind|meta\.ai"
 AI = re.compile(AI_TOKENS, re.I)
@@ -52,7 +52,7 @@ def all_tabs(tabs):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--doc", required=True, help="Google Doc URL (with ?tab=t.xxx) or ID")
-    ap.add_argument("--tab", help="Tab id; defaults to the URL's tab= param, else first tab")
+    ap.add_argument("--tab", help="Tab id; defaults to the URL's tab= param, otherwise Final")
     ap.add_argument("--apply", action="store_true", help="Write the fixes (default: dry-run)")
     ap.add_argument("--creds", default=DEFAULT_CREDS)
     ap.add_argument("--token", default=DEFAULT_TOKEN)
@@ -61,15 +61,11 @@ def main():
 
     did = doc_id_from(args.doc)
     want = args.tab or tab_id_from_url(args.doc)
+    if not args.tab and want == "t.0":
+        want = None  # ordinary outline links do not override the article default
     s = get_service(args.creds, args.token)
     doc = s.documents().get(documentId=did, includeTabsContent=True).execute()
-    tabs = list(all_tabs(doc.get("tabs")))
-    tab = next((t for t in tabs if t["tabProperties"]["tabId"] == want), None)
-    if tab is None:
-        tab = tabs[0]
-        print("WARNING: tab %r not found; fell back to first tab." % want)
-    tid = tab["tabProperties"]["tabId"]
-    body = tab["documentTab"]["body"]["content"]
+    tid, _title, body, _fallback = select_tab(doc, want)
 
     reqs, report = [], []
     for pe in text_runs(body):

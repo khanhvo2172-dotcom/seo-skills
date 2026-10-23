@@ -1,0 +1,4 @@
+interface:
+  display_name: "Find and Insert Article Images"
+  short_description: "Source article images and add contextual captions"
+  default_prompt: "Use $find-insert-images-google-docs to find suitable examples for this article and insert them with natural captions and linked sources."

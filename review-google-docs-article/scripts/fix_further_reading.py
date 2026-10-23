@@ -1,9 +1,9 @@
 """Normalize every "Further Reading" block in ONE tab of a Google Doc so the label
-stands alone and each link is its own bullet:
+stands alone and each link has its own line (bullets are optional):
 
     Further Reading: [Link A]          Further Reading:
-    [Link B]                    ->       * Link A
-                                         * Link B
+    [Link B]                    ->         Link A
+                                           Link B
 
 Dry-run by default (lists blocks that need fixing); --apply edits the Doc.
 Links, anchor text and text styles are preserved; only line breaks, separator
@@ -14,7 +14,7 @@ import re
 import sys
 
 from review_structure import get_service, doc_id_from, DEFAULT_CREDS, DEFAULT_TOKEN
-from dump_tab import tab_id_from_url
+from dump_tab import tab_id_from_url, select_tab
 
 LABEL = re.compile(r"^\s*further reading\b(\s*:)?", re.I)
 SEPARATOR = re.compile(r"^[\s,;|/\-–—•]*$")
@@ -128,17 +128,12 @@ def iter_fixes(body, tid):
             if not is_link_only(nxt["paragraph"]):
                 break
             items.append(nxt)
-        if items and any(not it["paragraph"].get("bullet") for it in items):
-            yield ("bullet %d link line(s) under: %r" % (len(items), label_txt),
-                    [{"createParagraphBullets": {"range": {
-                        "startIndex": items[0]["startIndex"], "endIndex": items[-1]["endIndex"] - 1,
-                        "tabId": tid}, "bulletPreset": BULLET_PRESET}}])
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--doc", required=True, help="Google Doc URL (with ?tab=t.xxx) or ID")
-    ap.add_argument("--tab", help="Tab id; defaults to the URL's tab= param, else first tab")
+    ap.add_argument("--tab", help="Tab id; defaults to the URL's tab= param, otherwise Final")
     ap.add_argument("--apply", action="store_true", help="Write the fixes (default: dry-run)")
     ap.add_argument("--creds", default=DEFAULT_CREDS)
     ap.add_argument("--token", default=DEFAULT_TOKEN)
@@ -147,13 +142,15 @@ def main():
 
     did = doc_id_from(args.doc)
     want = args.tab or tab_id_from_url(args.doc)
+    if not args.tab and want == "t.0":
+        want = None  # ordinary outline links do not override the article default
     s = get_service(args.creds, args.token)
 
     def load():
         doc = s.documents().get(documentId=did, includeTabsContent=True).execute()
-        tabs = list(all_tabs(doc.get("tabs")))
-        tab = next((t for t in tabs if t["tabProperties"]["tabId"] == want), None)
-        return doc, tab or tabs[0], tab is None
+        tid, _title, _body, _fallback = select_tab(doc, want)
+        tab = next(t for t in all_tabs(doc.get("tabs")) if t["tabProperties"]["tabId"] == tid)
+        return doc, tab, False
 
     doc, tab, fell_back = load()
     tid = tab["tabProperties"]["tabId"]

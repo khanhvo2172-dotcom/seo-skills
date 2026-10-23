@@ -26,8 +26,9 @@ Docs, add comments, or publish content unless the user asks for those actions.
    insights/outline tab. Never substitute an n8n workflow or finished-article tab.
    When several outline tabs are plausible and scope is unclear, ask which one
    while continuing with unambiguous documents.
-3. Use an available authenticated Google Docs/Drive connector or tab-aware API
-   reader. Preserve headings, heading levels, tables, hyperlinks, and FAQ questions
+3. Use the shared `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` helper
+   (`tabs`, then a tab-specific `dump`); read the adjacent README first. Do not
+   use browser edits or one-off Docs API scripts. Preserve headings, heading levels, tables, hyperlinks, and FAQ questions
    where available. Do not use an undifferentiated all-tabs export as if it were
    the outline. If only flattened text is available, establish tab boundaries
    before reviewing; do not guess them.
@@ -165,6 +166,12 @@ outline's strengths and most important changes. Follow with the three tables bel
   recommendations with supporting sources.
 - Do not import finished-article QA tasks such as CTA placement, CMS triggers,
   image-alt audits, or link-checker workflows into an outline review.
+
+## Accepted revisions and link planning
+
+When comment-led revision is requested, read all paginated threads, anchors and replies, including resolved threads, before editing. Map each requested change to an edit or explicit preserve/no-change decision. Respect later user edits and exclusions; do not claim comments were resolved merely because text changed. Use the shared helper module interface for supported table/style edits, guarded by the current revision, and verify the result.
+
+After accepted outline/FAQ revisions, continue the established internal-link workflow using `suggest-internal-links`: map links to each heading without anchor-text recommendations, retain verified pillar/sub-pillar priorities, relevant tools/core metrics, and suggest 2–3 missing hubs for Further Reading. Put requested link plans in the outline-containing tab; honor chat-only scope. Initial advisory reviews still do not authorize document edits.
 
 ## Before delivering
 

@@ -69,18 +69,19 @@ Reviews SEO outlines in one or more Google Docs against their reference URLs, sa
 ---
 
 ### `review-google-docs-article`
-Runs a structured **pre-publish QA review** of a TrueProfit blog article in a Google Doc, one step at a time, scoped strictly to the tab named in the URL.
+Runs a structured **pre-publish QA review** of a TrueProfit blog article in a Google Doc, one step at a time, scoped to the selected article tab (normally Final).
 
 **Triggers when you say:** *"review this doc"*, *"QA a blog doc"*, *"check the links in this Google Doc"*, *"find internal link opportunities"*, *"is this article ready to publish"*
 
 **What it does:**
 - **Step 1 - Links:** runs the internal/external link checker, proposes missing internal-link insertions (anchor text or Related reading), flags duplicates to remove, and verifies every external benchmark plus domain authority (DR >= 65)
 - **Step 2 - CTA image:** counts H2s (Quick Recap excluded, FAQ counted) and inserts the CTA image trigger above a `[cta]` marker when the article qualifies (> 5 H2)
-- **Step 3 - Further Reading:** warns when a Further Reading block sits directly above the 2nd-5th H2
+- **Step 3 - Further Reading:** normalizes malformed label/link lines while preserving plain URLs; warns on placement directly above the 2nd-5th H2
 - **Step 4 - FAQ redundancy:** flags FAQ questions that duplicate a heading's intent or are already answered in the body
-- Reads **only the tab in the URL** (never sibling tabs); advisory by default - only the Step 2 CTA insertion edits the doc, and only after you confirm
+- **Steps 5–7:** removes AI tracking params, verifies marked/material claims, removes only verified tags, and compares the article with its outline
+- Resolves the article tab (normally Final) separately from the outline; reports actionable findings in detail and summarizes passing checks. CTA insertion requires the confirmed campaign; reading-format, AI-param and verified-tag cleanups retain their existing authorization.
 
-**Requires:** Google Docs API credentials (`token.json`) and the personal link-checker Streamlit app for Step 1.
+**Requires on Khanh's PC:** Shared `gdocs.py` helper and authorized Docs access and the personal link-checker Streamlit app for Step 1.
 
 ---
 
@@ -119,7 +120,7 @@ Translates TrueProfit blog markdown files into **Spanish (Spain)**, **German (Ge
 ---
 
 ### `trueprofit-blog-triggers`
-Adds the CMS "highlight triggers" that the n8n publishing workflow needs before a blog post can be built, operating only on the **selected article tab** of a TrueProfit blog Google Doc (explicit tab title/ID, URL tab, then first-tab default).
+Adds the CMS "highlight triggers" that the n8n publishing workflow needs before a blog post can be built, operating only on the **selected article tab** of a TrueProfit blog Google Doc (resolve the article explicitly, normally Final; outline links do not select article content).
 
 **Triggers when you say:** *"check the doc"*, *"prep for publish"*, *"add triggers to this doc"*, *"recheck the triggers"*, *"is the doc ready for n8n"*
 
@@ -132,7 +133,7 @@ Adds the CMS "highlight triggers" that the n8n publishing workflow needs before 
 - Idempotent — already-present triggers are detected and skipped; re-running never creates duplicates
 - Normalizes all trigger lines to plain body text after inserting
 
-**Requires:** Google Docs API credentials (`token.json`). Run this before `trueprofit-blog-multilingual-tabs-triggers`.
+**Requires:** shared `gdocs.py` helper and authorized Docs access. Run this before `trueprofit-blog-multilingual-tabs-triggers`.
 
 ---
 
@@ -149,7 +150,7 @@ Repairs the CMS "highlight triggers" in the **Spanish, German, and French tabs**
 - Trigger labels stay in English in every tab (`Content Highlight`, `Image (sentence note):`) — only alt text is translated
 - Idempotent: re-running on an already-repaired tab produces no changes
 
-**Requires:** Google Docs API credentials (`token.json`). Run the `trueprofit-blog-triggers` skill on the English tab first.
+**Requires:** shared `gdocs.py` helper and authorized Docs access. Run the `trueprofit-blog-triggers` skill on the English tab first.
 
 ---
 
@@ -277,6 +278,18 @@ Keyword / Target Audience / Total count / Branded count / Direction / Issues / S
 
 ---
 
+### `humanizer`
+Humanizes pasted text or edits wording directly in the existing Google Doc (normally Final), preserving meaning, links and formatting. Uses the shared Docs helper; Markdown review files are opt-in.
+
+### `suggest-internal-links`
+Maps links to outline headings without anchor suggestions, using live pillar/sub-pillar labels, relevant tools and metrics, plus 2–3 missing hubs for Further Reading.
+
+### `find-insert-images-google-docs`
+Sources real app, product and campaign images, checks native dimensions, writes contextual captions and performs authorized insertion/replacement through the shared helper with private Drive copies.
+
+### `generate-demonstrate-images-trueprofit`
+Generates or revises explanatory images from the supplied visual references, including selective icon line weights and checklist layouts, with visibly checked revisions and authorized private Drive insertion.
+
 ## Repository Layout
 
 Each skill is stored as a folder with `SKILL.md` at its root:
@@ -377,9 +390,9 @@ Skills are available globally across all Claude Code sessions after installation
 | Skill | Requirements |
 |---|---|
 | `trueprofit-blog-localization` | Claude Code |
-| `trueprofit-blog-triggers` | Claude Code + Google Docs API credentials |
-| `trueprofit-blog-multilingual-tabs-triggers` | Claude Code + Google Docs API credentials |
-| `review-google-docs-article` | Claude Code + Google Docs API credentials + link-checker app |
+| `trueprofit-blog-triggers` | Shared `gdocs.py` helper + authorized Docs access |
+| `trueprofit-blog-multilingual-tabs-triggers` | Shared `gdocs.py` helper + authorized Docs access |
+| `review-google-docs-article` | Shared `gdocs.py` helper + authorized Docs access + link-checker app |
 | `outline-generate-trueprofit` | Web browsing; Google Docs access to write into a Doc tab |
 | `review-outline-google-docs-file` | Tab-aware Google Docs access + web browsing |
 | `review-trueprofit-live-blog-urls` | Claude Code + Python (`requests`, `beautifulsoup4`) + network access |

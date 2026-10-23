@@ -23,9 +23,7 @@ The outline is a structure baseline, not proof that its factual claims are true.
 
 ## Find the claims
 
-1. Read the selected tab with `scripts/dump_tab.py`, preserving inline source links.
-   Also inspect table cells in that same tab through the Docs API: the current dump
-   prints `{table}` instead of cell contents. Do not call a whole-document reader.
+1. Read the selected tab with the shared helper's `dump --tab <resolved-title-or-id>`, preserving links and table cells. For exact structure, use `gdocs.read` and `gdocs.pick_tab` from the same helper. Do not call a flattened all-tabs reader.
 2. Find all three labels case-insensitively, including labels in table cells, bullets,
    FAQs, and labels split across text runs. Join text runs within each paragraph or
    cell before scanning. Recognize both prefix and suffix notes. A standalone note
@@ -120,8 +118,7 @@ advisory unless separately authorized.
 - Make an allowlist of the exact verified sentences/tags and their verification basis.
   Re-read the live tab before editing, use exact paragraph/text-run indices including
   table cells, and plan tag-only ranges. Never globally replace all three labels.
-  Use a revision-guarded batch of deletions in descending index order with the selected
-  tab ID. If the text or revision changed, refresh and recompute the plan.
+  Use the shared helper's targeted `replace` after a dry run, or `gdocs.guarded_batch` for tag-only deletions in descending index order with the selected tab ID. If the text or revision changed, refresh and recompute the plan.
 - Read back after applying: verify the intended tags are gone, sentence text and links
   are preserved, and every unresolved tag remains. Re-running must not remove more
   tags without new verification. If writing fails or edit access is absent, report

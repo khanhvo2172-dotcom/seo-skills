@@ -90,6 +90,22 @@ class TabSelectionTests(unittest.TestCase):
         self.invoke(service, "--doc", "https://docs.google.com/document/d/doc/edit?tab=t.missing", "--tab-title", "Final", "--base-slug", "article", "--dry-run")
         self.assertEqual(service.writes, [])
 
+    def test_normal_outline_url_defaults_to_final(self):
+        doc = fixture()
+        doc["tabs"][0]["tabProperties"] = {"tabId": "t.0", "title": "Outline"}
+        service = FakeDocs(doc)
+        self.invoke(service, "--doc", "https://docs.google.com/document/d/doc/edit?tab=t.0", "--base-slug", "article")
+        self.assertTrue(service.writes)
+        self.assertTrue(all(next(iter(r.values()))["range" if "range" in next(iter(r.values())) else "location"]["tabId"] == "t.final" for r in service.writes))
+
+    def test_explicit_outline_selector_remains_explicit(self):
+        doc = fixture()
+        doc["tabs"][0]["tabProperties"] = {"tabId": "t.0", "title": "Outline"}
+        service = FakeDocs(doc)
+        self.invoke(service, "--doc", "https://docs.google.com/document/d/doc/edit?tab=t.0", "--tab", "t.0", "--base-slug", "article")
+        self.assertTrue(service.writes)
+        self.assertTrue(all(next(iter(r.values()))["range" if "range" in next(iter(r.values())) else "location"]["tabId"] == "t.0" for r in service.writes))
+
     def test_missing_tab_exits_before_writes(self):
         service = FakeDocs(fixture())
         with self.assertRaises(SystemExit):
