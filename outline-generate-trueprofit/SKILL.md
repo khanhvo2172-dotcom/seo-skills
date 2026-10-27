@@ -2,8 +2,8 @@
 name: outline-generate-trueprofit
 description: >-
   Build TrueProfit SEO article outlines for Shopify merchants with a strict
-  three-stage workflow: Insights from the main keyword, Area to Win from SERP
-  evidence (top URLs, Google AI Overview, AI Mode), then a lean outline in the
+  three-stage workflow: Insights from keyword intent and SERP evidence, Area to
+  Win from competitor coverage, then an audience-confirmed lean outline in the
   team's Coverage-line format. Use whenever the user gives a main keyword for a
   new TrueProfit/Shopify blog post, pastes ranking URLs or AI Overview text for
   an outline, asks for "insights", "area to win", an "outline", or a content
@@ -21,20 +21,26 @@ The work runs in three stages. Each stage needs the user's input before the next
 
 Before Stage 3, read `references/team-lessons.md`: it holds the reviewer corrections that past outlines kept receiving, and following it up front saves a review round.
 
-## Stage 1: Insights (keyword only)
+## Before outlining: target audience and evidence
 
-Input: the main keyword. Analyze only the keyword.
+Read the document's existing target-audience data first. If absent, ask Khanh to confirm the intended audience at the start, before building the outline. Do not substitute the generic TrueProfit audience or infer an audience from the keyword as confirmation. A clear audience confirmation already supplied for this topic in the current conversation satisfies the requirement; do not ask again. Research may continue while awaiting the answer, but outline drafting must wait.
 
-Output a section titled **Insights**: exactly one short, practical paragraph covering the primary search intent, what searchers are actually looking for, what information they expect, and the content type that best satisfies the intent (listicle, how-to, explainer, benchmark, comparison...).
+Khanh's **Google Search** URL list and **AIO / AI Mode top URLs** list are complementary: the latter contains additional URLs appearing in AI Overview or AI Mode answers that are not already listed under Google Search. Combine the lists and read each distinct page once. Do not ask for Google Search URLs to be repeated under AIO / AI Mode, or infer that an omitted URL did not appear in an AI answer. A blank additional-URL list can mean there are no extra URLs; it does not by itself establish missing evidence. Preserve the supplied categories when recording sources.
 
-Then stop and ask for SERP evidence. If the user already pasted URLs or AI Overview text with the keyword, still deliver only Insights, say you have kept the evidence for Stage 2, and point out anything missing (for example, "you mentioned top URLs but none came through").
+## Stage 1: Insights (keyword intent plus SERP evidence)
+
+Input: the main keyword, supplied AI Overview and AI Mode answers, and the combined ranking URLs. Read the available answer text and ranking pages before filling Insights. If only a keyword is available, request the SERP material needed to complete Insights rather than presenting a keyword-only interpretation as the finished section. If an AI answer is unavailable, state that limitation and use the available evidence without inventing it.
+
+1. Read each distinct ranking URL's headings and main content. If a fetch fails, try an available alternate reader and disclose any page that remains inaccessible; do not guess its coverage.
+2. Compare the keyword's likely intent with the questions, formats, audiences and information emphasized across the AI answers and ranking pages.
+
+Output a section titled **Insights**: exactly one short, practical paragraph synthesizing the primary search intent, what searchers actually want, the information they expect, and the content type that best satisfies that need. Base it on the keyword intent, AIO, AI Mode and ranking URLs together, not the keyword alone. Distinguish observed search intent from an audience that still needs Khanh's confirmation.
+
+Then stop before Area to Win unless the user has already requested that stage. Do not ask for evidence already supplied in the document or conversation.
 
 ## Stage 2: Area to Win (needs SERP evidence)
 
-Input: ranking URLs, Google AI Overview / AI Mode text, screenshots or notes. Treat these as the evidence base.
-
-1. Read every ranking URL (headings and main sections). If a fetch fails (redirect loops, blocks), retry with `curl -sL` and cookies, and extract the headings. Tell the user which pages could not be read rather than guessing their content.
-2. Note what each page and the AI answers cover, who they are written for, and what they skip (budgeting, timing, measurement, profitability, Shopify specifics are common gaps).
+Use the evidence read for Insights and any new ranking URLs, AI Overview / AI Mode text, screenshots or notes supplied afterward. Read new sources as needed; reuse the existing analysis instead of refetching unchanged pages. Note what the pages and AI answers cover, who they address, and which concrete merchant decisions they leave unresolved.
 
 Output a section titled **Area to Win**: exactly one concise paragraph naming one specific, executable gap or angle that:
 - addresses a real decision or need of Shopify merchants;
@@ -45,7 +51,7 @@ Keep it one paragraph even in chat, because the user pastes it into a Doc. Then 
 
 ## Stage 3: Outline
 
-Build from: the keyword, the Stage 1 intent, the Stage 2 SERP analysis, the confirmed Area to Win, and the important topics competitors cover.
+Build only after target-audience data is present in the document or Khanh has confirmed it for this topic. Build from: the keyword, the evidence-based Insights, the target audience, the Stage 2 SERP analysis, the confirmed Area to Win, and the important topics competitors cover.
 
 ### Sizing
 
@@ -82,7 +88,7 @@ Headings are natural, merchant-focused and keyword-relevant without stuffing. Ou
 
 ### Self-check before sending
 
-Run through `references/team-lessons.md` and confirm: no section drifts from intent; no two headings overlap; each heading delivers what it promises; no trivial FAQ; metric/benchmark/TrueProfit points follow the team rules; total size fits a 2,000-word article.
+Run through `references/team-lessons.md` and confirm: target audience is documented or confirmed; Insights uses the supplied AI answers and combined URL evidence; no section drifts from intent; no two headings overlap; each heading delivers what it promises; no trivial FAQ; metric/benchmark/TrueProfit points follow the team rules; total size fits a 2,000-word article.
 
 ## Writing into a Google Doc
 
