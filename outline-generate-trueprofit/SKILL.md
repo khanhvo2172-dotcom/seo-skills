@@ -38,16 +38,16 @@ Output a section titled **Insights**: exactly one short, practical paragraph syn
 
 Then stop before Area to Win unless the user has already requested that stage. Do not ask for evidence already supplied in the document or conversation.
 
-## Stage 2: Area to Win (needs SERP evidence)
+## Stage 2: Choose the Area to Win section (needs SERP evidence)
 
 Use the evidence read for Insights and any new ranking URLs, AI Overview / AI Mode text, screenshots or notes supplied afterward. Read new sources as needed; reuse the existing analysis instead of refetching unchanged pages. Note what the pages and AI answers cover, who they address, and which concrete merchant decisions they leave unresolved.
 
-Output a section titled **Area to Win**: exactly one concise paragraph naming one specific, executable gap or angle that:
-- addresses a real decision or need of Shopify merchants;
-- clearly differs from what competitors cover, rather than "more information";
-- is not a generic SEO angle and does not force TrueProfit in (profit is often the natural angle, but only when the topic supports it).
+Choose one specific, executable angle to deliver through a real H2 or H3 inside the outline. The section must:
+- address a real decision or need of Shopify merchants;
+- clearly differ from what competitors cover, rather than "more information";
+- avoid a generic SEO angle and forced TrueProfit promotion (profit is often the natural angle, but only when the topic supports it).
 
-Keep it one paragraph even in chat, because the user pastes it into a Doc. Then stop and wait for confirmation or an instruction to proceed. A request to "build the outline" or "paste it into the doc" counts as confirmation.
+When this stage is requested separately, propose the actual merchant-facing heading tagged `(area to win)` and one concise `Coverage:` line, then wait for confirmation or an instruction to proceed. A request to "build the outline" or "paste it into the doc" counts as confirmation. In the completed outline or Google Doc, place this heading and its coverage in the outline itself. Do not create a separate `Area to Win` section or competitor-gap paragraph outside the outline. This supersedes the earlier standalone-paragraph format (Khanh, October 27, 2026).
 
 ## Stage 3: Outline
 
@@ -88,14 +88,14 @@ Headings are natural, merchant-focused and keyword-relevant without stuffing. Ou
 
 ### Self-check before sending
 
-Run through `references/team-lessons.md` and confirm: target audience is documented or confirmed; Insights uses the supplied AI answers and combined URL evidence; no section drifts from intent; no two headings overlap; each heading delivers what it promises; no trivial FAQ; metric/benchmark/TrueProfit points follow the team rules; total size fits a 2,000-word article.
+Run through `references/team-lessons.md` and confirm: target audience is documented or confirmed; Insights uses the supplied AI answers and combined URL evidence; no section drifts from intent; no two headings overlap; the Area to Win is a concrete heading/section within the outline with no separate analysis block; each heading delivers what it promises; no trivial FAQ; metric/benchmark/TrueProfit points follow the team rules; total size fits a 2,000-word article.
 
 ## Writing into a Google Doc
 
 When the user asks to put the result in a Doc, write into the tab whose name contains "outline" (or the tab they name), keeping any existing content and other tabs untouched. Use the shared `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` helper for every Docs read/edit; read its adjacent README first. Use `tabs` and a separate `dump --tab <title-or-id>` per source. Do not use browser editing, a flattened all-tabs reader or a one-off Docs API script. For tables/styles or other operations beyond the CLI, use the README's `gdocs.read`/`gdocs.guarded_batch` module interface, with a fresh revision and explicit tab IDs. Dry-run or inspect the exact request plan before applying, then read back text, links, formatting and unchanged sibling tabs.
 
-Team tab layout, top to bottom: Insights → Area to Win → Top url (the ranking URLs) → Outline → (Internal Link Suggestions and Further Reading, added later by the internal-link workflow) → pasted AI Overview / AI Mode.
+Team tab layout, top to bottom: Insights and confirmed Target audience, retaining any existing keyword table at the beginning; Top url (the ranking URLs); Outline, including the heading tagged `(area to win)`; Internal Link Suggestions and Further Reading when separately requested; pasted AI Overview / AI Mode. Never add a standalone Area to Win section outside the outline.
 
-Styles: section titles (Insights, Area to Win, Outline) as Heading 2; `H1.`/`H2.` lines as Heading 3; `H3.` lines as Heading 4; Coverage, Writer note and Answer coverage lines as normal text; any bullets as real Docs bullets, never typed markers. Read the tab back and verify text and styles before reporting.
+Styles: section titles (Insights, Outline) as Heading 2; `H1.`/`H2.` lines as Heading 3; `H3.` lines as Heading 4; Coverage, Writer note and Answer coverage lines as normal text; any bullets as real Docs bullets, never typed markers. Read the tab back and verify text and styles before reporting.
 
 Internal-link suggestions are a separate step (`suggest-internal-links` skill or the team's internal-link workflow); offer it after the outline is accepted rather than doing it unasked.
