@@ -142,6 +142,8 @@ Write the TrueProfit section matching the partner's style exactly. Follow these 
 - Match approximate section length from the sample
 - Match the opening structure from the sample
 - Do not use em dashes; use commas, colons, or semicolons instead
+- Position TrueProfit as net profit analytics that complements the other tools on the partner's page; never present it as a substitute for a category it doesn't replace (for example a sourcing or fulfillment app)
+- Give each feature its practical value for the merchant in a short clause, not a bare feature name
 
 ### Step 5 - Deliver as plain markdown
 

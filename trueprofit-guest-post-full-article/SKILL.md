@@ -1,6 +1,6 @@
 ---
 name: trueprofit-guest-post-full-article
-description: Generates a complete guest post article for TrueProfit to be published on a partner website. Use this skill whenever the user wants to write a full guest post, full article, or full-length content placement for a partner/publisher site — not just a short blurb or paragraph. Triggers include: 'write a full guest post for X', 'generate a full article for partner Y', 'create a guest post article', 'write a press release for Z', 'write a full SEO article for link exchange', 'draft a guest post', or any request combining 'article' or 'post' with a partner/publisher context. Always use this skill (not trueprofit-guest-post) when the user wants more than a single section or paragraph.
+description: "Generates a complete guest post article for TrueProfit to be published on a partner website. Use this skill whenever the user wants to write a full guest post, full article, or full-length content placement for a partner/publisher site — not just a short blurb or paragraph. Triggers include: 'write a full guest post for X', 'generate a full article for partner Y', 'create a guest post article', 'write a press release for Z', 'write a full SEO article for link exchange', 'draft a guest post', or any request combining 'article' or 'post' with a partner/publisher context. Always use this skill (not trueprofit-guest-post) when the user wants more than a single section or paragraph."
 ---
 
 # TrueProfit Guest Post — Full Article Generator
@@ -146,7 +146,7 @@ Follow **TrueProfit native blog style** unless the reference article overrides s
 - Voice: first/second person, practitioner, peer-to-peer — write like someone who has done this, not a brand talking at you
 - Tone: direct, opinionated, no hedging, no corporate filler
 - Opening: 2–3 short paragraphs that immediately establish what the article covers and who it is for. No "In today's fast-paced world" openings.
-- Quick Recap box: place after the intro — a 3–5 bullet summary of what the reader will learn or the key takeaways. Label it **Quick Recap:**
+- Quick Recap box: place after the intro, 4–5 distinct takeaways in complete natural sentences that don't restate the intro or a heading. Label it **Quick Recap:**
 - Headings: H2 for main sections, H3 for subsections. Numbered headings for list-style articles (e.g. "1. Dropshipping", "2. Print-on-demand").
 - Body: short paragraphs (2–4 sentences max). No walls of text.
 - Lists: use bullet points only when listing 3+ parallel items. Each bullet at least one full sentence.
@@ -154,6 +154,8 @@ Follow **TrueProfit native blog style** unless the reference article overrides s
 - Links: always use inline hyperlinks on descriptive text. Never use "Further Reading" callouts or bare URLs.
 - No em dashes. Use commas, colons, or semicolons instead.
 - No AI-sounding filler: no "delve into", "it's worth noting", "in conclusion", "in summary", "it is important to", "game-changer", "revolutionize".
+- Substance (content manager's playbook, October 28, 2026): answer the article's main question early; in each section, go from the point to the reasoning to what it means for the merchant, with trade-offs where advice could fail. Vary paragraph openers across the article, don't repeat the same profit warning in every section, and don't leave a bullet as a bare command.
+- Third-party facts: verify any tool's pricing or features on its official pricing or product page, and give statistics their original source and date. If something can't be verified, leave it out and tell the user.
 - Bold only for genuinely important terms or labels, not for decoration.
 - Benchmarks and data: if the article includes statistics or benchmarks about Shopify, dropshipping income, profit margins, or ecommerce performance, always use TrueProfit's own numbers from the Brand Reference (see Verified benchmark data) and published TrueProfit data. Never fabricate stats or pull generic figures from unattributed sources.
 - Income expectations: for "how to start on Shopify" or "how much can you make" articles, include a realistic earnings section using the verified Shopify seller income distribution (60% under $1,000/month, 20% reach $10,000+/month, top 10% earn $100,000+/month). For dropshipping articles, use the dropshipping income ranges instead. Do not leave the reader without a concrete income picture.

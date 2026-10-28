@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write TrueProfit SEO Article"
+  short_description: "Draft or minimally update TrueProfit blog articles to the playbook"
+  default_prompt: "Use $write-trueprofit-seo-article to draft this article from its approved outline (or update the existing article with minimal, verified edits) and end with the handoff note."

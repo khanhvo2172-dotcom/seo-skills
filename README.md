@@ -3,7 +3,7 @@
 > A collection of [Claude Code](https://claude.ai/code) skills for SEO content localization, digital PR screening, reporter response drafting, guest post content, link exchange email briefings, and YouTube community seeding - built for TrueProfit's ecommerce marketing workflow.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet?logo=anthropic)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-22-brightgreen)](#skills)
+[![Skills](https://img.shields.io/badge/Skills-23-brightgreen)](#skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -278,8 +278,11 @@ Keyword / Target Audience / Total count / Branded count / Direction / Issues / S
 
 ---
 
+### `write-trueprofit-seo-article`
+Drafts a full TrueProfit article from an approved outline, or updates an existing article with the smallest verified edits, following the content team's editorial standard. Ends with a handoff note (what changed, why, facts to confirm, open questions) and stops to ask on unsourced claims, conflicting sources, intent or cannibalization conflicts, or TrueProfit overstatement.
+
 ### `humanizer`
-Humanizes pasted text or edits wording directly in the existing Google Doc (normally Final), preserving meaning, links and formatting. Uses the shared Docs helper; Markdown review files are opt-in.
+Humanizes pasted text or edits wording directly in the existing Google Doc (normally Final), preserving meaning, links and formatting. For TrueProfit articles it makes minimal edits in the team voice (no em dashes, no repeated openers). Uses the shared Docs helper; Markdown review files are opt-in.
 
 ### `suggest-internal-links`
 Maps links to outline headings without anchor suggestions, using live pillar/sub-pillar labels, relevant tools and metrics, plus 2–3 missing hubs for Further Reading.

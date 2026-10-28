@@ -83,7 +83,18 @@ different structures. Prioritize:
   and conditional requirements from universal rules where relevant.
 - **Batch overlap:** If related outlines overlap, briefly define which article owns
   each subject and suggest a cross-link instead of repeating a full section.
+- **Site overlap:** If the outline would compete with an existing trueprofit.io
+  article for the same query, flag it in the overview and ask Khanh which page owns
+  the topic.
+- **Heading jobs and titles:** Each heading needs a distinct job; flag headings that
+  exist only to fit a keyword. Flag an H1 built as keyword plus generic descriptor
+  or keyword-colon formula, and excessive colon-led headings.
+- **Roundups:** Apps should be chosen by the keyword's intent. Each app needs room
+  for positioning, Key Features, verified Pricing, Best For and, only with reliable
+  review evidence, Customer Sentiment. Flag TrueProfit placed first by default or
+  framed as a substitute for a category it doesn't replace.
 
+These checks follow the content manager's writing playbook (October 28, 2026).
 Do not add headings simply because a competitor has them, to lengthen the article,
 or to cover every related keyword. Keep relevant existing coverage. Explain why
 an addition helps this reader, even when a reference page already includes it.

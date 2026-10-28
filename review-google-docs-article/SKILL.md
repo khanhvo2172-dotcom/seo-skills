@@ -4,7 +4,9 @@ description: >-
   Review a TrueProfit Google Docs article before publishing. Use for article QA,
   internal/external links and citations, CTA images, Further Reading formatting
   and placement, FAQ redundancy, AI tracking params, or fact-checking sentences
-  marked [Inference], [Speculation], or [Unverified]. Compare the full article
+  marked [Inference], [Speculation], or [Unverified]. Also runs an editorial
+  quality pass from the content manager's playbook (intent, accuracy, voice,
+  SEO, TrueProfit fit, roundups, recap/FAQ/closing). Compare the full article
   structure with its outline tab and prioritize factual accuracy. Review the selected
   article tab, using its outline tab only as the structure baseline. Produce
   recommendations, with the existing authorized exceptions
@@ -16,9 +18,9 @@ description: >-
 
 This skill runs a structured pre-publish QA review of a TrueProfit blog article that lives
 in a Google Doc. The review is deliberately **modular** — each step is a self-contained QA
-pass with its own reference file. Steps 1-7 cover links, CTA image, Further Reading,
-FAQ redundancy, AI tracking params, fact verification, and article-versus-outline
-structure comparison. Prioritize factual accuracy and departures from the outline;
+pass with its own reference file. Steps 1-8 cover links, CTA image, Further Reading,
+FAQ redundancy, AI tracking params, fact verification, article-versus-outline
+structure comparison, and the editorial quality pass. Prioritize factual accuracy and departures from the outline;
 avoid unsolicited stylistic restructuring. Future steps slot in the same way.
 
 ## Shared Google Docs access on this PC
@@ -29,7 +31,8 @@ Use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` for Docs reads and
 
 1. Default to **all available steps** unless the user specifies a subset. Compare
    the article with the outline first (Step 7), prioritize fact verification (Step 6),
-   then run the other checks in their existing order (1 -> 2 -> 3 -> 4 -> 5).
+   then run the other checks in their existing order (1 -> 2 -> 3 -> 4 -> 5), and
+   finish with the editorial quality pass (Step 8).
 2. For each requested step, open its reference file and follow it exactly.
 3. Deliver findings as a **report in chat**, focusing detail only on items requiring
    review, a decision, or an edit. For each actionable item, give its location, the
@@ -46,6 +49,9 @@ Use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` for Docs reads and
    link, CTA, Further Reading, FAQ, and tracking checks remain unchanged. Step 6
    automatically removes tags only from fully verified sentences; unresolved tags
    remain until verified, including by the user when their confirmation is needed.
+6. Put any stop-and-ask item from Step 8 at the top of the report. End with a short
+   handoff note: what changed in the Doc (auto-edits only), why, facts that still
+   need confirmation, and unresolved questions or source gaps.
 
 ## Available steps
 
@@ -58,9 +64,10 @@ Use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` for Docs reads and
 | 5 | AI tracking params | `references/step-5-ai-tracking-params.md` | Detects **and removes** AI-tool `utm_source` params (chatgpt, claude, perplexity, gemini, …) from every link in the tab, incl. tables; keeps all other params |
 | 6 | Fact verification | `references/step-6-marked-sentence-fact-check.md` | Verifies all marked sentences and material factual claims across the article against sources; reports actionable findings and automatically removes only verified sentence tags, preserving the sentences; keeps unresolved tags |
 | 7 | Article structure vs. outline | `references/step-7-article-outline-comparison.md` | Compares the full article with its outline tab to detect missing sections, wrong headings or hierarchy/order, extra sections, and content that fails to deliver the outlined topic (report-only) |
+| 8 | Editorial quality | `references/step-8-editorial-quality.md` | Content manager's playbook checks: intent, pricing/statistics accuracy, logic, depth, voice (incl. em dashes), title/meta/anchors/clean source URLs, TrueProfit fit, app-roundup structure, Quick Recap 4–5 and closing; stop-and-ask triggers (report-only) |
 
 Steps 2 and 3 share one pass over the doc's headings, so `scripts/review_structure.py`
-runs both together. Steps 4, 6, and 7 require model judgment; Step 6 also requires source
+runs both together. Steps 4, 6, 7 and 8 require model judgment; Step 6 also requires source
 research. Run Step 6 for a full review or a fact-check request even if the internal-link
 check is skipped or no internal-link candidate list is available. The bracketed labels
 are sentence notes in the selected tab, not instructions to review sibling tabs.

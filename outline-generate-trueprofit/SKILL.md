@@ -34,7 +34,9 @@ Input: the main keyword, supplied AI Overview and AI Mode answers, and the combi
 1. Read each distinct ranking URL's headings and main content. If a fetch fails, try an available alternate reader and disclose any page that remains inaccessible; do not guess its coverage.
 2. Compare the keyword's likely intent with the questions, formats, audiences and information emphasized across the AI answers and ranking pages.
 
-Output a section titled **Insights**: exactly one short, practical paragraph synthesizing the primary search intent, what searchers actually want, the information they expect, and the content type that best satisfies that need. Base it on the keyword intent, AIO, AI Mode and ranking URLs together, not the keyword alone. Distinguish observed search intent from an audience that still needs Khanh's confirmation.
+Output a section titled **Insights**: exactly one short, practical paragraph synthesizing the primary search intent, what searchers actually want, the information they expect, and the content type that best satisfies that need (list, tutorial, comparison, review, benchmark, checklist or definition). End the paragraph with a one-sentence job-to-be-done, such as "Help a Shopify merchant compare dropshipping apps and choose tools that fit their workflow." Base it on the keyword intent, AIO, AI Mode and ranking URLs together, not the keyword alone. Distinguish observed search intent from an audience that still needs Khanh's confirmation.
+
+If the keyword overlaps an existing trueprofit.io article closely enough that the two pages could compete, say so and ask Khanh before outlining.
 
 Then stop before Area to Win unless the user has already requested that stage. Do not ask for evidence already supplied in the document or conversation.
 
@@ -59,6 +61,7 @@ Articles are 1,500–2,000 **words** and are drafted with the outline locked: ev
 - Put the core search intent in the first two H2s; the Area to Win is the key differentiation, usually one H2 (or one H2 per idea type) tagged `(area to win)`.
 - Aim for about 4–6 core H2s. Merge or cut anything that overlaps; every heading must earn its place.
 - Listicles: each item is its own numbered H2 (`H2. 1. ...`), typically 6–10 items for a 2,000-word ceiling. A comparison or summary table H2 can open the list. Product/business-idea listicles need a summary table. For "best X" keywords, help merchants decide rather than multiplying categories.
+- Tool/app roundups: choose apps by the keyword's intent and the reader's needs. Each app's Coverage line names the per-app parts: short positioning, Key Features relevant to the intent, verified Pricing, Best For, and Customer Sentiment only when reliable review patterns exist. Place TrueProfit where profit tracking complements the other tools, never first by default and never as a substitute for a category it doesn't replace.
 - FAQs: 1–3, only questions the body does not already answer and that are not obvious.
 - Include a TrueProfit-related point only where it genuinely fits (usually the profitability/measurement section).
 - End with Final Thoughts.
@@ -84,11 +87,11 @@ Answer coverage: ...
 Coverage: [the next action for the merchant, without repeating the article]
 ```
 
-Headings are natural, merchant-focused and keyword-relevant without stuffing. Output only the outline in this stage, not prose.
+Organize headings around the reader's decision or task, not a keyword list. Give each heading a distinct job, and never add a heading just to fit a related keyword. Headings are natural, merchant-focused and keyword-relevant without stuffing. The H1 states the article's real value; avoid the keyword-plus-generic-descriptor or keyword-colon formula. Output only the outline in this stage, not prose.
 
 ### Self-check before sending
 
-Run through `references/team-lessons.md` and confirm: target audience is documented or confirmed; Insights uses the supplied AI answers and combined URL evidence; no section drifts from intent; no two headings overlap; the Area to Win is a concrete heading/section within the outline with no separate analysis block; each heading delivers what it promises; no trivial FAQ; metric/benchmark/TrueProfit points follow the team rules; total size fits a 2,000-word article.
+Run through `references/team-lessons.md` and confirm: target audience is documented or confirmed; Insights uses the supplied AI answers and combined URL evidence and ends with a job-to-be-done; the format matches the intent; no section drifts from intent; no two headings overlap; the Area to Win is a concrete heading/section within the outline with no separate analysis block; each heading delivers what it promises; no trivial FAQ; metric/benchmark/TrueProfit points follow the team rules; total size fits a 2,000-word article.
 
 ## Writing into a Google Doc
 

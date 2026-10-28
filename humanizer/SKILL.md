@@ -42,6 +42,15 @@ Use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` for every Docs rea
 
 On a revision conflict, reread and rebuild the edits. Verify the text and links after applying, then report a concise change summary and links to the edited Docs. Do not use browser edits or one-off Docs API scripts.
 
+## TrueProfit articles
+
+For TrueProfit blog content, the content manager's writing playbook (October 28, 2026) sets the voice. Where it differs from the general guidance in this skill, the playbook wins.
+
+- **Smallest edit.** Change only sentences that show AI patterns or break the rules below. Keep accurate, natural copy as it is; do not rewrite good sentences just to make them sound different, and never change facts, figures, headings or the outline.
+- **Voice.** Conversational-professional and practical, like an experienced operator explaining what works and why. Skip the "Personality and soul" advice about humor, edge, tangents, half-formed thoughts and emotional reactions. Use "I recommend" sparingly and only when it adds judgment; never invent first-person experience.
+- **Always fix:** every em dash (none are allowed, not just overuse); the same paragraph opener repeated across the article ("Most merchants", "If…", "Once…", "Here's the thing"); generic AI openings and conclusions; empty claims such as "this is crucial for success" with no explanation; awkward exact-match keyword insertions; excessive colon-led headings; bullets that are only a command with a period (add the short reason or fold them into prose); choppy one-sentence paragraphs where the idea needs 2–4 lines; the same profitability warning repeated in several sections.
+- **Handoff note.** End with a short note: what changed, why, any facts that need confirmation, and open questions.
+
 ## PERSONALITY AND SOUL
 
 Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as obvious as slop. Good writing has a human behind it.

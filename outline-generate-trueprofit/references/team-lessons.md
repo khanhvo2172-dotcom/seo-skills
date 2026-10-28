@@ -11,6 +11,7 @@ Distilled from the October 2026 outlines in the SEO sheet `Content Plan 10/2026`
 6. TrueProfit and sister products
 7. Practical advice
 8. Example outline in team format
+9. Content manager playbook (October 28, 2026)
 
 ## 1. Intent and audience
 
@@ -101,3 +102,15 @@ Answer coverage: Public research establishes a baseline; an optional purchase re
 ```
 
 Listicle variant ("christmas marketing ideas"): a first H2 comparing ideas by budget, effort and time (area to win), then one numbered H2 per idea (`H2. 1. Launch a Christmas Countdown or Advent Calendar Campaign`) with one Coverage line each, a measurement H2 (area to win), two FAQs.
+
+## 9. Content manager playbook (October 28, 2026)
+
+The content manager's writing playbook and SOP set these outline-stage rules on top of the lessons above:
+
+- Write the article's job-to-be-done in one sentence before outlining, and match the format to the intent.
+- Use the SERP to learn expectations, not to copy competitors' structure or claims. Separate recurring SERP patterns from facts that still need independent verification.
+- Area to Win candidates: a missing decision criterion, an unclear explanation, a stale detail, a weak comparison, an unsupported claim or missing practical guidance.
+- Each heading has a distinct job; if two headings would get nearly the same answer, merge them or sharpen their scope.
+- Plan internal links while outlining, where the destination naturally helps the reader continue.
+- Roundups: choose apps by intent; per app cover positioning, Key Features, verified Pricing, Best For, optional evidence-based Customer Sentiment. TrueProfit is not first by default.
+- Stop and ask Khanh when the outline seems to conflict with search intent or with another existing trueprofit.io page.

@@ -73,9 +73,12 @@ unless they are confirmed in the rendered heading.
 ### 2. Quick Recap
 
 Report whether it exists, its number of bullets, and its location relative to the introduction
-and first H2. Do not judge claims or rewrite the recap unless the user asks for content review.
+and first H2. The team standard is 4–5 distinct takeaways (content manager's playbook, October
+28, 2026); flag a recap with fewer than 4 or more than 5 bullets as a count issue only. Do not
+judge claims or rewrite the recap unless the user asks for content review.
 An explicit request for a replacement recap also authorizes that narrow rewrite; base it on
-the current article rather than a generic template.
+the current article rather than a generic template. A replacement recap uses 4–5 complete,
+natural sentences, each a distinct takeaway that doesn't restate the introduction or a heading.
 
 ### 3. Further Reading
 
