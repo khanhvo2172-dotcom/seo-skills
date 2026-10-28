@@ -22,8 +22,8 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 - Generic AI openings, empty claims, repetitive conclusions, formulaic transitions.
 - Keyword stuffing and unnatural exact-match phrases.
 - Corporate, academic, overly casual or chatbot wording.
-- The same paragraph opener repeated across the article ("Most merchants", "If…", "Once…", "Here's the thing").
-- Em dashes (none at all), excessive colon-led headings, and titles built as keyword plus a generic descriptor.
+- The same paragraph opener starting three or more paragraphs ("Most merchants", "If…", "Once…", "Here's the thing"). Deliberate repeated labels in parallel list entries are fine.
+- Em dashes (none at all, including tables, captions, alt text and the meta description), excessive colon-led headings, and titles built as keyword plus a generic descriptor.
 - Bullets that are only a short command and a period. Bullets help scanning; they don't replace analysis.
 - Over-explaining basics, or repeating the same profitability warning in every section.
 - Generic claims like "this is crucial for success" unless the next sentence explains exactly why.
@@ -70,7 +70,7 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 
 ## Closing sections
 
-- **Quick Recap:** 4–5 distinct takeaways in complete natural sentences; none restates the introduction or simply repeats a heading.
+- **Quick Recap:** 4–5 distinct takeaways in complete natural sentences; none restates the introduction or simply repeats a heading. In list articles a bullet can name items if it adds the reason or decision.
 - **FAQs:** answer directly and briefly, then add the one clarification a reader needs. Genuine secondary questions only; don't copy body paragraphs.
 - **Final Thoughts:** a practical conclusion or decision principle. No generic wrap-up ("In today's competitive landscape…") and no replay of the whole article.
 

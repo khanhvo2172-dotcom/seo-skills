@@ -83,12 +83,17 @@ different structures. Prioritize:
   and conditional requirements from universal rules where relevant.
 - **Batch overlap:** If related outlines overlap, briefly define which article owns
   each subject and suggest a cross-link instead of repeating a full section.
-- **Site overlap:** If the outline would compete with an existing trueprofit.io
-  article for the same query, flag it in the overview and ask Khanh which page owns
-  the topic.
+- **Site overlap:** Check titles and slugs in `https://trueprofit.io/blog.xml` (more
+  reliable than `site:` searches). If an existing article targets the same main
+  keyword or the same primary intent, put an ownership question for Khanh above the
+  overview table and continue the rest of the review. Overlap on a single sub-keyword,
+  section or FAQ is not an ownership question: recommend a cross-link or a shorter
+  section in that heading's row.
 - **Heading jobs and titles:** Each heading needs a distinct job; flag headings that
-  exist only to fit a keyword. Flag an H1 built as keyword plus generic descriptor
-  or keyword-colon formula, and excessive colon-led headings.
+  exist only to fit a keyword. Flag an H1 whose descriptor could fit any article
+  (for example "Shopify Analytics: Everything You Need to Know" or "... Explained"),
+  and more than one or two colon-led headings. A numbered listicle H1 with a concrete
+  promise is fine.
 - **Roundups:** Apps should be chosen by the keyword's intent. Each app needs room
   for positioning, Key Features, verified Pricing, Best For and, only with reliable
   review evidence, Customer Sentiment. Flag TrueProfit placed first by default or

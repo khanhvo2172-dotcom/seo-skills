@@ -68,9 +68,9 @@ An update is not a mandate to rewrite. Change content only where there is a clea
 
 Pause and ask, rather than guess, when:
 
-- a material claim has no reliable source and can't be safely qualified;
+- a material claim has no reliable source and can't be safely qualified (pause only that claim; keep drafting the rest);
 - official sources disagree, or pricing or feature availability is unclear;
-- the outline or article conflicts with search intent or another existing trueprofit.io page;
+- the outline or article conflicts with search intent, or another trueprofit.io page targets the same main keyword or primary intent (check `https://trueprofit.io/blog.xml`; overlap on one section only needs a cross-link);
 - a requested claim would overstate TrueProfit or present it as a substitute for an unrelated tool.
 
 ## Handoff note

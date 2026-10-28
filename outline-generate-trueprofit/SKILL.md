@@ -36,7 +36,7 @@ Input: the main keyword, supplied AI Overview and AI Mode answers, and the combi
 
 Output a section titled **Insights**: exactly one short, practical paragraph synthesizing the primary search intent, what searchers actually want, the information they expect, and the content type that best satisfies that need (list, tutorial, comparison, review, benchmark, checklist or definition). End the paragraph with a one-sentence job-to-be-done, such as "Help a Shopify merchant compare dropshipping apps and choose tools that fit their workflow." Base it on the keyword intent, AIO, AI Mode and ranking URLs together, not the keyword alone. Distinguish observed search intent from an audience that still needs Khanh's confirmation.
 
-If the keyword overlaps an existing trueprofit.io article closely enough that the two pages could compete, say so and ask Khanh before outlining.
+Check titles and slugs in `https://trueprofit.io/blog.xml`. If an existing trueprofit.io article targets the same main keyword or primary intent, say so and ask Khanh before outlining. Overlap on one sub-keyword or section only needs a cross-link in the outline.
 
 Then stop before Area to Win unless the user has already requested that stage. Do not ask for evidence already supplied in the document or conversation.
 
