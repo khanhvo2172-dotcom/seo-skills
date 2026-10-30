@@ -35,7 +35,7 @@ Right after the introduction, 4–5 distinct takeaways in complete natural sente
 
 ## Links
 
-- Internal anchors vary naturally and stay close to the destination's intent; keep meaningful qualifiers and the action verb when useful. A verified benchmark figure can be the anchor. Don't repeat one exact-match anchor.
+- Internal anchors vary naturally and stay close to the destination's intent; keep meaningful qualifiers and the action verb when useful. A verified benchmark figure can be the anchor. Don't repeat one exact-match anchor. Develop the current answer before sending readers to a broad guide; optional wider context belongs in relevant Further Reading. Keep early links that directly support the explanation, and do not invent a bridge sentence just to fit an assigned URL.
 - No external links in the body; 3–5 clean external reference links at the end under a bold **References** label if the outline has no heading for them.
 - Further Reading: a simple `Further Reading:` label and separate related link lines, never a table. During trigger preparation, use each destination’s verified article title as clickable anchor text, preserving its URL, order and native list structure. Never revert verified title anchors to bare URLs; leave an unverifiable title unchanged and report the gap.
 - Free tools: a plain `Content Highlight` line on its own, followed by a `Pro Tips: Use our free ...` paragraph with a natural link and any relevant limitation.

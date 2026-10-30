@@ -180,4 +180,8 @@ Deliver in chat with this shape:
 <2–4 sentence summary: what to add, what to remove, what to fix before publishing>
 ```
 
-Keep it scannable — the user applies these edits in the Doc by hand.
+Keep it scannable. Route approved substantive edits through the designated writing/image agents in the main skill; this report does not authorize copy changes.
+
+## Link timing and section fit
+
+A natural anchor still needs the right moment. Let the section deliver its immediate answer before sending the reader to a broad Shopify/marketing guide. Keep early links that directly support the explanation; move optional wider context to relevant Further Reading rather than adding filler to justify a supplied URL. Report this as a small location-specific recommendation, not an automatic copy edit.

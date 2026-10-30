@@ -4,6 +4,8 @@ Khanh rejected literal scene descriptions as sounding like alt text, then approv
 
 Write the caption from the source page and the surrounding section. Help a reader understand the idea, offer or story represented by this specific example. One useful sentence is usually enough; add a second only when a date, adaptation or qualification matters. Avoid a fixed formula across every image, repeating the section heading, or inventing performance results.
 
+A visible caption is useful only when it adds context. Omit one that merely repeats an adjacent instruction under a self-explanatory tool/dashboard screenshot; keep required attribution separate and preserve pending human suggestions.
+
 ## Approved examples
 
 **John Lewis, The Bear and the Hare**

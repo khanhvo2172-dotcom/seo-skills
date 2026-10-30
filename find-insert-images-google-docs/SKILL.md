@@ -44,6 +44,10 @@ Keep screenshots focused on the relevant page or creative, with readable content
 
 For caption work, read [references/contextual-captions.md](references/contextual-captions.md). Explain the campaign/story, the offer or product role, and why the image belongs in this section. Usually one concise sentence is enough. Do not just list visible objects and colors; keep that separate for alt text.
 
+Native dimensions alone do not establish sharpness. Inspect detail and legibility at the intended article width; a larger screenshot of a blurry source does not restore detail. Choose a sharper native frame/source. Each screenshot should teach a distinct part of the task; explain separate field views or omit a redundant view when authorized. Prefer current authentic interfaces where recency matters, without relabeling an old source.
+
+Captions are conditional: omit a description that merely repeats the neighboring instruction under a self-explanatory tool/dashboard image. Assess attribution separately and retain required Source credits. Preserve pending human caption deletions as suggestions unless their acceptance is authorized.
+
 Keep historical and adapted examples accurate: a Black Friday email used as a Christmas-format example must be labeled Black Friday; an old delivery deadline is a historical example; a January thank-you discount is not automatically exclusive to Christmas purchasers. Avoid unsupported claims about sales, conversions or campaign success.
 
 ## Insert, replace or revise in the same Doc
