@@ -89,7 +89,7 @@ different structures. Prioritize:
   overview table and continue the rest of the review. Overlap on a single sub-keyword,
   section or FAQ is not an ownership question: recommend a cross-link or a shorter
   section in that heading's row.
-- **Heading jobs and titles:** Each heading needs a distinct job; flag headings that
+- **Heading jobs and titles:** Prefer natural, varied titles; the keyword need not always come first. Recommend **Main Keyword FAQs** for the FAQ section label while reviewing each question separately. Each heading needs a distinct job; flag headings that
   exist only to fit a keyword. Flag an H1 whose descriptor could fit any article
   (for example "Shopify Analytics: Everything You Need to Know" or "... Explained"),
   and more than one or two colon-led headings. A numbered listicle H1 with a concrete

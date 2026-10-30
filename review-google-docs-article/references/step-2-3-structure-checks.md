@@ -34,7 +34,7 @@ The insertion is **idempotent** — if an `Image: …` trigger already sits abov
 
 ### 3a. Format — label and separate link lines (auto-fix)
 
-Use a simple label followed by each link on its own line; preserve the user's edited plain-URL format and do not create a table:
+Use a simple label followed by each link on its own line; preserve URLs and existing anchor text, and do not create a table:
 
 ```
 Further Reading:
@@ -47,7 +47,7 @@ label itself, or drop the colon. `scripts/fix_further_reading.py` fixes all of
 these: it splits each link onto its own line, deletes leftover separators between
 links (spaces, commas, `|`, dashes, soft breaks), removes a bullet from the label,
 adds the missing colon. Existing separate plain lines are already valid; bullets are optional and must not be forced onto them. Links,
-anchor text and text styles are untouched.
+anchor text and text styles are untouched. Never turn existing verified article-title anchors back into bare URLs. The later trigger-preparation workflow verifies destination titles and updates bare-URL anchors; this format-only script does not fetch titles or replace anchors.
 
 This fix is **pre-authorized** (no confirmation needed). Run it **before** the
 placement check; placement detection accepts plain URLs and existing linked bullets:

@@ -62,6 +62,7 @@ Articles are 1,500–2,000 **words** and are drafted with the outline locked: ev
 - Aim for about 4–6 core H2s. Merge or cut anything that overlaps; every heading must earn its place.
 - Listicles: each item is its own numbered H2 (`H2. 1. ...`), typically 6–10 items for a 2,000-word ceiling. A comparison or summary table H2 can open the list. Product/business-idea listicles need a summary table. For "best X" keywords, help merchants decide rather than multiplying categories.
 - Tool/app roundups: choose apps by the keyword's intent and the reader's needs. Each app's Coverage line names the per-app parts: short positioning, Key Features relevant to the intent, verified Pricing, Best For, and Customer Sentiment only when reliable review patterns exist. Place TrueProfit where profit tracking complements the other tools, never first by default and never as a substitute for a category it doesn't replace.
+- FAQ section heading: **Main Keyword FAQs**, such as **Shopify Tips FAQs**. Titles should vary naturally; the main keyword need not always open the H1.
 - FAQs: 1–3, only questions the body does not already answer and that are not obvious.
 - Include a TrueProfit-related point only where it genuinely fits (usually the profitability/measurement section).
 - End with Final Thoughts.
@@ -80,7 +81,7 @@ Coverage: ...
 Coverage: ...
 ### H2. [Differentiating section] (area to win)
 Coverage: ...
-### H2. FAQs
+### H2. [Main Keyword] FAQs
 #### H3. [Question]?
 Answer coverage: ...
 ### H2. Final Thoughts

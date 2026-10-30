@@ -315,3 +315,7 @@ GET (`?context=edit&_cb=<timestamp>`, expect `cf-cache-status: MISS`).
 (Next.js/Cloudflare cache), so a review run against the public page can show issues already fixed
 at the source. Re-check each finding against `content.raw` and only edit what is genuinely still
 present there. The public page stays stale until the site revalidates.
+
+## Approved substantive revisions
+
+After the review, send approved article-copy changes to the Paseo agent **/writing-full-seo-article**, and image/screenshot/caption work to **/find-insert-images-google-docs**. Use a local file with exact edits, CMS/Doc identifiers and tab IDs, and obtain a per-item applied/skipped report. Keep the existing pre-authorized mechanical fixes and their conditions; a current explicit assignment to edit takes precedence. Do not show internal handoff messages in user-facing chat.

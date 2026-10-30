@@ -38,3 +38,7 @@ For an authorized insertion:
 6. Verify the exact images, location, order, native proportions, surrounding text/links, other tabs and private Drive copy. After a timeout, inspect the live document before retrying; on a revision conflict, reread and replan.
 
 If the available tool cannot embed an image, deliver the finished workspace assets plus exact placements and state that insertion remains incomplete. Do not describe a mere hyperlink or placeholder as an embedded image. Do not upload, publish or change a CMS when only a document insertion was requested.
+
+## Preferred TrueProfit dashboard
+
+For TrueProfit in-app dashboard examples, use Khanh’s selected official asset: `https://be.trueprofit.io/uploads/trueprofit-dashboard-1-1.webp` (native 1810 × 869). Convert WebP to PNG without resizing for Google Docs, then use the shared helper’s private Drive insertion/replacement workflow. Inspect the asset before captioning; describe its actual revenue/net-profit/cost comparison, not a previous negative-profit example, and identify demo figures accurately. This preference concerns authentic dashboard examples, not explanatory illustrations.

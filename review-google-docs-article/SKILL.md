@@ -59,7 +59,7 @@ Use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` for Docs reads and
 |---|------|----------------|----------------|
 | 1 | Internal & External Links | `references/step-1-internal-external-links.md` | Missing internal-link opportunities (with anchor-text proposals), duplicate links to remove, and external-reference accuracy (benchmark matching + DR≥65 authority + broken links) |
 | 2 | CTA image | `references/step-2-3-structure-checks.md` | Whether a `[cta]` marker qualifies for the CTA image (> 5 H2, Quick Recap excluded, FAQ counted) and, if so, **inserts** the CTA image trigger; warns on short articles |
-| 3 | Further Reading format + placement | `references/step-2-3-structure-checks.md` | **Auto-fixes** every block to a `Further Reading:` label plus separate link lines, preserving the user's plain-URL format (`scripts/fix_further_reading.py`), then warns when a block sits directly above the 2nd–5th H2 (report-only) |
+| 3 | Further Reading format + placement | `references/step-2-3-structure-checks.md` | **Auto-fixes** every block to a `Further Reading:` label plus separate link lines, preserving URLs and existing title anchors (`scripts/fix_further_reading.py`), then warns when a block sits directly above the 2nd–5th H2 (report-only) |
 | 4 | FAQ redundancy | `references/step-4-faq-redundancy.md` | Flags FAQ questions that duplicate a heading's intent or are already answered in the body (report-only, model-driven) |
 | 5 | AI tracking params | `references/step-5-ai-tracking-params.md` | Detects **and removes** AI-tool `utm_source` params (chatgpt, claude, perplexity, gemini, …) from every link in the tab, incl. tables; keeps all other params |
 | 6 | Fact verification | `references/step-6-marked-sentence-fact-check.md` | Verifies all marked sentences and material factual claims across the article against sources; reports actionable findings and automatically removes only verified sentence tags, preserving the sentences; keeps unresolved tags |
@@ -103,9 +103,9 @@ If a step's required input is missing, ask for it before running that step.
   (`read_file_content`) concatenates *every tab* into one blob — do **not** use it for this skill.
   Read article text with the shared helper's `dump --tab Final` or the resolved exact ID. It preserves links, tables and image markers. Read the outline separately for Step 7. Never concatenate tabs or flag outline notes as article content.
 - For comment-led review/revision, read every paginated thread, quoted anchor and reply, including resolved threads, before planning edits. Map each requirement to an edit or explicit preserve/no-change decision, respect newer user edits and exclusions, and verify each disposition. Do not claim comments were resolved merely because content was edited.
-- **Advisory by default; four exceptions.** Every step produces *recommendations* the user
-  applies themselves — **except Step 2's CTA insertion**, **Step 3a's Further Reading
-  separate-link formatting**, **Step 5's AI-param removal**, and **Step 6's verified-tag
+- **Approved content changes.** After presenting the review, route approved copy changes to the Paseo agent **/writing-full-seo-article** and image/screenshot/caption work to **/find-insert-images-google-docs**. Put exact edits and doc/tab IDs in a local handoff file; request a per-item applied/skipped report. Do not apply substantive article edits yourself as the reviewer. A current explicit instruction assigning you the edits takes precedence. Keep internal handoff messages out of user-facing chat.
+- **Advisory by default; four exceptions.** Every step produces *recommendations* — **except Step 2's CTA insertion**, **Step 3a's Further Reading
+  separate-link formatting** (retaining verified title anchors), **Step 5's AI-param removal**, and **Step 6's verified-tag
   removal**, which edit the Doc in place.
   Step 3a (`scripts/fix_further_reading.py`) is pre-authorized: dry-run, apply, re-verify. For Step 2 (`scripts/review_structure.py`), always dry-run and
   show the plan first; only `--apply` after the user confirms (especially the `utm_campaign`

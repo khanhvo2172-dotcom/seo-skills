@@ -1,6 +1,6 @@
 ---
 name: generate-reponse-emails-to-reporters
-description: Generate concise, reporter-ready email replies for PR opportunities, especially HARO, MentionMatch, Qwoted, or similar requests. Use when Codex needs to draft, refine, summarize, or create a response email from reporter questions, source notes, brand references, TrueProfit articles, customer examples, or expert quotes.
+description: Generate substantive, clearly formatted reporter-ready email replies for PR opportunities, especially HARO, MentionMatch, Qwoted, or similar requests. Use when Codex needs to draft, refine, summarize, or create a response email from reporter questions, source notes, brand references, TrueProfit articles, customer examples, or expert quotes.
 ---
 
 # Generate Reporter Response Emails
@@ -17,7 +17,7 @@ When pitching AI/SMB/productivity topics, focus on TrueProfit MCP: Shopify merch
 
 1. Identify the reporter, publication, deadline, request title, target source type, questions, and submission email if available.
 2. Use the user's provided links, article notes, and requested angle as the primary source of truth. If links are provided but not already summarized, browse or scrape them when current/source accuracy matters.
-3. Draft the email with a short intro, then answers under each reporter question.
+3. Draft the email with a relevant introduction, then developed answers under clearly labeled reporter questions. Use short paragraphs, selective bullets and a practical example when useful. Keep any requested short quote separately extractable; do not reduce a substantive attribution/POAS reply to a four-sentence quote-only pitch.
 4. Before the answers, include a short attribution line when requested, such as: `Here are some insights from our CEO, Harry Chu:`
 5. Include one concrete customer-style example per question when the user asks for examples.
 6. Keep examples believable and varied. Do not start every example with the same phrase.
@@ -42,7 +42,7 @@ Here are some insights from our CEO, Harry Chu:
 
 **1. [Reporter question]**
 
-[Direct answer in 1-2 short paragraphs.]
+[Direct answer with enough explanation to cover the requested angle; use labeled points or selective bullets when useful. Keep a requested short quote separately extractable.]
 
 Example: [Concrete customer-style example.]
 
@@ -64,7 +64,7 @@ Harry Chu's contact information:
 - Open with a hook that directly addresses the reporter's central topic. Do not lead with a narrower TrueProfit qualification; use that as the following sentence.
 - Prefer practical actions over generic advice.
 - Use `profit`, `margin`, `unit economics`, `net profit`, `average order profit`, `COGS`, `shipping`, `refunds`, `returns`, `CAC`, `LTV`, and `net profit on ad spend` when relevant.
-- Keep paragraphs short. Most answers should be 60-120 words including the example.
+- Keep paragraphs short. About 60–120 words can fit a focused answer, but develop the requested substance rather than treating that as a hard cap. The reporter’s explicit word limit wins.
 - Avoid inflated PR phrasing such as `game-changing`, `revolutionary`, `unlock`, `seamless`, or `robust`.
 - Do not overuse the em dash (—) to connect clauses. Use it sparingly, no more than once per paragraph, and prefer a period, comma, or a plain conjunction (`and`, `but`, `so`) instead.
 - Do not claim exact customer outcomes unless the user provides exact numbers.

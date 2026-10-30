@@ -14,6 +14,8 @@ Pick the mode from the request:
 
 Read `references/editorial-standard.md` before either mode. On this PC also read `E:\.trueprofit-claude-codex\shared\playbooks\README.md` and the style memories it links (practical flow, contextual TrueProfit mentions, Ahrefs models, drafting rules); they refine the standard where they don't conflict.
 
+For a tone/refinement request, also read [references/refinement.md](references/refinement.md). Review the full article for flow, while changing only passages that need work.
+
 ## Which rule wins
 
 1. Khanh's instructions for this task and the locked or approved outline.
@@ -47,7 +49,7 @@ Follow `references/drafting-format.md` (outline lock, introduction, Quick Recap,
 
 Run the submit checklist in `references/editorial-standard.md` (intent, accuracy, logic, depth, voice, SEO, TrueProfit, finish). Fix what fails. Then deliver:
 
-- Into Google Docs only when asked, normally a new tab named **Final** in the same Doc. Never overwrite an existing Final tab without reading it first and confirming with Khanh. Use the shared helper with a dry run, then read back text, heading styles, links and tables, and confirm sibling tabs are unchanged.
+- Into Google Docs only when asked, normally a new tab named **Final** in the same Doc. Read an existing Final tab before changing it; an explicit request to revise that tab already authorizes the scoped edit. Otherwise confirm before replacing it. Use the shared helper with a dry run, then read back text, heading styles, links and tables, and confirm sibling tabs are unchanged.
 - Otherwise as Markdown in chat or a file under `E:\.trueprofit-claude-codex\workspaces\`.
 - End with the handoff note.
 
@@ -63,6 +65,17 @@ An update is not a mandate to rewrite. Change content only where there is a clea
 6. If performance data is part of the request, separate indexing delays from content-quality problems before blaming the copy.
 7. Edit the Doc in place only when Khanh asked for edits (dry run, apply, read back). Otherwise deliver proposed edits as a compact table: location, current text, proposed text, reason, source.
 8. End with the handoff note, including the sections left unchanged on purpose.
+
+### CMS-to-Docs audit with visible changes
+
+When Khanh requests the CMS audit workflow, use the current CMS article as the baseline, then read the supplied Doc’s **Audit Suggestions (Giang)** tab and its **What to do** instructions. If that tab is absent, inspect the actual instruction tabs and report the discrepancy. Create a separate **Full Content (Audited) MM/YYYY** tab, using the audit month (for example, **Full Content (Audited) 10/2026**). Keep the full article, links, structure and images; do not publish CMS edits as part of this workflow.
+
+- Unchanged article copy stays black. Additions and replacements are red; for an in-place rewrite, color only the changed wording red.
+- Retain removed/replaced original wording in black strikethrough beside its replacement or near its former location, including deleted paragraphs, headings and pricing tables.
+- Deliberately moved passages are wholly red. Index shifts caused by another insertion are not moves.
+- Editorial/process notes are blue (#1155CC), visually separate from publication copy.
+
+Example: replacing “TrueProfit is the best dropshipping apps” with “TrueProfit is the #1 profit tracking app for dropshipping” keeps “TrueProfit is the” black, strikes the old suffix in black and shows the new suffix in red. Preview the plan with the shared helper, apply to the new audit tab, and read back both content and colors/strikethrough while verifying source/sibling tabs are unchanged.
 
 ## Stop and ask Khanh
 

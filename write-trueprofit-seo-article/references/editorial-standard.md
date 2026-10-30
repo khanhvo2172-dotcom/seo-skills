@@ -58,7 +58,8 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 - Positioning: real-time net profit analytics for Shopify merchants: profitability after all costs, product and ad performance, decisions based on clearer business results.
 - Mention it only where its capabilities solve a problem the article discusses, and explain the specific connection.
 - Verify current features, integrations and plan details before stating them.
-- The reader's problem stays at the center. No landing-page tone; use a subtle, context-specific CTA.
+- The reader's problem stays at the center. No landing-page tone; use a subtle, context-specific CTA. Link the contextual **TrueProfit** anchor to `https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&utm_medium=blog&utm_campaign=<article-slug>`, retaining an existing approved campaign for this article. This App Store CTA is an exception to the no-external-body-links default.
+- Assign each tool its actual measurement job. Shopify channel/referrer/order evidence supports AI-channel assessment; GSC and Shopify data support title-SEO assessment; email-platform flow reports support email assessment. TrueProfit adds profitability context when revenue/cost inputs are complete. Do not imply it directly measures all AI-channel conversions, title-change SEO effects or email-flow lift. It has no distinct repeat-order/customer-profit view; never imply one. Verify current capabilities before writing new claims.
 
 ## On-page SEO
 
@@ -78,7 +79,7 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 
 - **Intent:** the opening answers the main query; the article completes the search task.
 - **Accuracy:** numbers, dates, claims, pricing, features, integrations, formulas and links verified.
-- **Logic:** sections flow, don't contradict each other, don't repeat the same point.
+- **Logic:** sections flow, don't contradict each other, don't repeat the same point. All peer tips/examples follow their agreed structure; each Why analysis supports its heading and the Quick Recap represents the main content.
 - **Depth:** each major section gives reasoning or useful detail, not surface description.
 - **Original value:** analysis, a practical example, a trade-off or a clearer explanation beyond what competing pages repeat.
 - **Voice:** no generic AI phrasing, repeated openers, awkward keyword insertions, excessive colon headings or em dashes.

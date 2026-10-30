@@ -26,7 +26,7 @@ Distilled from the October 2026 outlines in the SEO sheet `Content Plan 10/2026`
 - Put each point under the heading it belongs to: "measure social performance by profit" is not a social-media strategy, it belongs in the measurement section; profit metrics don't belong in a "sales & conversion metrics" table.
 - A heading must deliver what it promises. A heading "Top-performing stores" makes readers (and search engines) expect benchmark numbers for top stores, not a note. "Eligibility requirements" means address/ID/plan requirements, not fees.
 - Cut obvious or trivial sections and FAQs ("Should I use Facebook Ads for a new Shopify store?" — obviously yes; "Why you need a business plan" — too simple).
-- Lists of metrics or comparisons work better as tables. This does not apply to article Further Reading: use a simple label and separate URLs, not a table.
+- Lists of metrics or comparisons work better as tables. This does not apply to article Further Reading: use a simple label and separate related links, not a table. Trigger preparation uses verified destination article titles as anchors while preserving URLs.
 - Add a short writer note under an H2 with H3s to preview the actual steps/categories in order, without generic filler.
 - Product listicles need the buyer need and a concrete reason each item has selling potential, alongside costs/risks; product description or sourcing alone is insufficient. Treat opportunities as reasons to test, not proven demand or profit.
 - Evergreen posts must not be framed to one period ("Q4 2026"). Update roundups: newest first, date in each H2 with the year (e.g. "Oct 9, 2026"), and focus on updates that affect merchants' profit (include agentic-commerce changes when relevant).
@@ -57,8 +57,10 @@ Distilled from the October 2026 outlines in the SEO sheet `Content Plan 10/2026`
 - Introduce TrueProfit from the section's practical merchant question: information gap → relevant feature/action → useful decision. Avoid an appended generic product description or detached feature list. A closing CTA alone can fit some articles; do not require a body pitch everywhere. Verify specific capabilities before making claims, and never imply access to competitors' private finances.
 - Emphasize net profit (the core of the product) and that it tracks every cost a seller has: COGS, shipping, transaction fees, ad spend, refunds, apps and other expenses.
 - Ad platforms and Shopify dashboards, even combined, don't show true profit because they miss the other running costs; that is why a profit-tracking tool is needed.
-- Marketing Attribution: shows which orders an ad channel actually drove and whether they were profitable; Meta, Google Ads and Shopify cannot track this themselves, TrueProfit uses its own tracking. Its main message is real contribution, not just "compare campaign profitability". Reference: https://trueprofit.io/solutions/marketing-attribution
-- Suggest a dashboard image beside the TrueProfit mention.
+- Marketing Attribution: explain verified own-order/ad-channel attribution and profitability in the merchant's scenario. Attribution is not proof of incremental lift; do not claim that other platforms cannot track conversions or that TrueProfit directly measures every channel. Reference: https://trueprofit.io/solutions/marketing-attribution
+- Suggest a dashboard image beside the TrueProfit mention. For in-app dashboard examples, Khanh selected `https://be.trueprofit.io/uploads/trueprofit-dashboard-1-1.webp`; use the official demo image rather than an invented interface.
+- Titles vary around the reader’s task rather than always beginning with the keyword. Name FAQ section headings **Main Keyword FAQs**.
+- Measurement coverage distinguishes each tool’s role: TrueProfit provides profitability context, not direct title-SEO effects, email-flow lift, all AI-channel conversions or a distinct repeat-order profit view.
 - Proveny (UGC/AI video ads) can be introduced in social-proof or UGC sections.
 
 ## 7. Practical advice
@@ -94,7 +96,7 @@ H2. How to Turn Competitor Insights Into Profitable Growth (area to win)
 Coverage: Work through one finding, proposed test, cost calculation, and success criterion using the merchant's own economics.
 H2. Final Thoughts
 Coverage: End with the next research-and-test action without repeating the workflow.
-H2. FAQs
+H2. Shopify Competitor Analysis FAQs
 H3. How often should I update my Shopify competitor analysis?
 Answer coverage: Revisit before important product, pricing, or market decisions; avoid one universal interval.
 H3. Do I need to buy from competitors to analyze them?

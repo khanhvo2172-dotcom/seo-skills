@@ -66,3 +66,7 @@ Use a fresh helper dump after the writes. Verify expected image/caption counts, 
 Report completion concisely with the Doc link, number of images/captions completed and any material limitation. Include the automatic Drive copy/folder link when inserting local images. For sourcing-only work, provide accessible image/preview links and original dimensions, with direct source-page attribution. A gallery or ZIP is useful for several images when it helps delivery, not mandatory for a single edit.
 
 Update existing shared project memory with completion state and preserve new user corrections before the final answer. Do not publish to the CMS, add unrelated triggers or modify another article unless requested.
+
+## Preferred TrueProfit dashboard
+
+For TrueProfit in-app dashboard examples, use Khanh’s selected official asset: `https://be.trueprofit.io/uploads/trueprofit-dashboard-1-1.webp` (native 1810 × 869). Convert WebP to PNG without resizing for Google Docs, then use the shared helper’s private Drive insertion/replacement workflow. Inspect the asset before captioning; describe its actual revenue/net-profit/cost comparison, not a previous negative-profit example, and identify demo figures accurately. This preference concerns authentic dashboard examples, not explanatory illustrations.

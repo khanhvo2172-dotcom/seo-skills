@@ -6,7 +6,7 @@ description: >-
   label above formulas and Pro tip/Note callouts, Image trigger lines with
   auto-numbered be.trueprofit.io CDN URLs, and a linked CTA image above a [cta]
   marker - and it reports whether the Quick Recap and FAQ sections exist and
-  whether any Further Reading block is mis-placed. Use this whenever the user
+  updates Further Reading anchors to verified article titles and reports misplaced blocks. Use this whenever the user
   asks to "check", "prep", "recheck", "add triggers to", or "get ready for
   publish" a blog Google Doc, mentions Content Highlight / Quick Recap / FAQ /
   Image triggers / sentence notes / CTA image / Further Reading placement, gives
@@ -41,9 +41,9 @@ Use `E:\.trueprofit-claude-codex\shared\tools\gdocs\gdocs.py` for Docs reads and
 | **CTA image** | **Adds** an image trigger above a `[cta]` marker — fixed URL and alt, plus a `Link is` to the Shopify app listing tagged with the article's main keyword — **but only when the article has more than 5 Heading 2 sections** (FAQ counted). A shorter article gets a **warning** and nothing is inserted. |
 | **Quick Recap** | **Flags only.** If the selected tab has no Quick Recap, it tells you — it does not write one. |
 | **FAQ** | **Flags only.** Same — reports missing, never fabricates Q&A. |
-| **Further Reading** | **Flags only.** Warns when a Further Reading block sits directly above the 2nd–5th Heading 2 (it reads as belonging to the heading below it). Never moved automatically. |
+| **Further Reading** | **Updates anchors** to the verified destination article titles while preserving URLs. **Flags placement only:** warns directly above the 2nd–5th H2; never moves the block automatically. |
 
-The reason Quick Recap, FAQ and Further Reading are flag-only is that they need
+The reason Quick Recap, FAQ and Further Reading placement are flag-only is that they need
 real editorial judgement (which points to summarise, which questions matter,
 which section a reading list belongs to). Formulas, callouts, image URLs and the
 CTA image are mechanical, so those are safe to automate.
@@ -267,6 +267,12 @@ CMS block is n8n's job. For reference, the same CTA lands in WordPress as:
 That is the **output** contract, not doc input. `--reset` will strip such markup
 if it ever ends up in a doc.
 
+### Further Reading article-title anchors (check every run)
+
+Khanh’s latest rule, October 30, 2026: check every link in every Further Reading list in the selected article tab and use the destination article’s verified title as its clickable anchor text. This supersedes earlier instructions to keep bare URLs. Read the live destination H1 or authoritative article title; do not guess a title from the slug. Preserve the destination URL, list structure, order and the Further Reading label. If a title cannot be verified, retain that link and report the source gap while completing the other links. Preview the exact anchor replacements, apply through the shared Docs helper, then verify titles and unchanged URLs. This formatting step is authorized as part of normal trigger preparation; placement checks below remain flag-only.
+
+The trigger script does not fetch destination titles. Complete the anchor check separately through the shared helper on every run, even if the script reports no trigger changes. Read back the final selected tab after both operations. Report the number of anchors changed and any unverified destinations.
+
 ### Further Reading placement (warn only)
 
 A **Further Reading** line plus the run of URLs under it should sit *inside* the
@@ -306,6 +312,7 @@ Report back to the user, concisely:
 
 - What was added (count of Content Highlight labels, count of image triggers
   with the numbered URLs, and whether the CTA image trigger went in).
+- Further Reading anchors updated or already verified; any destination whose title could not be checked.
 - Whether **Quick Recap** and **FAQ** are present or missing — and if missing,
   remind them to add those manually before publishing.
 - Any **warnings**: a `[cta]` marker in a ≤5-H2 article (nothing inserted), a
