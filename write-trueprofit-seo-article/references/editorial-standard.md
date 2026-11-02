@@ -15,7 +15,7 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 - Voice: conversational-professional, knowledgeable, practical and credible, like an experienced operator explaining what works and why.
 - "I recommend" is fine occasionally when it adds judgment; never as a template, and never invent first-person experience.
 - Use "you" and "we" naturally, not in every paragraph. Transitions carry the reasoning; phrasal verbs and idioms are fine in moderation.
-- Most paragraphs run 2–4 lines. Don't split ideas into choppy one-sentence fragments to look scannable.
+- Paragraphs and lists follow the content manager's `blog-readability` skill: split paragraphs longer than about three sentences at the natural idea break (a one-sentence paragraph is fine for emphasis; don't split halves that only make sense together). Turn 2 or more genuinely parallel items into a list with a lead-in sentence ending in a colon: bold labels for categories, numbered lists for sequences, paths and step summaries, 2–6 items of 1–2 sentences, and prose between two lists. Keep FAQ answers, product intros (except Deep TrueProfit feature bullets), arguments and transitions as prose.
 
 ### Avoid
 
@@ -43,7 +43,7 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 
 - Organize around the reader's decision or task, not a keyword list. H2 for major questions or stages, H3 for meaningful subtopics. No headings just to fit a keyword.
 - Each heading has a distinct job. If two would get nearly the same answer, they should be merged or sharpened (flag it if the outline is locked).
-- Tables for genuine comparisons and compact reference data; bullets for short lists, steps or criteria; prose for reasoning and nuance.
+- Tables for genuine comparisons and compact reference data; lists for parallel items (numbered when order matters); prose for reasoning and nuance.
 - A strong section goes from a clear point to the explanation to what it means for the merchant.
 
 ## App and product roundups
@@ -55,10 +55,9 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 
 ## TrueProfit mentions
 
-- Positioning: real-time net profit analytics for Shopify merchants: profitability after all costs, product and ad performance, decisions based on clearer business results.
-- Mention it only where its capabilities solve a problem the article discusses, and explain the specific connection.
-- Verify current features, integrations and plan details before stating them.
-- The reader's problem stays at the center. No landing-page tone; use a subtle, context-specific CTA. Link the contextual **TrueProfit** anchor to `https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&utm_medium=blog&utm_campaign=<article-slug>`, retaining an existing approved campaign for this article. This App Store CTA is an exception to the no-external-body-links default.
+- Follow the content manager's `trueprofit-mention` skill for every direct TrueProfit introduction: decide relevance first (none: no mention; low: a 2–3 sentence intro inside Final Thoughts; high: a Standard or Deep H2 in the second half, named after the reader's outcome), carry the four core points (#1 net profit analytics platform for Shopify merchants; revenue plus every cost to net profit; real-time P&L; TrueProfit MCP with ChatGPT or Claude), one direct intro and one App Store link per article, and a matching screenshot for H2 sections.
+- Rewrite the intro for each article: bridge from the previous point, emphasize the costs the article discussed, match features to the topic, and say which decision each feature helps make. Positioning stays "net profit analytics"; never "accounting software". No "Try it now" style CTA in the section.
+- Verify features outside her list before stating them. Link the contextual **TrueProfit** anchor to `https://apps.shopify.com/trueprofit?utm_source=trueprofit.io&utm_medium=blog&utm_campaign=<article-slug>`, retaining an existing approved campaign for this article. This App Store CTA is an exception to the no-external-body-links default.
 - Assign each tool its actual measurement job. Shopify channel/referrer/order evidence supports AI-channel assessment; GSC and Shopify data support title-SEO assessment; email-platform flow reports support email assessment. TrueProfit adds profitability context when revenue/cost inputs are complete. Do not imply it directly measures all AI-channel conversions, title-change SEO effects or email-flow lift. It has no distinct repeat-order/customer-profit view; never imply one. Verify current capabilities before writing new claims.
 
 ## On-page SEO
@@ -84,7 +83,7 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 - **Original value:** analysis, a practical example, a trade-off or a clearer explanation beyond what competing pages repeat.
 - **Voice:** no generic AI phrasing, repeated openers, awkward keyword insertions, excessive colon headings or em dashes.
 - **SEO:** title, H2/H3 hierarchy, natural keyword use, meta description, internal links, clean source URLs.
-- **TrueProfit:** relevant, accurate, understated, placed where it helps.
+- **TrueProfit:** passes the `trueprofit-mention` pre-publish checklist (relevance level, placement, core points, single App Store link with the article slug).
 - **Finish:** FAQs add distinct value; Quick Recap has 4–5 distinct takeaways when required; Final Thoughts isn't a generic summary.
 
 ## Reusable writer brief

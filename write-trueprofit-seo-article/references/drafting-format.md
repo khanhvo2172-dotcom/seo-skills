@@ -28,7 +28,7 @@ Right after the introduction, 4–5 distinct takeaways in complete natural sente
 
 ## Lists and tables
 
-- Prefer connected prose for reasoning. Bullets for steps or simple parallel lists, introduced by one short sentence (up to about 15 words). Body lists are bulleted, not numbered.
+- Prefer connected prose for reasoning. Use lists per the content manager's `blog-readability` skill: a lead-in sentence ending in a colon, bold labels for categories, numbered lists for sequences, paths and step summaries, 2–6 items, prose between two lists.
 - Each action bullet carries its short reason; no bare commands. In refinement mode, use subject-led descriptive sentences after bold labels. Apply an agreed Why it matters / How to pattern across every peer tip or example without making the wording repetitive.
 - Email examples use separate native bullets for **Subject** and **CTA**; keep the email body as prose. Preserve approved wording unless a rewrite is requested.
 - Tables for comparisons. Product or business-idea listicles open with a summary table (Product | Estimated Selling Price | Supplier Price | Gross Profit Margin); never fabricate prices or margins to fill it, keep gross and net margin distinct, and label estimates.

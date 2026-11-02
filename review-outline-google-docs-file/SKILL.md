@@ -99,7 +99,11 @@ different structures. Prioritize:
   review evidence, Customer Sentiment. Flag TrueProfit placed first by default or
   framed as a substitute for a category it doesn't replace.
 
-These checks follow the content manager's writing playbook (October 28, 2026).
+- **TrueProfit section:** Check it against the content manager's `trueprofit-mention`
+  skill: relevance level (none, Final Thoughts intro, Standard or Deep H2), placement in
+  the second half, and an H2 named after the reader's outcome rather than the product.
+
+These checks follow the content manager's writing playbook (October 28, 2026). Her own skills win where they differ.
 Do not add headings simply because a competitor has them, to lengthen the article,
 or to cover every related keyword. Keep relevant existing coverage. Explain why
 an addition helps this reader, even when a reference page already includes it.

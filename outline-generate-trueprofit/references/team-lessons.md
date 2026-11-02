@@ -54,7 +54,7 @@ Distilled from the October 2026 outlines in the SEO sheet `Content Plan 10/2026`
 
 ## 6. TrueProfit and sister products
 
-- Introduce TrueProfit from the section's practical merchant question: information gap → relevant feature/action → useful decision. Avoid an appended generic product description or detached feature list. A closing CTA alone can fit some articles; do not require a body pitch everywhere. Verify specific capabilities before making claims, and never imply access to competitors' private finances.
+- Introduce TrueProfit from the section's practical merchant question: information gap → relevant feature/action → useful decision. Avoid an appended generic product description or detached feature list. Since November 2, 2026 the content manager's `trueprofit-mention` skill decides depth and placement (none / Final Thoughts intro / Standard or Deep H2) and overrides this section where they differ. Verify specific capabilities before making claims, and never imply access to competitors' private finances.
 - Emphasize net profit (the core of the product) and that it tracks every cost a seller has: COGS, shipping, transaction fees, ad spend, refunds, apps and other expenses.
 - Ad platforms and Shopify dashboards, even combined, don't show true profit because they miss the other running costs; that is why a profit-tracking tool is needed.
 - Marketing Attribution: explain verified own-order/ad-channel attribution and profitability in the merchant's scenario. Attribution is not proof of incremental lift; do not claim that other platforms cannot track conversions or that TrueProfit directly measures every channel. Reference: https://trueprofit.io/solutions/marketing-attribution

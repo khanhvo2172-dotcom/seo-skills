@@ -64,7 +64,7 @@ Articles are 1,500–2,000 **words** and are drafted with the outline locked: ev
 - Tool/app roundups: choose apps by the keyword's intent and the reader's needs. Each app's Coverage line names the per-app parts: short positioning, Key Features relevant to the intent, verified Pricing, Best For, and Customer Sentiment only when reliable review patterns exist. Place TrueProfit where profit tracking complements the other tools, never first by default and never as a substitute for a category it doesn't replace.
 - FAQ section heading: **Main Keyword FAQs**, such as **Shopify Tips FAQs**. Titles should vary naturally; the main keyword need not always open the H1.
 - FAQs: 1–3, only questions the body does not already answer and that are not obvious.
-- Include a TrueProfit-related point only where it genuinely fits (usually the profitability/measurement section).
+- TrueProfit: follow the content manager's `trueprofit-mention` skill. Classify profit-tracking relevance: high gets a Standard or Deep H2 in the second half named after the reader's outcome (or a step, a measurement-phase H3, or "The Automatic Approach" after a manual method); low gets a 2–3 sentence intro noted in the Final Thoughts Coverage line; none gets no mention. Ask Khanh when the level is unclear.
 - End with Final Thoughts.
 
 ### Format

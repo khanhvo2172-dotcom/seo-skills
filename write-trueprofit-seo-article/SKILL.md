@@ -12,15 +12,17 @@ Pick the mode from the request:
 - **Draft mode:** a new article from an approved outline.
 - **Update mode:** refresh, fix, audit or improve an existing article (Doc tab or live URL).
 
-Read `references/editorial-standard.md` before either mode. On this PC also read `E:\.trueprofit-claude-codex\shared\playbooks\README.md` and the style memories it links (practical flow, contextual TrueProfit mentions, Ahrefs models, drafting rules); they refine the standard where they don't conflict.
+Read `references/editorial-standard.md` before either mode. On this PC also read `E:\.trueprofit-claude-codex\shared\playbooks\README.md` and the style memories it links (practical flow, contextual TrueProfit mentions, Ahrefs models, drafting rules); they refine the standard where they don't conflict. The content manager's own skills take priority over everything in this skill: `trueprofit-mention` for any TrueProfit product intro, `blog-readability` for lists and paragraph length, and `trueprofit-blog-refine` for tone refinement. Read the relevant one before writing.
 
 For a tone/refinement request, also read [references/refinement.md](references/refinement.md). Review the full article for flow, while changing only passages that need work.
 
 ## Which rule wins
 
-1. Khanh's instructions for this task and the locked or approved outline.
-2. The editorial standard in this skill.
-3. Older style memories and reference articles.
+1. Khanh's explicit instructions for this task.
+2. The content manager's skills (`trueprofit-mention`, `blog-readability`, `trueprofit-blog-refine`) and her playbooks. When they disagree with this skill or any memory, hers win.
+3. The locked or approved outline.
+4. The editorial standard in this skill.
+5. Older style memories and reference articles.
 
 When a rule can't be met without breaking a higher one (for example the locked title lacks the keyword), follow the higher rule and flag the conflict in the handoff note.
 
@@ -43,7 +45,7 @@ Follow `references/drafting-format.md` (outline lock, introduction, Quick Recap,
 - Lead with the answer or key distinction, then the reasoning, then what it means for the merchant. Include trade-offs and when the advice may not work.
 - Use concrete examples, formulas or scenarios when they make a decision easier. Check every calculation and label assumptions and hypothetical numbers.
 - Bring profitability in where it changes the decision, not in every section.
-- Mention TrueProfit only where a section has already set up the problem it solves: reader problem, relevant capability, concrete decision. Keep it understated and accurate; a closing CTA alone can be enough.
+- Follow the content manager's `trueprofit-mention` skill for every direct TrueProfit introduction: decide relevance first (none: no mention; low: a 2–3 sentence intro inside Final Thoughts; high: a Standard or Deep H2 in the second half, named after the reader's outcome), carry the four core points (#1 net profit analytics platform for Shopify merchants; revenue plus every cost to net profit; real-time P&L; TrueProfit MCP with ChatGPT or Claude), one direct intro and one App Store link per article, and a matching screenshot for H2 sections.
 
 ### 4. Before delivering
 
