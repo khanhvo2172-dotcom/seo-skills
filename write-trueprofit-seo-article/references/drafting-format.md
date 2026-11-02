@@ -28,8 +28,8 @@ Right after the introduction, 4–5 distinct takeaways in complete natural sente
 
 ## Lists and tables
 
-- Prefer connected prose for reasoning. Use lists per the content manager's `blog-readability` skill: a lead-in sentence ending in a colon, bold labels for categories, numbered lists for sequences, paths and step summaries, 2–6 items, prose between two lists.
-- Each action bullet carries its short reason; no bare commands. In refinement mode, use subject-led descriptive sentences after bold labels. Apply an agreed Why it matters / How to pattern across every peer tip or example without making the wording repetitive.
+- Prefer connected prose for reasoning. Use lists per the content manager's `blog-readability` skill: a lead-in sentence ending in a colon, bold labels for categories, numbered lists for sequences and paths, 2–6 items, prose between two lists.
+- Each action bullet carries its short reason; no bare commands. Numbered step lists may start each step with a command verb ("1. Check the care label."); all other bullets use a bold label or a subject-led sentence (Khanh, 2026-11-02). In refinement mode, use subject-led descriptive sentences after bold labels. Apply an agreed Why it matters / How to pattern across every peer tip or example without making the wording repetitive.
 - Email examples use separate native bullets for **Subject** and **CTA**; keep the email body as prose. Preserve approved wording unless a rewrite is requested.
 - Tables for comparisons. Product or business-idea listicles open with a summary table (Product | Estimated Selling Price | Supplier Price | Gross Profit Margin); never fabricate prices or margins to fill it, keep gross and net margin distinct, and label estimates.
 

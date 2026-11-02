@@ -15,7 +15,7 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 - Voice: conversational-professional, knowledgeable, practical and credible, like an experienced operator explaining what works and why.
 - "I recommend" is fine occasionally when it adds judgment; never as a template, and never invent first-person experience.
 - Use "you" and "we" naturally, not in every paragraph. Transitions carry the reasoning; phrasal verbs and idioms are fine in moderation.
-- Paragraphs and lists follow the content manager's `blog-readability` skill: split paragraphs longer than about three sentences at the natural idea break (a one-sentence paragraph is fine for emphasis; don't split halves that only make sense together). Turn 2 or more genuinely parallel items into a list with a lead-in sentence ending in a colon: bold labels for categories, numbered lists for sequences, paths and step summaries, 2–6 items of 1–2 sentences, and prose between two lists. Keep FAQ answers, product intros (except Deep TrueProfit feature bullets), arguments and transitions as prose.
+- Paragraphs and lists follow the content manager's `blog-readability` skill: split paragraphs longer than about three sentences at the natural idea break (a one-sentence paragraph is fine for emphasis; don't split halves that only make sense together). Turn 2 or more genuinely parallel items into a list with a lead-in sentence ending in a colon: bold labels for categories, numbered lists for sequences and paths (not for the conclusion), 2–6 items of 1–2 sentences, and prose between two lists. Keep FAQ answers, product intros (except Deep TrueProfit feature bullets), arguments and transitions as prose.
 
 ### Avoid
 
@@ -24,7 +24,7 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 - Corporate, academic, overly casual or chatbot wording.
 - The same paragraph opener starting three or more paragraphs ("Most merchants", "If…", "Once…", "Here's the thing"). Deliberate repeated labels in parallel list entries are fine.
 - Em dashes (none at all, including tables, captions, alt text and the meta description), excessive colon-led headings, and titles built as keyword plus a generic descriptor.
-- Bullets that are only a short command and a period. Bullets help scanning; they don't replace analysis.
+- Bullets that are only a short command and a period, except in numbered step lists. Numbered step lists may start each step with a command verb ("1. Check the care label."); all other bullets use a bold label or a subject-led sentence (Khanh, 2026-11-02). Bullets help scanning; they don't replace analysis.
 - Over-explaining basics, or repeating the same profitability warning in every section.
 - Generic claims like "this is crucial for success" unless the next sentence explains exactly why.
 
@@ -72,7 +72,7 @@ Condensed from the content manager's SEO writing playbook and SOP checklist (Oct
 
 - **Quick Recap:** 4–5 distinct takeaways in complete natural sentences; none restates the introduction or simply repeats a heading. In list articles a bullet can name items if it adds the reason or decision.
 - **FAQs:** answer directly and briefly, then add the one clarification a reader needs. Genuine secondary questions only; don't copy body paragraphs.
-- **Final Thoughts:** a practical conclusion or decision principle. No generic wrap-up ("In today's competitive landscape…") and no replay of the whole article.
+- **Final Thoughts:** a practical conclusion or decision principle. No generic wrap-up ("In today's competitive landscape…") and no replay of the whole article. Final Thoughts follows `trueprofit-blog-refine`: 3–4 short paragraphs that recap the main idea in order with no new information and end on a clear closing line; never a numbered or bulleted summary (Khanh, 2026-11-02).
 
 ## Submit checklist
 
