@@ -32,7 +32,7 @@ If absent or Drive upload fails, stop and ask Khanh to run `gdocs.py auth-drive`
 
 ## Add descriptions to images already in the Doc
 
-For an image followed by a source-only paragraph, put a new clean description immediately before that source:
+For an image followed by a source-only paragraph, combine the description and source in one centered caption when supported by the current helper. For a brief that explicitly requests separate paragraphs, a clean description can be inserted immediately before the source:
 
 ```powershell
 python -X utf8 $gdocs insert-paragraph DOC_ID --tab Final --before-text 'Source: Unique Brand' --text 'Natural context explaining this example.'
@@ -54,6 +54,14 @@ python -X utf8 $gdocs replace DOC_ID --tab Final --edits caption-edits.json
 
 Inspect the plan and repeat with `--apply`. Match only the unlinked description; do not span into the linked source name, another style run or a newline. The helper refuses matches that cross formatting boundaries.
 
+## Caption alignment and source-link overrides
+
+Center the caption paragraph beneath the intended image. Keep the description and `Source: Publisher` on the same paragraph unless the current brief asks otherwise. A single paragraph may wrap naturally; do not shrink the text to force one visual line.
+
+The insertion CLI has no caption-alignment option. For formatting beyond the CLI, use the shared helper's `read` / `guarded_batch` module interface, explicit tab IDs and a fresh revision. Limit `updateParagraphStyle` to the actual caption paragraph with `alignment: CENTER`; do not center adjacent article prose or labels drawn inside the image. Inspect the request plan before applying and verify the paragraph style afterward.
+
+Retain a linked source by default, with only its label linked. For an explicit request to remove source hyperlinks, omit `--caption-url` and `--caption-link-text` on new insertions. For existing credits, clear only the requested source text's link through the helper's guarded write; keep the source name, description and other article links. Preserve the original URL in task notes. When combining existing description/source paragraphs, preserve any source link that the user has not asked to remove.
+
 ## Replace a small or unsuitable image
 
 Get the image's object ID from a fresh `dump --indices`, then use the paragraph immediately above the image:
@@ -72,6 +80,6 @@ For a relocation, use `insert-image --move-image-id kix.OBJECT_ID` with the orig
 
 ## Verify the exact change
 
-Read a fresh helper dump after the writes. For description additions, remove only the expected new description paragraphs from the readback and compare to the baseline; the remaining article should match. For replacements or revisions, construct the expected result from the approved changes. Compare image counts/IDs, heading mapping, source links and table content as appropriate.
+Read a fresh helper dump after the writes. For description additions, remove only the expected new description paragraphs from the readback and compare to the baseline; the remaining article should match. For replacements or revisions, construct the expected result from the approved changes. Compare image counts/IDs, heading mapping, caption paragraph alignment, description/source adjacency, source-link presence or explicitly requested removal, and table content as appropriate.
 
 Review `text_ok`, `image_ok`, `links_ok` and `other_tabs_unchanged` for insertions, or `text_matches_plan` and `link_urls_unchanged` for replacements of wording. Do not retry a timed-out write blindly. Snapshot logs are in `shared/tools/gdocs/logs/`; task-specific manifests, before/after dumps and completed-state records help prevent duplicate insertions on continuation.

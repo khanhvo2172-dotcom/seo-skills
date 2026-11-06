@@ -144,6 +144,8 @@ core content intent — even if it is the first question or the one you would ot
 `Keep (primary)` ONLY for pure sibling clusters, where several questions near-duplicate each
 other but none maps to a heading or the page thesis — then keep one and cut the rest.
 
+Also inspect the visible FAQ text for accidentally published editorial comments, replies or comment-reference markers. Quote the exact suspected leftover and its question/location; propose a narrow removal for confirmation. A bracketed marker or a word such as `TODO` alone is not proof: verify that it is editorial residue rather than a legitimate placeholder, citation or word in the article's language. Do not classify an answer as clean merely because its question is not redundant.
+
 If there is no FAQ component after raw verification, say so plainly.
 
 ### 5. Image alt text

@@ -33,6 +33,10 @@ an edge case, a distinct sub-angle the body doesn't cover — it's pulling its
 weight. Mark those **partial** (note the related section) rather than flagging them
 as redundant, so the user can decide.
 
+## Visible editorial residue
+
+Check the FAQ text for editorial comments or replies accidentally pasted into the article, including comment-reference markers attached to instructions to the author. Report the exact text and question/location separately from the redundancy classification, with a narrow proposed removal. A marker or `TODO` alone is not proof: it may be an intentional placeholder, citation or ordinary word in another language. Leave the live comment threads and pending human suggestions intact. This remains report-only.
+
 ## How to run it
 
 1. Locate the FAQ section (usually the last H2, titled `FAQ`/`FAQs` or

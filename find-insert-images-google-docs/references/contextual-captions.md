@@ -47,7 +47,7 @@ The last example illustrates a January follow-up incentive. It does not establis
 | Field | Purpose |
 |---|---|
 | Visible description | Give readers natural campaign/product context and relevance. |
-| Linked Source credit | Attribute and link to the actual source page. Keep the link separate from unlinked prose. |
+| Source credit | Attribute the actual source. Keep it in the same centered caption paragraph as the description; link only the source label by default. If the current article/batch brief requests unlinked sources, retain the plain source name and keep its URL in task notes. |
 | Alt suggestion | Concisely describe the image's relevant visible content for accessibility. |
 
 Keep alt suggestions in the task manifest/source notes. The current Docs API helper cannot set image alt metadata; do not claim it did. CMS image triggers are a separate requested workflow, not an automatic part of adding captions.
